@@ -21,13 +21,11 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "~6.0",
         "intervention/image": "^2.5",
-        "kirilkirkov/amazon-paapi5-php-sdk": "^1.0",
         "predis/predis": "~1.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
         "rap2hpoutre/laravel-log-viewer": "^2.0",
-        "sngrl/sphinxsearch": "dev-master",
         "proxycrawl/proxycrawl": "^3.0"
     },
     "require-dev": {
