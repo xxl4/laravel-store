@@ -20,54 +20,74 @@ class CreateStoreTables extends Migration
      */
     public function up()
     {
+
+        Schema::create(config('store.database.store'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->string('code',50);
+            $table->string('name', 200);
+            $table->text('config');
+            $table->timestamps();
+        });
+
         Schema::create(config('store.database.config_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->string('type',50);
             $table->string('code',200);
             $table->text('value');
+            $table->index(['code', 'user_id']);
             $table->timestamps();
         });
 
         Schema::create(config('store.database.product_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->string('name', 200);
             $table->timestamps();
         });
 
         Schema::create(config('store.database.product_attr_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->timestamps();
         });
 
         Schema::create(config('store.database.product_image_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->timestamps();
         });
 
         Schema::create(config('store.database.product_stock_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->timestamps();
         });
 
         Schema::create(config('store.database.order_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->timestamps();
         });
 
         Schema::create(config('store.database.order_item_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->integer("order_id");
             $table->timestamps();
         });
 
         Schema::create(config('store.database.refund_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->integer("order_id");
             $table->timestamps();
         });
 
         Schema::create(config('store.database.refund_item_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->integer("refund_id");
             $table->timestamps();
         });

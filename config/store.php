@@ -1,6 +1,8 @@
 <?php 
 return [
     'database' => [
+        // 店铺
+        'store_table'   => 'store',
         'config_table'  => 'config',
         'product_table'  => 'products', //商品表
         'product_attr_table'  => 'product_attrs', //商品属性表
@@ -14,6 +16,8 @@ return [
         'refund_item_table'      => 'refund_items', //售后商品表
 
         'shipping_table'      => 'shipping', //配送表
+
+        'organization_table'          => 'organization', // 机构表
 
     ]
 ];
