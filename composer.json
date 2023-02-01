@@ -1,0 +1,98 @@
+{
+    "name": "nicelizhi/laravel-admin-store",
+    "type": "project",
+    "description": "laravel-admin-store.",
+    "keywords": [
+        "framework",
+        "laravel",
+        "shopping",
+        "store",
+        "taobao",
+        "tmall",
+        "Jd"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.1.3",
+        "aliyuncs/oss-sdk-php": "^2.4",
+        "bensampo/laravel-enum": "1.38",
+        "doctrine/dbal": "^2.0",
+        "nicelizhi/laravel-admin": "1.0.0",
+        "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "~6.0",
+        "intervention/image": "^2.5",
+        "kirilkirkov/amazon-paapi5-php-sdk": "^1.0",
+        "predis/predis": "~1.0",
+        "laravel/framework": "5.8.*",
+        "laravel/tinker": "^1.0",
+        "maatwebsite/excel": "^3.1",
+        "rap2hpoutre/laravel-log-viewer": "^2.0",
+        "sngrl/sphinxsearch": "dev-master",
+        "proxycrawl/proxycrawl": "^3.0"
+    },
+    "require-dev": {
+        "beyondcode/laravel-dump-server": "^1.0",
+        "filp/whoops": "^2.0",
+        "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^3.0",
+        "phpunit/phpunit": "^7.5"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "classmap": [
+            "database/seeds",
+            "database/factories",
+            "app/Libs/Jd/JdSdk.php",
+            "app/Libs/Jd/lotusphp_runtime/Lotus.php",
+            "app/Libs/Jd/jd/JdClient.php",
+            "app/Libs/Jd/jd/request",
+            "app/Libs/Taobao/TopSdk.php",
+            "app/Libs/Taobao/TopSdk.php",
+            "app/Libs/Taobao/top/TopClient.php",
+            "app/Libs/Taobao/top/ResultSet.php",
+            "app/Libs/Taobao/top/RequestCheckUtil.php",
+            "app/Libs/Taobao/top/ClusterTopClient.php",
+            "app/Libs/Taobao/top/ApplicationVar.php",
+            "app/Libs/Taobao/top/SpiUtils.php",
+            "app/Libs/Taobao/top/TopLogger.php",
+            "app/Libs/Taobao/top/request",
+            "app/Libs/Taobao/Autoloader.php",
+            "app/Libs/Taobao/QimenCloud/top",
+            "app/Libs/Taobao/QimenCloud/QimenCloudClient.php",
+            "app/Libs/doudian/src/autoload.php",
+            "app/Libs/doudian/src/open/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    }
+}
