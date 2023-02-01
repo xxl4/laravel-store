@@ -26,9 +26,13 @@ Laravel admin Store 是一套基于基础商品，订单中心，基于基础订
 
 # 支持商店
 ## Taobao
+开发平台：https://open.taobao.com/
 ## Tmall
+开发平台：https://open.taobao.com/
 ## JD
+开发平台： https://jos.jd.com/
 ## DouDian
+开发平台：https://op.jinritemai.com/home
 
 # BUG 提交
 
