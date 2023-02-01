@@ -1,0 +1,169 @@
+<?php
+/**
+ * TOP API: taobao.qimen.order.pending request
+ * 
+ * @author auto create
+ * @since 1.0, 2018.07.25
+ */
+class OrderPendingRequest
+{
+	/** 
+	 * 操作类型(pending=挂起;restore=恢复)
+	 **/
+	private $actionType;
+	
+	/** 
+	 * 扩展属性
+	 **/
+	private $extendProps;
+	
+	/** 
+	 * 单据编码
+	 **/
+	private $orderCode;
+	
+	/** 
+	 * 仓储系统单据编码
+	 **/
+	private $orderId;
+	
+	/** 
+	 * 单据类型(JYCK=一般交易出库单;HHCK=换货出库;BFCK=补发出库;PTCK=普通出库单;DBCK=调拨出库;QTCK=其他出库;B2BRK=B2B入库;B2BCK=B2B出库;CGRK=采购入库;DBRK=调拨入库;QTRK=其他入库;XTRK=销退入库;HHRK=换货入库;CNJG=仓内加工单)
+	 **/
+	private $orderType;
+	
+	/** 
+	 * 货主编码
+	 **/
+	private $ownerCode;
+	
+	/** 
+	 * 挂起/恢复原因
+	 **/
+	private $reason;
+	
+	/** 
+	 * 仓库编码(统仓统配等无需ERP指定仓储编码的情况填OTHER)
+	 **/
+	private $warehouseCode;
+	
+	private $apiParas = array();
+	
+	public function setActionType($actionType)
+	{
+		$this->actionType = $actionType;
+		$this->apiParas["actionType"] = $actionType;
+	}
+
+	public function getActionType()
+	{
+		return $this->actionType;
+	}
+
+	public function setExtendProps($extendProps)
+	{
+		$this->extendProps = $extendProps;
+		$this->apiParas["extendProps"] = $extendProps;
+	}
+
+	public function getExtendProps()
+	{
+		return $this->extendProps;
+	}
+
+	public function setOrderCode($orderCode)
+	{
+		$this->orderCode = $orderCode;
+		$this->apiParas["orderCode"] = $orderCode;
+	}
+
+	public function getOrderCode()
+	{
+		return $this->orderCode;
+	}
+
+	public function setOrderId($orderId)
+	{
+		$this->orderId = $orderId;
+		$this->apiParas["orderId"] = $orderId;
+	}
+
+	public function getOrderId()
+	{
+		return $this->orderId;
+	}
+
+	public function setOrderType($orderType)
+	{
+		$this->orderType = $orderType;
+		$this->apiParas["orderType"] = $orderType;
+	}
+
+	public function getOrderType()
+	{
+		return $this->orderType;
+	}
+
+	public function setOwnerCode($ownerCode)
+	{
+		$this->ownerCode = $ownerCode;
+		$this->apiParas["ownerCode"] = $ownerCode;
+	}
+
+	public function getOwnerCode()
+	{
+		return $this->ownerCode;
+	}
+
+	public function setReason($reason)
+	{
+		$this->reason = $reason;
+		$this->apiParas["reason"] = $reason;
+	}
+
+	public function getReason()
+	{
+		return $this->reason;
+	}
+
+	public function setWarehouseCode($warehouseCode)
+	{
+		$this->warehouseCode = $warehouseCode;
+		$this->apiParas["warehouseCode"] = $warehouseCode;
+	}
+
+	public function getWarehouseCode()
+	{
+		return $this->warehouseCode;
+	}
+
+	public function getApiMethodName()
+	{
+		return "taobao.qimen.order.pending";
+	}
+	
+	public function getApiParas()
+	{
+		return $this->apiParas;
+	}
+	
+	public function check()
+	{
+		
+		RequestCheckUtil::checkNotNull($this->actionType,"actionType");
+		RequestCheckUtil::checkMaxLength($this->actionType,50,"actionType");
+		RequestCheckUtil::checkNotNull($this->orderCode,"orderCode");
+		RequestCheckUtil::checkMaxLength($this->orderCode,50,"orderCode");
+		RequestCheckUtil::checkMaxLength($this->orderId,50,"orderId");
+		RequestCheckUtil::checkMaxLength($this->orderType,50,"orderType");
+		RequestCheckUtil::checkMaxLength($this->ownerCode,50,"ownerCode");
+		RequestCheckUtil::checkMaxLength($this->reason,500,"reason");
+		RequestCheckUtil::checkNotNull($this->warehouseCode,"warehouseCode");
+		RequestCheckUtil::checkMaxLength($this->warehouseCode,50,"warehouseCode");
+	}
+	
+	public function putOtherTextParam($key, $value) {
+		$this->apiParas[$key] = $value;
+		$this->$key = $value;
+	}
+}

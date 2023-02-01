@@ -1,0 +1,87 @@
+<?php
+class QueryQuoteItemDetailOutRequest
+{
+	private $apiParas = array();
+	
+	public function getApiMethodName(){
+	  return "jingdong.queryQuoteItemDetailOut";
+	}
+	
+	public function getApiParas(){
+	    if(empty($this->apiParas)){
+            return "{}";
+        }
+        return json_encode($this->apiParas);
+	}
+	
+	public function check(){
+		
+	}
+	
+	public function putOtherTextParam($key, $value){
+		$this->apiParas[$key] = $value;
+		$this->$key = $value;
+	}
+
+    private  $version;
+
+    public function setVersion($version){
+        $this->version = $version;
+    }
+
+    public function getVersion(){
+        return $this->version;
+    }
+                                                        		                                    	                   			private $operatorPin;
+    	                        
+	public function setOperatorPin($operatorPin){
+		$this->operatorPin = $operatorPin;
+         $this->apiParas["operatorPin"] = $operatorPin;
+	}
+
+	public function getOperatorPin(){
+	  return $this->operatorPin;
+	}
+
+                        	                   			private $operatorName;
+    	                        
+	public function setOperatorName($operatorName){
+		$this->operatorName = $operatorName;
+         $this->apiParas["operatorName"] = $operatorName;
+	}
+
+	public function getOperatorName(){
+	  return $this->operatorName;
+	}
+
+                        	                   			private $serviceId;
+    	                        
+	public function setServiceId($serviceId){
+		$this->serviceId = $serviceId;
+         $this->apiParas["serviceId"] = $serviceId;
+	}
+
+	public function getServiceId(){
+	  return $this->serviceId;
+	}
+
+                        	                   			private $venderCode;
+    	                        
+	public function setVenderCode($venderCode){
+		$this->venderCode = $venderCode;
+         $this->apiParas["venderCode"] = $venderCode;
+	}
+
+	public function getVenderCode(){
+	  return $this->venderCode;
+	}
+
+                            }
+
+
+
+
+
+        
+ 
+
