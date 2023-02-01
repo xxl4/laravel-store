@@ -56,11 +56,19 @@ class CreateStoreTables extends Migration
 
         Schema::create(config('store.database.order_item_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer("order_id");
             $table->timestamps();
         });
 
         Schema::create(config('store.database.refund_table'), function (Blueprint $table) {
             $table->increments('id');
+            $table->integer("order_id");
+            $table->timestamps();
+        });
+
+        Schema::create(config('store.database.refund_item_table'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer("refund_id");
             $table->timestamps();
         });
     }
@@ -72,13 +80,21 @@ class CreateStoreTables extends Migration
      */
     public function down()
     {
+        //配置表
         Schema::dropIfExists(config('store.database.config_table'));
+
+        //商品表
         Schema::dropIfExists(config('store.database.product_table'));
         Schema::dropIfExists(config('store.database.product_attr_table'));
         Schema::dropIfExists(config('store.database.product_image_table'));
         Schema::dropIfExists(config('store.database.product_stock_table'));
+
+        //订单表
         Schema::dropIfExists(config('store.database.order_table'));
         Schema::dropIfExists(config('store.database.order_item_table'));
+
+        //售后表
         Schema::dropIfExists(config('store.database.refund_table'));
+        Schema::dropIfExists(config('store.database.refund_item_table'));
     }
 }
