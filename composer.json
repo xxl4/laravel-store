@@ -17,6 +17,7 @@
         "aliyuncs/oss-sdk-php": "^2.4",
         "bensampo/laravel-enum": "1.38",
         "doctrine/dbal": "^2.0",
+        "dingo/api": "^2.4.7",
         "nicelizhi/laravel-admin": "1.0.0",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "~6.0",
