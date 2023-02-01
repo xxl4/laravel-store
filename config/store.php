@@ -1,5 +1,6 @@
 <?php 
 return [
+    // 数据表
     'database' => [
         // 店铺
         'store_table'   => 'store',
@@ -18,6 +19,16 @@ return [
         'shipping_table'      => 'shipping', //配送表
 
         'organization_table'          => 'organization', // 机构表
+        'organization_user_table'          => 'organization_user', // 机构用户表
+        'organization_role_table'          => 'organization_role', // 机构角色
 
+        'storage_location_table'      => 'storage_location', //库位
+
+    ],
+
+    // 队列
+    'queue' => [
+        'put_on_queue'          => 'put_on', //上架
+        'take_off_queue'        => 'take_off',//下架
     ]
 ];

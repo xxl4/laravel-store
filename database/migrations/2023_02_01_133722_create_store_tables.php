@@ -91,6 +91,33 @@ class CreateStoreTables extends Migration
             $table->integer("refund_id");
             $table->timestamps();
         });
+
+        Schema::create(config('store.database.storage_location_table'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->integer("refund_id");
+            $table->timestamps();
+        });
+
+        Schema::create(config('store.database.organization_table'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->boolean("enable"); // 是否启用
+            $table->char("name", 100); // 机构名称
+            $table->char('code')->unique(); // 机构标识
+            $table->timestamps();
+        });
+
+        //机构用户
+        Schema::create(config('store.database.organization_user_table'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->comment("用户UID");
+            $table->boolean("enable")->comment("是否启用 1,0"); // 是否启用
+            $table->char("name", 100)->comment("显示名称"); // 名称
+            $table->integer("role_id")->comment("角色ID"); // 角色ID
+            $table->index(['role_id', 'user_id',"enable"]);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -116,5 +143,11 @@ class CreateStoreTables extends Migration
         //售后表
         Schema::dropIfExists(config('store.database.refund_table'));
         Schema::dropIfExists(config('store.database.refund_item_table'));
+
+        //库位表
+        Schema::dropIfExists(config('store.database.storage_location_table'));
+
+        // 机构表
+        Schema::dropIfExists(config('store.database.organization_table'));
     }
 }
