@@ -13,16 +13,10 @@ final class DouYinApi
     const client_key = "";
     const client_secret = "";
 
-    static $access_token = "act.f1ec46e29400ea3779e44dca8792ffa2biNjqvQinoMtx9IXHYT3HhDV04fQ";
-    static $refresh_token = "rft.49862b3314ec2db57e3d1b623f5f051afSR3WUdliDwX3Y2NFLxa6WOwjqYw";
-    static $open_id = "690d678b-12a2-4fbd-9548-193acf5da0e0";
-    static $client_token = "clt.50dba5776cb9c5fb2861d59fe58373faREDOyI1BRG3BshvQg33yuSfp1F94";
-
-    /**
-     *
-     *
-     * {"data":{"access_token":"act.f1ec46e29400ea3779e44dca8792ffa2biNjqvQinoMtx9IXHYT3HhDV04fQ","captcha":"","desc_url":"","description":"","error_code":0,"expires_in":1296000,"open_id":"690d678b-12a2-4fbd-9548-193acf5da0e0","refresh_expires_in":2592000,"refresh_token":"rft.49862b3314ec2db57e3d1b623f5f051afSR3WUdliDwX3Y2NFLxa6WOwjqYw","scope":"user_info,video.create,video.list"},"message":"success"}
-     */
+    static $access_token = "";
+    static $refresh_token = "";
+    static $open_id = "";
+    static $client_token = "";
 
     static $response = null;
 
