@@ -8,17 +8,6 @@ use App\Models\Sd\English;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
-define("URL",            "http://api.fanyi.baidu.com/api/trans/vip/translate");
-//define("APP_ID",         "20161220000034340"); //替换为您的APPID
-//define("SEC_KEY",        "YJNFTkLbg4QYvJEXcqS5");//替换为您的密钥
-define("APP_ID",         "20180309000133354"); //替换为您的APPID
-define("SEC_KEY",        "DCZc34bW0RsqggofRa4z");//替换为您的密钥
-//define("WECOM_BOT_URL", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b02e1588-8b89-4b97-b5c3-d9cab004c7ed");
-define("WECOM_BOT_URL", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=1429b4d0-36d3-44df-82d2-691f7031f995");
-
-define("TAOBAO-REDIS-QUEUE","default-queue"); //淘宝的队列
-define("DOUDIAN-REDIS-QUEUE","doudian-queue"); //抖店队列
-
 /* 图片处理相关常数 */
 define('ERR_INVALID_IMAGE',         1);
 define('ERR_NO_GD',                 2);
