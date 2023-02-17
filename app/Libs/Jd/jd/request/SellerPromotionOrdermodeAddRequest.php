@@ -35,7 +35,7 @@ class SellerPromotionOrdermodeAddRequest
                                                              	                        	                                                                                                                          private $promoId;
                               public function setPromoId($promoId ){
                  $this->promoId=$promoId;
-                 $this->apiParas["#promo_id"] = $#promoId;
+                 $this->apiParas["promo_id"] = $promoId;
               }
 
               public function getPromoId(){
@@ -44,7 +44,7 @@ class SellerPromotionOrdermodeAddRequest
                                                                                                                                                          private $favorMode;
                               public function setFavorMode($favorMode ){
                  $this->favorMode=$favorMode;
-                 $this->apiParas["#favor_mode"] = $#favorMode;
+                 $this->apiParas["favor_mode"] = $favorMode;
               }
 
               public function getFavorMode(){
@@ -89,7 +89,7 @@ class SellerPromotionOrdermodeAddRequest
                                                                                                                                                          private $link;
                               public function setLink($link ){
                  $this->link=$link;
-                 $this->apiParas["#link"] = $#link;
+                 $this->apiParas["link"] = $link;
               }
 
               public function getLink(){
