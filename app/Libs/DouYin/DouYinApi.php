@@ -10,8 +10,8 @@ use phpDocumentor\Reflection\Types\Self_;
 final class DouYinApi
 {
     const Douyin_Url = "https://open.douyin.com";
-    const client_key = "awxd3hfucczj436b";
-    const client_secret = "fac65aa2063a2e8a47d2d40a9ec41d08";
+    const client_key = "";
+    const client_secret = "";
 
     static $access_token = "act.f1ec46e29400ea3779e44dca8792ffa2biNjqvQinoMtx9IXHYT3HhDV04fQ";
     static $refresh_token = "rft.49862b3314ec2db57e3d1b623f5f051afSR3WUdliDwX3Y2NFLxa6WOwjqYw";
