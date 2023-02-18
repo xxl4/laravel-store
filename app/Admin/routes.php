@@ -13,4 +13,6 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
 
+    $router->resource('configs', ConfigController::class);
+
 });

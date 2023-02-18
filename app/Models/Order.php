@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Config extends Model
+class Order extends Model
 {
     //
-    public $table = "config";
+    public $table = "order";
 }
