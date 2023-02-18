@@ -13,30 +13,22 @@ final class StoreTypeEnum extends Enum
 {
     const TMALL     =  "tm";
     const TAOBAO    =  "TB";
-    const DouDian   = "DD";
-    const WEDIAN    = "WD";
-    const JD        = "jd";
+    const DouDian   =  "DD";
+    const WEDIAN    =  "WD";
+    const JD        =  "JD";
+    const AMAZONCN  =   "AMAZONCN";
+    const AMAZON    =   "AMAZON";
 
-    public static function getDescription(int $value): string
-    {
-        switch ($value) {
-            case self::TMALL:
-                return "天猫";
-            break;
-            case self::TAOBAO:
-                return "淘宝";
-            break;
-            case self::JD:
-                return "京东";
-            break;
-            case self::WEDIAN:
-                return "微店";
-            break;
-            case self::DouDian:
-                return "抖店";
-            break;
-            default:
-                return self::getKey($value);
-        }
+
+    public static function getAll() {
+        return [
+            self::TMALL => __("TMALL"),
+            self::TAOBAO => __("TAOBAO"),
+            self::JD => __("JD"),
+            self::WEDIAN => __("WEDIAN"),
+            self::DouDian => __("DouDian"),
+            self::AMAZONCN => __("AMAZONCN"),
+            self::AMAZON => __("AMAZON")
+        ];
     }
 }
