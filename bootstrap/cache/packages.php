@@ -13,6 +13,17 @@
       0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     ),
   ),
+  'dingo/api' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Dingo\\Api\\Provider\\LaravelServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'API' => 'Dingo\\Api\\Facade\\API',
+    ),
+  ),
   'fideloper/proxy' => 
   array (
     'providers' => 
