@@ -37,8 +37,9 @@ $api->version('v1', function ($api) {
     $api->post('product/add', 'App\Api\V1\Controllers\ProductsController@add');
     $api->put('product/edit', 'App\Api\V1\Controllers\ProductsController@edit');
     $api->delete('product/delete', 'App\Api\V1\Controllers\ProductsController@delete');
+    $api->get("product/view", 'App\Api\V1\Controllers\ProductsController@view');
 
-    
+
 
 });
 

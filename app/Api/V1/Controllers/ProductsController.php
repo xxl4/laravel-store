@@ -27,7 +27,7 @@ class ProductsController extends Controller {
     }
 
     /*
-     * 编辑库存
+     * 编辑商品
      * @Versions({"v1"})
      * @Request()
      * @Response()
@@ -37,12 +37,22 @@ class ProductsController extends Controller {
     }
 
     /*
-     * 删除删除
+     * 商品删除
      * @Versions({"v1"})
      * @Request()
      * @Response()
     */
     public function delete(Request $request) {
+
+    }
+
+        /*
+     * 商品查看
+     * @Versions({"v1"})
+     * @Request()
+     * @Response()
+    */
+    public function view(Request $request) {
 
     }
 
