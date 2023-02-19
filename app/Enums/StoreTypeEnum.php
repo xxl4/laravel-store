@@ -11,7 +11,7 @@ use BenSampo\Enum\Enum;
  */
 final class StoreTypeEnum extends Enum
 {
-    const TMALL     =  "tm";
+    const TMALL     =  "TM";
     const TAOBAO    =  "TB";
     const DouDian   =  "DD";
     const WEDIAN    =  "WD";

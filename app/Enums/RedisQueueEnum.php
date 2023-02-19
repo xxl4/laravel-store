@@ -15,4 +15,6 @@ final class RedisQueueEnum extends Enum
     const DOUDIAN_REDIS_QUEUE =   "doudian-queue"; //抖店队列
     const JD_REDIS_QUEUE =   "jd-queue"; //京东队列
     const WD_REDIS_QUEUE =   "wd-queue"; //微店队列
+    const AMAZONCN_REDIS_QUEUE = "amazoncn-queue";
+    const AMAZON_REDIS_QUEUE = "amazon-queue";
 }

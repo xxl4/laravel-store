@@ -15,4 +15,13 @@ Route::group([
 
     $router->resource('configs', ConfigController::class);
 
+    $router->resource('organizations', OrganizationController::class);
+    $router->resource('organization-users', OrganizationUserController::class);
+
+    // 订单
+    $router->resource('orders', OrdersController::class);
+
+    // 商品
+    $router->resource('products', ProductsController::class);
+
 });
