@@ -24,7 +24,7 @@ class ProductsController extends Controller {
      * @POST("/add")
     */
     public function add(Request $request) {
-
+        
     }
 
     /*
