@@ -14,22 +14,9 @@ use Illuminate\Routing\Router;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group([
-    'namespace'     => "\App\Http\Controllers\Jos",
-    'middleware'    => ['web'],
-], function (Router $router) {
-    $router->any("v1/Jos/order/lists/{page}/{pagesize}", "OrderController@syncOrder");
-
-
-});
-
 $api = app('Dingo\Api\Routing\Router');
 
-$api->version('v1', function ($api) {
+$api->version('v1', ["middleware"=>'api.auth'],function ($api) {
     $api->post('stock/add', 'App\Api\V1\Controllers\StockController@add');
     $api->post('stock/down', 'App\Api\V1\Controllers\StockController@down');
 

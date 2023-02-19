@@ -168,7 +168,7 @@ return [
     */
 
     'auth' => [
-        
+        'Custom' => 'Dingo\Api\Auth\Provider\CustomProvider'
     ],
 
     /*

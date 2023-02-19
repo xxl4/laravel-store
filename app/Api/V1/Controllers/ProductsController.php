@@ -24,6 +24,7 @@ class ProductsController extends Controller {
      * @POST("/add")
     */
     public function add(Request $request) {
+        $user = app('Dingo\Api\Auth\Auth')->user();
         
     }
 

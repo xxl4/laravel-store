@@ -8,6 +8,8 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use App\Enums\OrganizationEnableEnum;
+use App\Admin\Forms\OrganizationSecret;
+use Nicelizhi\Admin\Layout\Content;
 
 class OrganizationController extends AdminController
 {
@@ -74,5 +76,13 @@ class OrganizationController extends AdminController
         $form->text('code', __('Code'));
 
         return $form;
+    }
+
+    /**
+     * 
+     * 秘钥生成与查看
+     */
+    public function secret(Content $content) {
+        return $content->title("密钥设置")->body(new OrganizationSecret());
     }
 }

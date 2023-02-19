@@ -8,6 +8,7 @@ use Nicelizhi\Admin\Layout\Column;
 use Nicelizhi\Admin\Layout\Content;
 use Nicelizhi\Admin\Layout\Row;
 use Illuminate\Support\Arr;
+use Nicelizhi\Admin\Facades\Admin;
 
 class HomeController extends Controller
 {
@@ -34,10 +35,15 @@ class HomeController extends Controller
     }
 
     public function developer() {
+        $uid = Admin::user()->id;
+        $org = \App\Models\Organization::where("user_id", $uid)->select(["secret"])->first();
         $envs = [
             ['name' => '联系电话',       'value' => '182 1761 4046'],
             ['name' => '技术支持',       'value' => 'Email:modays@foxmail.com'],
             ['name' => '项目链接',       'value' => 'https://github.com/nicelizhi/laravel-admin-store'],
+            ['name' => 'API密钥',       'value' => $org->secret],
+            ['name' => 'API文档',       'value' => 'https://github.com/nicelizhi/laravel-admin-store/wiki'],
+
         ];
         return view('admin.dashboard.developer', compact('envs'));
     }
