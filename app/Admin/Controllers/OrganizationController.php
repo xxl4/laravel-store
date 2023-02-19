@@ -28,7 +28,7 @@ class OrganizationController extends AdminController
         $grid = new Grid(new Organization());
 
         $grid->column('id', __('Id'));
-        $grid->column('user_id', __('User id'))->filter();
+        //$grid->column('user_id', __('User id'))->filter();
         $grid->column('enable', __('Enable'))->filter(OrganizationEnableEnum::getAll())->editable("select", OrganizationEnableEnum::getAll());
         $grid->column('name', __('Name'))->filter();
         $grid->column('code', __('Code'))->filter();

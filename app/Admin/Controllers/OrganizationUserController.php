@@ -71,7 +71,7 @@ class OrganizationUserController extends AdminController
     {
         $form = new Form(new OrganizationUser());
 
-        $form->number('user_id', __('User id'));
+        //$form->number('user_id', __('User id'));
         $form->switch('enable', __('Enable'));
         $form->text('name', __('Name'));
         $form->select('role_id', __('Role id'))->options(Role::whereIn("id",[2,3,4,5])->pluck('name', 'id'));
