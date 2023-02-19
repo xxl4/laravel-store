@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * stock resource representation
- * @Resource("Stock", uri="/stock")
+ * products resource representation
+ * @Resource("products", uri="/products")
  */
 class ProductsController extends Controller {
     use Helpers;
@@ -19,8 +19,9 @@ class ProductsController extends Controller {
     /*
      * 添加商品
      * @Versions({"v1"})
-     * @Request()
-     * @Response()
+     * @Request("username=foo&password=bar", contentType="application/x-www-form-urlencoded")
+     * @Response(200, body={"id": 10, "username": "foo"})
+     * @POST("/add")
     */
     public function add(Request $request) {
 
@@ -29,8 +30,9 @@ class ProductsController extends Controller {
     /*
      * 编辑商品
      * @Versions({"v1"})
-     * @Request()
-     * @Response()
+     * @Request("username=foo&password=bar", contentType="application/x-www-form-urlencoded")
+     * @Response(200, body={"id": 10, "username": "foo"})
+     * @Put("/edit")
     */
     public function edit(Request $request) {
 
@@ -39,8 +41,9 @@ class ProductsController extends Controller {
     /*
      * 商品删除
      * @Versions({"v1"})
-     * @Request()
-     * @Response()
+     * @Request("username=foo&password=bar", contentType="application/x-www-form-urlencoded")
+     * @Response(200, body={"id": 10, "username": "foo"})
+     * @Delete("/delete")
     */
     public function delete(Request $request) {
 
@@ -49,8 +52,9 @@ class ProductsController extends Controller {
     /*
      * 商品查看
      * @Versions({"v1"})
-     * @Request()
-     * @Response()
+     * @Request("username=foo&password=bar", contentType="application/x-www-form-urlencoded")
+     * @Response(200, body={"id": 10, "username": "foo"})
+     * @Get("/view")
     */
     public function view(Request $request) {
         $product_id = $request->input("product_id");
@@ -60,8 +64,9 @@ class ProductsController extends Controller {
     /*
      * 商品查找
      * @Versions({"v1"})
-     * @Request()
-     * @Response()
+     * @Request("username=foo&password=bar", contentType="application/x-www-form-urlencoded")
+     * @Response(200, body={"id": 10, "username": "foo"})
+     * @Get("/search")
     */
     public function search(Request $request) {
         $product_id = $request->input("product_id");
