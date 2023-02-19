@@ -118,6 +118,10 @@
     "Enable": "启用状态",
     "Enable_0": "禁用",
     "Enable_1": "启用",
+    "Role id": "角色ID",
+    "User id": "用户ID",
+    "Name": "名称",
+    "Code": "编码",
 
     "Goods number": "商品数量",
     "Pay status": "支付状态"

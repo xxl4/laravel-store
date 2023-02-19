@@ -16,7 +16,7 @@ class OrganizationController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Organization';
+    protected $title = '机构';
 
     /**
      * Make a grid builder.

@@ -8,6 +8,8 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
+use App\Enums\ProductsEnableEnum;
+use App\Libs\Utils;
 
 class ProductsController extends AdminController
 {
@@ -16,7 +18,7 @@ class ProductsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Product';
+    protected $title = '商品';
 
     /**
      * Make a grid builder.
@@ -30,12 +32,20 @@ class ProductsController extends AdminController
         $grid->column('id', __('Id'));
         //$grid->column('user_id', __('User id'));
         $grid->column('name', __('Name'));
+        $grid->column('code', __('Code'));
+        $grid->column('enable', __('Enable'))->filter(ProductsEnableEnum::getAll())->edit("select", ProductsEnableEnum::getAll());
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
         $uid = Admin::user()->id;
-        $grid->model()->where("user_id", $uid);
+        $organization_id = Utils::getOrganizationID($uid);
+        $grid->model()->where("organization_id", $organization_id);
         $grid->model()->orderBy("id", "desc");
+        $grid->filter(function($filter){
+            $filter->scope('enable_0', '仓库中')->where('enable', ProductsEnableEnum::Enable_0);
+            $filter->scope('enable_1', '在线')->where('enable', ProductsEnableEnum::Enable_1);
+        });
+        
 
         return $grid;
     }
@@ -70,6 +80,7 @@ class ProductsController extends AdminController
 
         $form->hidden('user_id', __('User id'))->default(Admin::user()->id);
         $form->text('name', __('Name'));
+        $form->text('code', __('Code'));
 
         return $form;
     }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Enums\ProductsEnableEnum;
 
 class AddOrganizationIdToProductsTable extends Migration
 {
@@ -17,7 +18,7 @@ class AddOrganizationIdToProductsTable extends Migration
             //
             $table->integer("organization_id")->after('user_id')->comment("机构ID");
             $table->string("code", 100)->after('organization_id')->comment("商品编码");
-            $table->enum("enable", )->after('code')->comment("商品状态");
+            $table->enum("enable", ProductsEnableEnum::getValues())->after('code')->comment("商品状态");
             
         });
     }
