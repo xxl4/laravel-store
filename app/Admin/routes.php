@@ -15,8 +15,10 @@ Route::group([
 
     $router->resource('configs', ConfigController::class);
 
+    //机构
     $router->resource('organizations', OrganizationController::class);
     $router->resource('organization-users', OrganizationUserController::class);
+    $router->resource('organization-stores', OrganizationStoresController::class);
 
     // 订单
     $router->resource('orders', OrdersController::class);

@@ -123,6 +123,12 @@
     "Name": "名称",
     "Code": "编码",
 
+
+    "Organization id": "机构ID",
+    "Shop id": "店铺ID",
+    "Shop type": "店铺类型",
+    "Config": "店铺配置",
+
     "Goods number": "商品数量",
     "Pay status": "支付状态"
 
