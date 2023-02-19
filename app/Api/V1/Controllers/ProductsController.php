@@ -46,13 +46,27 @@ class ProductsController extends Controller {
 
     }
 
-        /*
+    /*
      * 商品查看
      * @Versions({"v1"})
      * @Request()
      * @Response()
     */
     public function view(Request $request) {
+        $product_id = $request->input("product_id");
+        $cid = $request->input("cid");
+    }
+
+    /*
+     * 商品查找
+     * @Versions({"v1"})
+     * @Request()
+     * @Response()
+    */
+    public function search(Request $request) {
+        $product_id = $request->input("product_id");
+        $cid = $request->input("cid");
+
 
     }
 

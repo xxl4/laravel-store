@@ -38,6 +38,7 @@ $api->version('v1', function ($api) {
     $api->put('product/edit', 'App\Api\V1\Controllers\ProductsController@edit');
     $api->delete('product/delete', 'App\Api\V1\Controllers\ProductsController@delete');
     $api->get("product/view", 'App\Api\V1\Controllers\ProductsController@view');
+    $api->get("product/search", 'App\Api\V1\Controllers\ProductsController@search');
 
 
 
