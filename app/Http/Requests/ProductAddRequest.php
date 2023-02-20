@@ -28,7 +28,7 @@ class ProductAddRequest extends FormRequest
             'cid' => 'required',
             'price' => 'required',
             'outer_id' => 'required',
-            'image' => 'required|array',
+            'image' => 'required',
             'props' => 'required',
             'desc' => 'required',
             'customer_props' => 'required',

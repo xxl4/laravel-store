@@ -26,4 +26,17 @@ final class Utils
         }
         return $organization_id;
     }
+
+    /**
+     * 
+     * 统一API格式输出
+     * 
+     */
+    static function ApiResponse($data, $message='Success', $code='200') {
+        return [
+            'data' => $data,
+            'code'  => $code,
+            'message' => __($message)
+        ];
+    }
 }
