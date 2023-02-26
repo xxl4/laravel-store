@@ -75,6 +75,9 @@ class ProductsController extends Controller {
      * @Put("/edit")
     */
     public function edit(ProductEditRequest $request) {
+        $validated = $request->validated();
+        $data = $request->all();
+        
         $ret = [
             "product_id" => $product->id
         ];
@@ -100,9 +103,10 @@ class ProductsController extends Controller {
      * @Response(200, body={"id": 10, "username": "foo"})
      * @Get("/view")
     */
-    public function view(Request $request) {
+    public function get(Request $request) {
         $product_id = $request->input("product_id");
         $cid = $request->input("cid");
+        return Utils::ApiResponse($ret);
     }
 
     /*

@@ -13,6 +13,13 @@
       0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     ),
   ),
+  'cmgmyr/messenger' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Cmgmyr\\Messenger\\MessengerServiceProvider',
+    ),
+  ),
   'dingo/api' => 
   array (
     'providers' => 
@@ -83,13 +90,6 @@
     'providers' => 
     array (
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    ),
-  ),
-  'rap2hpoutre/laravel-log-viewer' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Rap2hpoutre\\LaravelLogViewer\\LaravelLogViewerServiceProvider',
     ),
   ),
 );

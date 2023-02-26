@@ -132,7 +132,7 @@
     'name' => NULL,
     'conditionalRequest' => true,
     'strict' => false,
-    'debug' => true,
+    'debug' => false,
     'errorFormat' => 
     array (
       'message' => ':message',
@@ -171,7 +171,7 @@
   array (
     'name' => 'Store-Admin',
     'env' => 'local',
-    'debug' => true,
+    'debug' => false,
     'url' => 'https://store-admin.258sd.com/',
     'asset_url' => NULL,
     'timezone' => 'Asia/Shanghai',
@@ -208,6 +208,7 @@
       23 => 'App\\Providers\\AuthServiceProvider',
       24 => 'App\\Providers\\EventServiceProvider',
       25 => 'App\\Providers\\RouteServiceProvider',
+      26 => 'Cmgmyr\\Messenger\\MessengerServiceProvider',
     ),
     'aliases' => 
     array (
@@ -280,7 +281,7 @@
       'users' => 
       array (
         'driver' => 'eloquent',
-        'model' => 'App\\User',
+        'model' => 'Nicelizhi\\Admin\\Auth\\Database\\Administrator',
       ),
       'admin' => 
       array (
@@ -721,6 +722,16 @@
       ),
     ),
     'log_channel' => NULL,
+  ),
+  'messenger' => 
+  array (
+    'message_model' => 'Cmgmyr\\Messenger\\Models\\Message',
+    'participant_model' => 'Cmgmyr\\Messenger\\Models\\Participant',
+    'thread_model' => 'Cmgmyr\\Messenger\\Models\\Thread',
+    'messages_table' => NULL,
+    'participants_table' => NULL,
+    'threads_table' => NULL,
+    'user_model' => 'Nicelizhi\\Admin\\Auth\\Database\\Administrator',
   ),
   'queue' => 
   array (

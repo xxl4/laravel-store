@@ -29,4 +29,10 @@ Route::group([
     // 商品
     $router->resource('products', ProductsController::class);
 
+    $router->get('/messages', ['as' => 'messages', 'uses' => 'MessagesController@index']);
+    $router->get('/messages/create', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
+    $router->post('/messages', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
+    $router->get('/messages/{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
+    $router->put('/messages/{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
+
 });
