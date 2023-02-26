@@ -29,7 +29,14 @@ Route::group([
 
     // 商品
     $router->resource('products', ProductsController::class);
+    $router->resource('prod-props', ProdPropController::class);
+    $router->resource('prod-prop-values', ProdPropValueController::class);
 
+    //商品分类
+    $router->resource('categories', CategoryController::class);
+    $router->resource('category-props', CategoryPropController::class);
+
+    //消息
     $router->get('/messages', ['as' => 'messages', 'uses' => 'MessagesController@index']);
     $router->get('/messages/create', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
     $router->post('/messages', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);

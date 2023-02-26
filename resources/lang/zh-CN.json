@@ -129,6 +129,16 @@
     "Shop type": "店铺类型",
     "Config": "店铺配置",
 
+    "Grade": "分类层级",
+    "Rec time": "添加时间",
+    "Seq": "排序",
+    "Category name": "分类名称",
+    "Parent id": "父ID",
+    "Category id": "分类ID",
+    "Pic": "图片",
+    "Prop value": "属性值",
+    "Value id": "Value ID",
+
     "Success": "成功",
 
     "Goods number": "商品数量",
