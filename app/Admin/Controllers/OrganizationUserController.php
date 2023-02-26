@@ -80,7 +80,7 @@ class OrganizationUserController extends AdminController
         })->ajax('/admin/organization-users/users');
         $form->switch('enable', __('Enable'));
         $form->text('name', __('Name'));
-        $form->select('role_id', __('Role ID'))->options(Role::whereIn("id",[2,3,4,5])->pluck('name', 'id'));
+        $form->select('role_id', __('Role ID'))->options(Role::whereIn("id",[2,3,4,5])->pluck('name', 'id'))->rules('required|min:2');
         $uid = Admin::user()->id;
         $org_id = 0;
         $orgMember = \App\Models\OrganizationUser::where("user_id", $uid)->select(['organization_id'])->first();
@@ -102,10 +102,7 @@ class OrganizationUserController extends AdminController
                 "user_id" => $form->model()->user_id,
                 "role_id" => $form->model()->role_id
             ]);
-            //DB::insert('insert into admin_role_users (user_id, role_id,created_at) values (?, ?, ?)', [$form->model()->user_id, $form->model()->role_id, $created]);
-
-
-            //$form->model()->user_id;
+  
         
         });
 
