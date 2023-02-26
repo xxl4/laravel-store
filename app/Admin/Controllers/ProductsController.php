@@ -33,12 +33,13 @@ class ProductsController extends AdminController
         //$grid->column('user_id', __('User id'));
         $grid->column('name', __('Name'));
         $grid->column('code', __('Code'));
-        $grid->column('enable', __('Enable'))->filter(ProductsEnableEnum::getAll())->edit("select", ProductsEnableEnum::getAll());
+        $grid->column('enable', __('Enable'))->filter(ProductsEnableEnum::getAll())->editable("select", ProductsEnableEnum::getAll());
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
         $uid = Admin::user()->id;
         $organization_id = Utils::getOrganizationID($uid);
+
         $grid->model()->where("organization_id", $organization_id);
         $grid->model()->orderBy("id", "desc");
         $grid->filter(function($filter){
