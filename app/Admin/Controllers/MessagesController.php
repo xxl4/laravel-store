@@ -36,7 +36,7 @@ class MessagesController extends Controller {
         // All threads that user is participating in, with new messages
         //$threads = Thread::forUserWithNewMessages(Auth::id())->latest('updated_at')->get();
 
-        return $content->view('admin.messenger.index', compact('threads'));
+        return $content->title("消息中心")->view('admin.messenger.index', compact('threads'));
     }
 
     /**
@@ -66,7 +66,7 @@ class MessagesController extends Controller {
 
         $thread->markAsRead($userId);
 
-        return $content->view('admin.messenger.show', compact('thread', 'users'));
+        return $content->title("消息展示")->view('admin.messenger.show', compact('thread', 'users'));
     }
 
     /**
@@ -79,7 +79,7 @@ class MessagesController extends Controller {
 
         $users = Administrator::where('id', '!=', Auth::id())->get();
 
-        return $content->view('admin.messenger.create', compact('users'));
+        return $content->title("消息创建")->view('admin.messenger.create', compact('users'));
     }
 
     /**

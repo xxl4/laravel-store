@@ -36,12 +36,19 @@ class HomeController extends Controller
 
     public function developer() {
         $uid = Admin::user()->id;
-        $org = \App\Models\Organization::where("user_id", $uid)->select(["secret"])->first();
+        $orgMember = \App\Models\OrganizationUser::where("user_id", $uid)->select(["organization_id"])->first();
+        $secret = "";
+        if(!is_null($orgMember)) {
+            $org = \App\Models\Organization::where("id", $orgMember->organization_id)->select(["secret"])->first();
+            if(!is_null($org)) $secret = $org->secret;
+        }
+        
+        
         $envs = [
             ['name' => '联系电话',       'value' => '182 1761 4046'],
             ['name' => '技术支持',       'value' => 'Email:modays@foxmail.com'],
             ['name' => '项目链接',       'value' => 'https://github.com/nicelizhi/laravel-admin-store'],
-            ['name' => 'API密钥',       'value' => $org->secret],
+            ['name' => 'API密钥',       'value' => $secret],
             ['name' => 'API文档',       'value' => 'https://github.com/nicelizhi/laravel-admin-store/wiki'],
 
         ];

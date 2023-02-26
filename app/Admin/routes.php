@@ -19,6 +19,7 @@ Route::group([
     $router->any('organizations/secret', "OrganizationController@secret");
     //$router->get('form', OrganizationSecret::class);
     $router->resource('organizations', OrganizationController::class);
+    $router->get('organization-users/users', "OrganizationUserController@getUser");
     $router->resource('organization-users', OrganizationUserController::class);
     $router->resource('organization-stores', OrganizationStoresController::class);
 

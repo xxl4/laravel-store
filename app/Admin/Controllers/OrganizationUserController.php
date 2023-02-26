@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\OrganizationUser;
 use Nicelizhi\Admin\Controllers\AdminController;
+use Nicelizhi\Admin\Auth\Database\Administrator;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
@@ -11,6 +12,8 @@ use App\Enums\OrganizationUserEnableEnum;
 use Nicelizhi\Admin\Auth\Database\Role;
 use Nicelizhi\Admin\Facades\Admin;
 use App\Libs\Utils;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationUserController extends AdminController
 {
@@ -71,14 +74,46 @@ class OrganizationUserController extends AdminController
     {
         $form = new Form(new OrganizationUser());
 
-        //$form->number('user_id', __('User id'));
+        $form->select('user_id', __('UserName'))->options(function($id) {
+            $user = Administrator::find($id);
+            if($user) return [$user->id => $user->username];
+        })->ajax('/admin/organization-users/users');
         $form->switch('enable', __('Enable'));
         $form->text('name', __('Name'));
-        $form->select('role_id', __('Role id'))->options(Role::whereIn("id",[2,3,4,5])->pluck('name', 'id'));
+        $form->select('role_id', __('Role ID'))->options(Role::whereIn("id",[2,3,4,5])->pluck('name', 'id'));
         $uid = Admin::user()->id;
-        $organization = \App\Models\Organization::where("user_id", $uid)->select(["id"])->first();
-        $form->hidden("organization_id")->default($organization->id);
+        $org_id = 0;
+        $orgMember = \App\Models\OrganizationUser::where("user_id", $uid)->select(['organization_id'])->first();
+        if(!is_null($orgMember)) {
+            $org_id = $orgMember->organization_id;
+        }
+        
+        
+        $form->hidden("organization_id")->default($org_id);
+
+
+        // 数据保存后的权限调整
+        $form->saved(function (Form $form) {
+
+            // 清理前面的权限
+            DB::table("admin_role_users")->where('user_id', $form->model()->user_id)->delete();
+            $created_at = date("Y-m-d H:i:s");
+            DB::table("admin_role_users")->insert([
+                "user_id" => $form->model()->user_id,
+                "role_id" => $form->model()->role_id
+            ]);
+            //DB::insert('insert into admin_role_users (user_id, role_id,created_at) values (?, ?, ?)', [$form->model()->user_id, $form->model()->role_id, $created]);
+
+
+            //$form->model()->user_id;
+        
+        });
 
         return $form;
+    }
+
+    public function getUser(Request $request) {
+        $q = $request->get('q');
+        return Administrator::where("username",'=', $q)->paginate(null, ['id', 'username as text']);
     }
 }

@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'Store-admin',
+    'name' => 'Store SASS Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>Store</b> admin',
+    'logo' => '<b>Store</b> SASS',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
     | Html title for all pages.
     |
     */
-    'title' => 'Admin',
+    'title' => 'Store SASS Admin',
 
     /*
     |--------------------------------------------------------------------------

@@ -26,7 +26,7 @@
 </style>
 
 <div class="title">
-    Store SASS
+    Store SASS Admin
 </div>
 <div class="links">
     <a href="https://github.com/nicelizhi/laravel-admin-store" target="_blank">Github</a>
