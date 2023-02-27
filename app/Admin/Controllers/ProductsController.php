@@ -7,9 +7,6 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
-use Nicelizhi\Admin\Facades\Admin;
-use App\Enums\ProductsEnableEnum;
-use App\Libs\Utils;
 
 class ProductsController extends AdminController
 {
@@ -18,7 +15,7 @@ class ProductsController extends AdminController
      *
      * @var string
      */
-    protected $title = '商品';
+    protected $title = 'Product';
 
     /**
      * Make a grid builder.
@@ -29,24 +26,27 @@ class ProductsController extends AdminController
     {
         $grid = new Grid(new Product());
 
-        $grid->column('id', __('Id'));
-        //$grid->column('user_id', __('User id'));
-        $grid->column('name', __('Name'));
-        $grid->column('code', __('Code'));
-        $grid->column('enable', __('Enable'))->filter(ProductsEnableEnum::getAll())->editable("select", ProductsEnableEnum::getAll());
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('prod_id', __('Prod id'));
+        $grid->column('prod_name', __('Prod name'));
+        $grid->column('shop_id', __('Shop id'));
+        $grid->column('ori_price', __('Ori price'));
+        $grid->column('price', __('Price'));
+        $grid->column('brief', __('Brief'));
+        $grid->column('content', __('Content'))->hide();
+        $grid->column('pic', __('Pic'))->hide();
+        $grid->column('imgs', __('Imgs'))->hide();
+        $grid->column('status', __('Status'));
+        $grid->column('category_id', __('Category id'));
+        $grid->column('sold_num', __('Sold num'));
+        $grid->column('total_stocks', __('Total stocks'));
+        $grid->column('delivery_mode', __('Delivery mode'));
+        $grid->column('delivery_template_id', __('Delivery template id'));
+        $grid->column('create_time', __('Create time'));
+        $grid->column('update_time', __('Update time'));
+        $grid->column('putaway_time', __('Putaway time'));
+        $grid->column('version', __('Version'));
 
-        $uid = Admin::user()->id;
-        $organization_id = Utils::getOrganizationID($uid);
-
-        $grid->model()->where("organization_id", $organization_id);
-        $grid->model()->orderBy("id", "desc");
-        $grid->filter(function($filter){
-            $filter->scope('enable_0', '仓库中')->where('enable', ProductsEnableEnum::Enable_0);
-            $filter->scope('enable_1', '在线')->where('enable', ProductsEnableEnum::Enable_1);
-        });
-        
+        $grid->model()->orderBy("prod_id", "DESC");
 
         return $grid;
     }
@@ -61,11 +61,25 @@ class ProductsController extends AdminController
     {
         $show = new Show(Product::findOrFail($id));
 
-        $show->field('id', __('Id'));
-        $show->field('user_id', __('User id'));
-        $show->field('name', __('Name'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
+        $show->field('prod_id', __('Prod id'));
+        $show->field('prod_name', __('Prod name'));
+        $show->field('shop_id', __('Shop id'));
+        $show->field('ori_price', __('Ori price'));
+        $show->field('price', __('Price'));
+        $show->field('brief', __('Brief'));
+        $show->field('content', __('Content'));
+        $show->field('pic', __('Pic'));
+        $show->field('imgs', __('Imgs'));
+        $show->field('status', __('Status'));
+        $show->field('category_id', __('Category id'));
+        $show->field('sold_num', __('Sold num'));
+        $show->field('total_stocks', __('Total stocks'));
+        $show->field('delivery_mode', __('Delivery mode'));
+        $show->field('delivery_template_id', __('Delivery template id'));
+        $show->field('create_time', __('Create time'));
+        $show->field('update_time', __('Update time'));
+        $show->field('putaway_time', __('Putaway time'));
+        $show->field('version', __('Version'));
 
         return $show;
     }
@@ -79,9 +93,24 @@ class ProductsController extends AdminController
     {
         $form = new Form(new Product());
 
-        $form->hidden('user_id', __('User id'))->default(Admin::user()->id);
-        $form->text('name', __('Name'));
-        $form->text('code', __('Code'));
+        $form->number('prod_id', __('Prod id'));
+        $form->text('prod_name', __('Prod name'));
+        $form->number('shop_id', __('Shop id'));
+        $form->decimal('ori_price', __('Ori price'))->default(0.00);
+        $form->decimal('price', __('Price'));
+        $form->text('brief', __('Brief'));
+        $form->textarea('content', __('Content'));
+        $form->image('pic', __('Pic'));
+        $form->multipleImage('imgs', __('Imgs'));
+        $form->number('status', __('Status'));
+        $form->number('category_id', __('Category id'));
+        $form->number('sold_num', __('Sold num'));
+        $form->number('total_stocks', __('Total stocks'));
+        $form->text('delivery_mode', __('Delivery mode'));
+        $form->number('delivery_template_id', __('Delivery template id'));
+        $form->datetime('update_time', __('Update time'))->default(date('Y-m-d H:i:s'));
+        $form->datetime('putaway_time', __('Putaway time'))->default(date('Y-m-d H:i:s'));
+        $form->hidden('version', __('Version'));
 
         return $form;
     }
