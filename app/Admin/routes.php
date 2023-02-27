@@ -26,6 +26,10 @@ Route::group([
 
     // 订单
     $router->resource('orders', OrdersController::class);
+    $router->resource('order-items', OrderItmesController::class);
+
+    //售后
+    $router->resource('order-refunds', OrderRefundsController::class);
 
     // 商品
     $router->resource('products', ProductsController::class);
