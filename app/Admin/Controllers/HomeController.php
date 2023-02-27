@@ -20,15 +20,17 @@ class HomeController extends Controller
             ->row($this->title())
             ->row(function (Row $row) {
 
+                /*
                 $row->column(4, function (Column $column) {
                     $column->append(Dashboard::environment());
                 });
+                */
 
-                $row->column(4, function (Column $column) {
+                $row->column(6, function (Column $column) {
                     $column->append($this->developer());
                 });
 
-                $row->column(4, function (Column $column) {
+                $row->column(6, function (Column $column) {
                     $column->append($this->stores());
                 });
             });
@@ -50,6 +52,7 @@ class HomeController extends Controller
             ['name' => '项目链接',       'value' => 'https://github.com/nicelizhi/laravel-admin-store'],
             ['name' => 'API密钥',       'value' => $secret],
             ['name' => 'API文档',       'value' => 'https://github.com/nicelizhi/laravel-admin-store/wiki'],
+            ['name' => '项目资助',       'value' => 'https://github.com/nicelizhi/laravel-admin-store'],
 
         ];
         return view('admin.dashboard.developer', compact('envs'));

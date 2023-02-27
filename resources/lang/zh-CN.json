@@ -147,6 +147,14 @@
 
     "Success": "成功",
 
+    "TMALL": "天猫",
+    "TAOBAO": "淘宝",
+    "JD": "京东",
+    "WEDIAN": "微店",
+    "DouDian": "抖店",
+    "AMAZONCN": "亚马逊中国",
+    "AMAZON": "亚马逊",
+
     "Goods number": "商品数量",
     "Pay status": "支付状态"
 
