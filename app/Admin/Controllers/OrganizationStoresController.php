@@ -32,7 +32,7 @@ class OrganizationStoresController extends AdminController
         //$grid->column('organization_id', __('Organization id'));
         $grid->column('name', __('Name'));
         $grid->column('shop_id', __('Shop id'));
-        $grid->column('shop_type', __('Shop type'));
+        $grid->column('shop_type', __('Shop type'))->editable("select", StoreTypeEnum::getAll());
         $grid->column('key', __('Key'));
         $grid->column('secret', __('Secret'))->limit(30);
         $grid->column('token', __('Token'))->limit(30);
