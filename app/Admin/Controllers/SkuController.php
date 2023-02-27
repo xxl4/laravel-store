@@ -26,7 +26,7 @@ class SkuController extends AdminController
     {
         $grid = new Grid(new Sku());
 
-        $grid->column('sku_id', __('Sku id'));
+        $grid->column('sku_id', __('Sku id'))->sortable()->filter();
         $grid->column('prod_id', __('Prod id'));
         $grid->column('properties', __('Properties'));
         $grid->column('ori_price', __('Ori price'));
@@ -37,7 +37,7 @@ class SkuController extends AdminController
         $grid->column('rec_time', __('Rec time'));
         $grid->column('party_code', __('Party code'));
         $grid->column('model_id', __('Model id'));
-        $grid->column('pic', __('Pic'));
+        //$grid->column('pic', __('Pic'));
         $grid->column('sku_name', __('Sku name'));
         $grid->column('prod_name', __('Prod name'));
         $grid->column('version', __('Version'));

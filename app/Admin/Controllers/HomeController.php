@@ -92,6 +92,11 @@ class HomeController extends Controller
                 'link' => 'https://www.amazon.com',
                 'icon' => 'clock-o',
             ],
+            'yzxiaodian' => [
+                'name' => '有赞小店',
+                'link' => 'https://www.xiaodian.com',
+                'icon' => 'clock-o',
+            ],
         ];
         return view('admin.dashboard.store', compact('extensions'));
     }

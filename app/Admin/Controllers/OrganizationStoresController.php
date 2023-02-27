@@ -34,9 +34,9 @@ class OrganizationStoresController extends AdminController
         $grid->column('shop_id', __('Shop id'));
         $grid->column('shop_type', __('Shop type'));
         $grid->column('key', __('Key'));
-        $grid->column('secret', __('Secret'));
-        $grid->column('token', __('Token'));
-        $grid->column('token2', __('Token Kefu'));
+        $grid->column('secret', __('Secret'))->limit(30);
+        $grid->column('token', __('Token'))->limit(30);
+        $grid->column('token2', __('Token Kefu'))->limit(30);
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
