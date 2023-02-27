@@ -8,7 +8,7 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 
-class ProdTagContrReferenceoller extends AdminController
+class ProdTagContrReferenceController extends AdminController
 {
     /**
      * Title for current resource.
