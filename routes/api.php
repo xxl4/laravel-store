@@ -15,7 +15,7 @@ use Illuminate\Routing\Router;
 
 $api = app('Dingo\Api\Routing\Router');
 
-$api->version('v1', ["middleware"=>'api.auth'],function ($api) {
+$api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api) {
     $api->post('stock/add', 'App\Api\V1\Controllers\StockController@add');
     $api->post('stock/down', 'App\Api\V1\Controllers\StockController@down');
 
@@ -26,11 +26,14 @@ $api->version('v1', ["middleware"=>'api.auth'],function ($api) {
     $api->get("product/get", 'App\Api\V1\Controllers\ProductsController@get');
     $api->get("product/search", 'App\Api\V1\Controllers\ProductsController@search');
 
+    #系统
+    $api->get("store/area", 'App\Api\V1\Controllers\StoreController@area');
+
 
 
 });
 
-$api->version('v2',["middleware"=>'api.auth'], function ($api) {
+$api->version('v2',["prefix"=>"api/v2","middleware"=>'api.auth'], function ($api) {
     $api->post('stock/add', 'App\Api\V1\Controllers\StockController@down');
     //$api->post('stock/down', 'App\Api\V1\Controllers\StockController@down');
 });
