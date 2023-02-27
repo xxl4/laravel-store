@@ -62,7 +62,7 @@ return [
 
         'namespace' => 'App\\Admin\\Controllers',
 
-        'middleware' => ['web', 'admin'],
+        'middleware' => ['web', 'admin', \App\Admin\Middleware\SwitchLanguage::class],
     ],
 
     /*
@@ -140,6 +140,20 @@ return [
             'auth/logout',
             '_handle_action_',
         ],
+    ],
+
+    'multi_language' => [
+        // 指定语言文件目录
+        'lang_directory' => resource_path('lang') . DIRECTORY_SEPARATOR,
+        // 支持的语言
+        'languages' => [
+            'en' => 'English',
+            'zh_CN' => '简体中文',
+        ],
+        // 默认语言
+        'default' => 'zh_CN',
+        // cookie键，用于记住用户语言
+        'cookie_name' => 'backend_locale',
     ],
 
     /*
