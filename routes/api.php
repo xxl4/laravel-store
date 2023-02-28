@@ -59,6 +59,9 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
     $api->delete('users/delete', 'App\Api\V1\Controllers\SkusController@delete');
     $api->get("users/get", 'App\Api\V1\Controllers\SkusController@get');
 
+    #发货
+    $api->post('shipping/add', 'App\Api\V1\Controllers\SkusController@add');
+
     #系统
     $api->get("store/area", 'App\Api\V1\Controllers\StoreController@area');
 
