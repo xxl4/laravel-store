@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\ProductAddRequest; 
 use App\Http\Requests\ProductEditRequest; 
 use App\Http\Requests\ProductDeleteRequest; 
+use Dingo\Api\Auth\Auth;
 
 /**
  * products resource representation
@@ -104,11 +105,23 @@ class ProductsController extends Controller {
      * @Get("/lists")
     */
     public function get(Request $request) {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
+        //$this->org = $user;
+        // 验证
+        $validated = $request->validate([
+            'num'   => 'required|int|max:100',
+            'page'   => 'required|int',
+            'cid'   => 'int',
+            'product_id'   => 'int',
+        ]);
+
+        // 接收数据
         $product_id = $request->input("product_id");
         $cid = $request->input("cid");
         $num = $request->input('num');
         $page = $request->input('page');
 
+        // 数据拼接
         $model = \App\Models\Product::select("*");
         if(!empty($product_id)) {
             $model->where("prod_id", $product_id);
@@ -116,15 +129,15 @@ class ProductsController extends Controller {
         if(!empty($cid)) {
             $model->where("category_id", $cid);
         }
+        $model->where("org_id", $this->org->id);
         //var_dump($model);
         $total = $model->count();
         $items = $model->offset($page * $num)->limit($num)->get();
 
-        
+        //数据返回
         $ret = [
             "items"=>$items,
             "total" => $total,
-            'request'=> $request->all()
         ];
         return Utils::ApiResponse($ret);
     }
