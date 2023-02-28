@@ -27,6 +27,12 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
     $api->get("product/lists", 'App\Api\V1\Controllers\ProductsController@get');
     $api->get("product/search", 'App\Api\V1\Controllers\ProductsController@search');
 
+    # 商品SKU
+    $api->post('sku/add', 'App\Api\V1\Controllers\SkusController@add');
+    $api->put('sku/edit', 'App\Api\V1\Controllers\SkusController@edit');
+    $api->delete('sku/delete', 'App\Api\V1\Controllers\SkusController@delete');
+    $api->get("sku/get", 'App\Api\V1\Controllers\SkusController@get');
+
     #系统
     $api->get("store/area", 'App\Api\V1\Controllers\StoreController@area');
 
