@@ -24,6 +24,7 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
     $api->put('product/edit', 'App\Api\V1\Controllers\ProductsController@edit');
     $api->delete('product/delete', 'App\Api\V1\Controllers\ProductsController@delete');
     $api->get("product/get", 'App\Api\V1\Controllers\ProductsController@get');
+    $api->get("product/lists", 'App\Api\V1\Controllers\ProductsController@get');
     $api->get("product/search", 'App\Api\V1\Controllers\ProductsController@search');
 
     #系统

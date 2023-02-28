@@ -101,11 +101,31 @@ class ProductsController extends Controller {
      * @Versions({"v1"})
      * @Request("username=foo&password=bar", contentType="application/x-www-form-urlencoded")
      * @Response(200, body={"id": 10, "username": "foo"})
-     * @Get("/view")
+     * @Get("/lists")
     */
     public function get(Request $request) {
         $product_id = $request->input("product_id");
         $cid = $request->input("cid");
+        $num = $request->input('num');
+        $page = $request->input('page');
+
+        $model = \App\Models\Product::select("*");
+        if(!empty($product_id)) {
+            $model->where("prod_id", $product_id);
+        }
+        if(!empty($cid)) {
+            $model->where("category_id", $cid);
+        }
+        //var_dump($model);
+        $total = $model->count();
+        $items = $model->offset($page * $num)->limit($num)->get();
+
+        
+        $ret = [
+            "items"=>$items,
+            "total" => $total,
+            'request'=> $request->all()
+        ];
         return Utils::ApiResponse($ret);
     }
 
