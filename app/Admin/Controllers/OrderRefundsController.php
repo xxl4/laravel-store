@@ -15,7 +15,7 @@ class OrderRefundsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'OrderRefund';
+    protected $title = '售后';
 
     /**
      * Make a grid builder.

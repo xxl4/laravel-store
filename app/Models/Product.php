@@ -29,4 +29,30 @@ class Product extends Model
         return json_decode($imgs, true);
     }
 
+
+    public function category() {
+        return $this->hasOne(Category::class);
+    }
+
+    /**
+     * 
+     * 属于哪个店铺
+     * 
+     */
+    public function store() {
+        
+    }
+
+    public function sku() {
+        $this->hasMany(Sku::class);
+    }
+
+    public function order() {
+        return $this->hasMany(Order::class);
+    }
+
+    public function refund_order() {
+        return $this->hasMany(OrderRefund::class);
+    }
+
 }

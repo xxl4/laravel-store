@@ -102,6 +102,9 @@ class OrganizationUserController extends AdminController
                 "user_id" => $form->model()->user_id,
                 "role_id" => $form->model()->role_id
             ]);
+
+            // 更新管理员表机构数据内容
+            DB::table("admin_user")->where("id", $form->model()->user_id)->update(['org_id'=>$form->model()->organization_id]);
   
         
         });
