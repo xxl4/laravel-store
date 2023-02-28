@@ -29,7 +29,7 @@ class ProdPropController extends AdminController
         $grid->column('prop_id', __('Prop id'));
         $grid->column('prop_name', __('Prop name'));
         $grid->column('rule', __('Rule'));
-        $grid->column('shop_id', __('Shop id'));
+        $grid->column('shop_id', __('Shop id'))->hide();
 
         return $grid;
     }

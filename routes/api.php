@@ -19,6 +19,14 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
     $api->post('stock/add', 'App\Api\V1\Controllers\StockController@add');
     $api->post('stock/down', 'App\Api\V1\Controllers\StockController@down');
 
+    # 分类操作
+    $api->post('category/add', 'App\Api\V1\Controllers\CategoryController@add');
+    $api->put('category/edit', 'App\Api\V1\Controllers\CategoryController@edit');
+    $api->delete('category/delete', 'App\Api\V1\Controllers\CategoryController@delete');
+    $api->get('category/prop', 'App\Api\V1\Controllers\CategoryController@prop');
+    $api->get('category/get', 'App\Api\V1\Controllers\CategoryController@get');
+    $api->get('category/lists', 'App\Api\V1\Controllers\CategoryController@get');
+
     # 商品操作
     $api->post('product/add', 'App\Api\V1\Controllers\ProductsController@add');
     $api->put('product/edit', 'App\Api\V1\Controllers\ProductsController@edit');
