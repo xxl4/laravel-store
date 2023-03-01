@@ -52,7 +52,8 @@ class CategoryController extends AdminController
         }
         $grid->model()->orderBy("seq", "asc");
         if(isset($_GET['parent_id'])) {
-            $grid->model()->where("parent_id", $_GET['parent_id']);
+            $parent_id = trim($_GET['parent_id']);
+            $grid->model()->where("parent_id", $parent_id);
         }else{
             $grid->model()->where("parent_id", 0);
         }

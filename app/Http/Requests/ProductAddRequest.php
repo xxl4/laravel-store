@@ -24,15 +24,16 @@ class ProductAddRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:100',
-            'cid' => 'required',
+            'prod_name' => 'required|max:100',
+            'category_id' => 'required',
+            'ori_price' => 'required',
             'price' => 'required',
-            'outer_id' => 'required',
-            'image' => 'required',
+            'imgs' => 'required',
+            'pic' => 'required',
             'props' => 'required',
-            'desc' => 'required',
+            'content' => 'required',
             'customer_props' => 'required',
-            'market_time' => 'required',
+            'putaway_time' => 'required',
         ];
     }
 }

@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     public $table = "prod";
-    CONST CREATED_AT="create_time";
-    const update_time = "update_time";
+    const CREATED_AT="create_time";
+    const UPDATED_AT = "update_time";
     public $primaryKey = "prod_id";
     //
-    //protected $fillable = ["name","market_time","outer_id","desc","props","customer_props","image","price","cid"];
+    protected $fillable = ["prod_name","ori_price","pic","content","imgs","price","category_id","brief","total_stocks"];
 
-    //protected $guarded = ["user_id","organization_id","code"];
+    protected $guarded = ["user_id","organization_id"];
 
     public function pic_attach_file() {
 
