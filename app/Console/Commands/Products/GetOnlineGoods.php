@@ -46,6 +46,6 @@ class GetOnlineGoods extends Command
             $this->error("no have");
             return false;
         }
-        Artisan::call("products.".$store->shop_type.".get.online");
+        Artisan::call("products.".$store->shop_type.".get.online", ['store'=>$store]);
     }
 }
