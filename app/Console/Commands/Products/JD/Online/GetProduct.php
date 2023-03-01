@@ -13,7 +13,7 @@ class GetProduct extends Command
      */
     protected $signature = 'products.JD.get.online {store} {prod_id}';
 
-    private $_field = "approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity";
+    private $_field = 'title,offlineTime,onlineTime,wareId,wareStatus,categoryId,outerId,itemNum,colType,stockNum';
 
     /**
      * The console command description.
@@ -43,41 +43,75 @@ class GetProduct extends Command
         $prod_id = $this->argument('prod_id'); // 但prod_id 为 0 的时候获取全部的商品数据
         //
         $this->info("get from online info start".$store);
-        $c = new \TopClient();
-        $c->appkey = $store->key;
-        $c->secretKey = $store->scret;
+        $c = new \JdClient();
+        $c->appKey = $store->key;
+        $c->appSecret = $store->scret;
+        $c->accessToken = $store->token;
 
+        // 查找有效的商品
         $size = 100;
-
-        $req = new \ItemsOnsaleGetRequest();
-        $req->setFields($this->_field);
+        $req = new \WareReadSearchWare4ValidRequest();
         $req->setPageNo(1);
         $req->setPageSize($size);
-        $resp = $c->execute($req, $store->token);
-        //var_dump($resp);
-        $total = $resp->total_results;
-        var_dump($total,$resp);
-        foreach ($resp->items->item as $key=> $item) {
-            $item = (array) $item;
-            $item['created_at'] = date("Y-m-d H:i:s");
-            $item['updated_at'] = date("Y-m-d H:i:s");
-            DB::table("taobao_goods")->insert($item);
-        }
+        $req->setField($this->_field);
+        $req->setOrderField("wareId");
+        $req->setOrderType("desc");
+        $resp = $c->execute($req, $c->accessToken);
 
+        $total = $resp->jingdong_ware_read_searchWare4Valid_responce->page->totalItem;
+
+        echo "Goods Total ".$total."\r\n";
+
+        $items = (array)$resp->jingdong_ware_read_searchWare4Valid_responce->page->data;
+        $goods = [];
+        foreach ($items as $key=>$item) {
+            $item = (array) $item;
+
+            $checkGood = \App\Models\ProdOuter::where("outer_id", $item['wareId'])->first();
+            if(!is_null($checkGood)) continue;
+
+            $checkGood = new \App\Models\ProdOuter();
+
+            
+            $checkGood->outer_id = trim($item['wareId']);
+            $checkGood->content = json_encode($item);
+            $checkGood->shop_id = $store->id;
+            $checkGood->shop_type = $store->shop_type;
+            $checkGood->prod_id = trim($item['outerId']);
+            $checkGood->save();
+        }
+        sleep(1);
         $pages = ceil($total / $size);
-        for ($i=2;$i<=$pages;$i++) {
-            $req = new \ItemsOnsaleGetRequest();
-            $req->setFields($this->_field);
+        //$goods = [];
+        for ($i=1;$i<=$pages;$i++) {
+            $this->info($i);
+            $req = new \WareReadSearchWare4ValidRequest();
             $req->setPageNo($i);
             $req->setPageSize($size);
-            $resp = $c->execute($req, $store->token);
-            foreach ($resp->items->item as $key=> $item) {
-                $item = (array) $item;
-                $item['created_at'] = date("Y-m-d H:i:s");
-                $item['updated_at'] = date("Y-m-d H:i:s");
-                DB::table("taobao_goods")->insert($item);
-            }
+            $req->setField($this->_field);
+            $req->setOrderField("wareId");
+            $req->setOrderType("desc");
+            $resp = $c->execute($req, $c->accessToken);
 
+            $items = (array)$resp->jingdong_ware_read_searchWare4Valid_responce->page->data;
+            $goods = [];
+            foreach ($items as $key=>$item) {
+                $good = [];
+                $item = (array) $item;
+                $checkGood = \App\Models\ProdOuter::where("outer_id", $item['wareId'])->first();
+                if(!is_null($checkGood)) continue;
+
+                $checkGood = new \App\Models\ProdOuter();
+                $checkGood->outer_id = trim($item['wareId']);
+                $checkGood->content = json_encode($item);
+                $checkGood->shop_id = $store->id;
+                $checkGood->shop_type = $store->shop_type;
+                $checkGood->prod_id = trim($item['outerId']);
+                $checkGood->save();
+            }
+            sleep(1);
         }
+
+
     }
 }
