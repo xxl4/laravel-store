@@ -136,7 +136,6 @@ class AddProduct extends Command
  
              if($item->sort > 10) continue; // 不可以超过10张图片
  
-             //var_dump($path->jingdong_imgzone_picture_upload_responce->picture_url);exit;
  
              $img["imgUrl"] = $path->jingdong_imgzone_picture_upload_responce->picture_url;
              $img["colorId"] = "0000000000";
@@ -151,10 +150,7 @@ class AddProduct extends Command
              $i++;
          }
  
-         //var_dump($imgs);exit;
- 
-         //$ware->props    = "";
-         //$ware->features  = "";
+
          $ware->images  = $imgs;
          //$ware->images  = [];
          //$ware->height = "";
@@ -229,34 +225,7 @@ class AddProduct extends Command
 
  
          $multiCateProps = [];
-         //$multiCateProp = [];
-         //$multiCateProp = ["attrid"=>"59206","attrValues"=>"365页"];
-         //$multiCateProps = $multiCateProp;
- 
-         //$multiCateProp = ["attrid"=>"59192","attrValues"=>"9780603551048"];
-         //$multiCateProps[] = $multiCateProp;
- 
-         //$multiCateProp = ["attrid"=>"59197","attrValues"=>"1"];
-         //$multiCateProps[] = $multiCateProp;
- 
-         /*
-         $multiCateProp = new \stdClass();
-         $multiCateProp->attrId = 59201;
-         $multiCateProp->attrValues = "Dean";
- 
-         $multiCateProps[] = $multiCateProp;
-         $multiCateProp = new \stdClass();
-         $multiCateProp->attrId = 59197;
-         $multiCateProp->attrValues = "1版";
-         $multiCateProps[] = $multiCateProp;
- 
-         $multiCateProp = new \stdClass();
-         $multiCateProp->attrId = 59192;
-         $multiCateProp->attrValues = "9780603551048";
-         $multiCateProps[] = $multiCateProp;
-         */
- 
- 
+
          // 10063044 著者
          // 10063044 编者
          // 10063035 开本
@@ -268,34 +237,6 @@ class AddProduct extends Command
          $attr['publisher'] = substr($attr['publisher'], 0, 20);
          $attr['author'] = substr($attr['author'], 0, 20);
  
-         /*
- 
-         if($cid=='4859') {
-             $multiCateProp =[
-                 ["attrid"=>10063032,"attrValues"=>["$attr[publisher]"]],
-                 ["attrid"=>10063029,"attrValues"=>["$book[isbn]"]],
-                 ["attrid"=>10063030,"attrValues"=>["$attr[edition]"]],
-                 ["attrid"=>10063034,"attrValues"=>["英语"]],
-                 ["attrid"=>10063044,"attrValues"=>["$attr[author]"]],
-                 ["attrid"=>10063037,"attrValues"=>["$book[page]"]],
-                 ["attrid"=>10063035,"attrValues"=>["$size"]],
-                 ["attrid"=>10063060,"attrValues"=>["$age"]]
-             ];
-         }elseif($cid=='4879'){
-             $attrids = explode('|', $attrid);
-             $multiCateProp =[
-                 ["attrid"=>10064682,"attrValues"=>["$attr[publisher]"]],
-                 ["attrid"=>10064679,"attrValues"=>["$book[isbn]"]],
-                 ["attrid"=>10064680,"attrValues"=>["$attr[edition]"]],
-                 ["attrid"=>10064684,"attrValues"=>["英语"]],
-                 //["attrid"=>10063044,"attrValues"=>["$attr[author]"]],
-                 ["attrid"=>10064687,"attrValues"=>["$book[page]"]],
-                 ["attrid"=>10064685,"attrValues"=>["$size"]],
-                 ['attrid'=>10064693, "attrValues"=>["$book[goods_name]"]],
-                 // ["attrid"=>10063060,"attrValues"=>["$age"]]
-             ];
-         }
-         */
          $attrInfo = [];
          $attrInfo['publisher'] = $attr['publisher'];
          $attrInfo['isbn'] = $book['isbn'];
@@ -309,15 +250,6 @@ class AddProduct extends Command
          $attrInfo['lang'] = "英语";
  
          $multiCateProp = $this->processAttrs($cid, $attrInfo);
- 
-         Log::info($this->goods_id." Attrs 1 ".json_encode($attrInfo));
-         Log::info($this->goods_id." Attrs 2 ".json_encode($multiCateProp));
- 
-         //var_dump($multiCateProp);
- 
-         // var_dump($cid);exit;
- 
-         // exit;
  
          //$multiCateProp = [];
          $multiCateProps[] = $multiCateProp;
