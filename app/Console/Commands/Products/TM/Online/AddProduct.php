@@ -11,7 +11,7 @@ class AddProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products.TM.add.online {store} {prod_id}';
+    protected $signature = 'products:TM:add:online {store} {prod_id}';
 
     /**
      * The console command description.

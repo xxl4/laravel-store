@@ -11,7 +11,7 @@ class UpdateProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products.TM.update.online {store} {prod_id}';
+    protected $signature = 'products:TM:update:online {store} {prod_id}';
 
     /**
      * The console command description.
