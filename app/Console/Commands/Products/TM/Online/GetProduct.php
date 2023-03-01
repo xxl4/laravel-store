@@ -11,7 +11,9 @@ class GetProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products.TM.get.online {store}';
+    protected $signature = 'products.TM.get.online {store} {prod_id}';
+
+    private $_field = "approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity";
 
     /**
      * The console command description.
@@ -38,6 +40,7 @@ class GetProduct extends Command
     public function handle()
     {
         $store = $this->argument('store');
+        $prod_id = $this->argument('prod_id'); // 但prod_id 为 0 的时候获取全部的商品数据
         //
         $this->info("get from online info start".$store);
         $c = new \TopClient();
@@ -47,7 +50,7 @@ class GetProduct extends Command
         $size = 100;
 
         $req = new \ItemsOnsaleGetRequest();
-        $req->setFields('approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity');
+        $req->setFields($this->_field);
         $req->setPageNo(1);
         $req->setPageSize($size);
         $resp = $c->execute($req, $store->token);
@@ -64,13 +67,10 @@ class GetProduct extends Command
         $pages = ceil($total / $size);
         for ($i=2;$i<=$pages;$i++) {
             $req = new \ItemsOnsaleGetRequest();
-            $req->setFields('approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity');
+            $req->setFields($this->_field);
             $req->setPageNo($i);
             $req->setPageSize($size);
             $resp = $c->execute($req, $store->token);
-
-            //var_dump($resp);
-
             foreach ($resp->items->item as $key=> $item) {
                 $item = (array) $item;
                 $item['created_at'] = date("Y-m-d H:i:s");
