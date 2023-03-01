@@ -42,8 +42,8 @@ class CategoryController extends AdminController
         $grid->column('grade', __('Grade'))->filter()->sortable()->hide();
         $grid->column('update_time', __('Update time'))->hide();
 
-        $uid = Admin::user()->id;
-        $org_id = Utils::getOrganizationID($uid);
+        $org_id = Admin::user()->org_id;
+        //$org_id = Utils::getOrganizationID($uid);
         $shop_ids = \App\Models\OrganizationStore::where("organization_id", $org_id)->select(["id"])->first();
         if(is_null($shop_ids)) {
             $grid->model()->where("shop_id", 0);
@@ -51,6 +51,11 @@ class CategoryController extends AdminController
             //$grid->model()->whereIN("shop_id", $shop_ids->toArray());
         }
         $grid->model()->orderBy("seq", "asc");
+        if(isset($_GET['parent_id'])) {
+            $grid->model()->where("parent_id", $_GET['parent_id']);
+        }else{
+            $grid->model()->where("parent_id", 0);
+        }
 
         $grid->actions(function ($actions) {
             $actions->add(new \App\Admin\Actions\Category\ProdProp);
