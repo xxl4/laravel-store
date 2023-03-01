@@ -30,9 +30,9 @@ class ProductAddRequest extends FormRequest
             'price' => 'required',
             'imgs' => 'required',
             'pic' => 'required',
-            'props' => 'required',
+            //'props' => 'required',
             'content' => 'required',
-            'customer_props' => 'required',
+            //'customer_props' => 'required',
             'putaway_time' => 'required',
         ];
     }

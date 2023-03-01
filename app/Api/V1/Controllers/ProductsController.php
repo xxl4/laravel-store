@@ -45,8 +45,22 @@ class ProductsController extends Controller {
 
         $data = $request->all();
 
+        /*
+        $sysCate = $this->_getCateProp($data['category_id']);
         $props = $data['props'];
-        $customer_props = $data['customer_props'];
+        $props_items = explode('|', $props);
+        foreach($props_items as $key=>$pitem) {
+            $pi = explode(':', $pitem);
+            if(!is_array($pi)) return false;
+
+            if(!isset($sysCate[$pi[0]][$pi[1]])) {
+                return $this->response->error("属性错误，请调整".$pi[1], 500);
+            }
+            
+        }*/
+        //var_dump($sysCate);
+        //exit;
+        //$customer_props = $data['customer_props'];
 
         //todo save data into db
 
@@ -57,6 +71,14 @@ class ProductsController extends Controller {
         $product->org_id = $this->org->id;
         //$product->code = date("YmdHis").mt_rand(1000000000,9999999999);
         $product->save();
+
+        /*
+        $sku = new \App\Models\Sku();
+        $sku->properties = $props;
+        $sku->prod_id = $product->prod_id;
+        $sku->ori_price = $data['ori_price'];
+        $sku->price = $data['price'];
+        $sku->save();*/
 
         $ret = [
             "product_id" => $product->prod_id
@@ -152,6 +174,24 @@ class ProductsController extends Controller {
         $cid = $request->input("cid");
 
 
+    }
+
+    private function _getCateProp($cid) {
+        $ret = Cache::get("c_p_v_".$cid);
+        if(empty($ret)) {
+            $items = \App\Models\CategoryProp::where("category_id", $cid)->with("prop_value")->select(['prop_id'])->get();
+            //var_dump($items->prop_value);exit;
+            $ret = [];
+            foreach($items as $key=>$item) {
+                foreach($item->prop_value as $kk=>$value) {
+                    $ret[$value->prop_id][$value->value_id] = $value->value_id;
+                }
+                
+            }
+            Cache::put("c_p_v_".$cid, $ret);
+        }
+        return $ret;
+        
     }
 
 }

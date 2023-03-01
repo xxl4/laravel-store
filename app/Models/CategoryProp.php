@@ -14,4 +14,8 @@ class CategoryProp extends Model
     public function prod_prop() {
         return $this->hasOne(ProdProp::class, "prop_id", "prop_id");
     }
+
+    public function prop_value() {
+        return $this->hasMany(ProdPropValue::class, "prop_id", "prop_id");
+    }
 }

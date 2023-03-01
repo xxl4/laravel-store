@@ -24,7 +24,12 @@ class ProductSkuAddRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'prod_id' => 'required',
+            'ori_price' => 'required',
+            'price' => 'required',
+            'imgs' => 'required',
+            'pic' => 'required',
+            'props' => 'required'
         ];
     }
 }

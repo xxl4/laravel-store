@@ -41,21 +41,16 @@ class SkusController extends Controller {
 
         //todo save data into db
 
-        $product = \App\Models\Product::where("organization_id", $this->org->id)->where("outer_id", $data['outer_id'])->first();
-        if(!is_null($product)) {
-            return Utils::ApiResponse([], "Duplication of goods", 400);
-        }
-
         //todo check props 类型
 
-        $product = new \App\Models\Product($data);
-        $product->user_id = $this->org->user_id;
-        $product->organization_id = $this->org->id;
-        $product->code = date("YmdHis").mt_rand(1000000000,9999999999);
+        $product = new \App\Models\Sku($data);
+        //$product->user_id = $this->org->user_id;
+        //$product->organization_id = $this->org->id;
+        //$product->code = date("YmdHis").mt_rand(1000000000,9999999999);
         $product->save();
 
         $ret = [
-            "product_id" => $product->id
+            "sku_id" => $sku->id
         ];
 
         //response data to client
