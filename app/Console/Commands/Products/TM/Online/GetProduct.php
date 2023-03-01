@@ -41,8 +41,8 @@ class GetProduct extends Command
         //
         $this->info("get from online info start".$store);
         $c = new \TopClient();
-        $c->appkey = env('TB_APPKEY');
-        $c->secretKey = env('TB_APPSECRET');
+        $c->appkey = $store->key;
+        $c->secretKey = $store->scret;
 
         $size = 100;
 
@@ -50,7 +50,7 @@ class GetProduct extends Command
         $req->setFields('approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity');
         $req->setPageNo(1);
         $req->setPageSize($size);
-        $resp = $c->execute($req, env('TB_SESSIONKEY'));
+        $resp = $c->execute($req, $store->token);
         //var_dump($resp);
         $total = $resp->total_results;
         var_dump($total,$resp);
@@ -67,7 +67,7 @@ class GetProduct extends Command
             $req->setFields('approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity');
             $req->setPageNo($i);
             $req->setPageSize($size);
-            $resp = $c->execute($req, env('TB_SESSIONKEY'));
+            $resp = $c->execute($req, $store->token);
 
             //var_dump($resp);
 
