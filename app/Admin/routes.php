@@ -53,5 +53,7 @@ Route::group([
 
     //系统
     $router->resource('areas', AreaController::class);
+    $router->resource('deliveries', DeliveryController::class);
+    $router->resource('notices', NoticeController::class);
 
 });

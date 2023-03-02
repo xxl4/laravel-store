@@ -25,15 +25,24 @@ class HomeController extends Controller
                     $column->append(Dashboard::environment());
                 });
                 */
+                $row->column(4, function (Column $column) {
+                    $column->append($this->news());
+                });
 
-                $row->column(6, function (Column $column) {
+                $row->column(4, function (Column $column) {
                     $column->append($this->developer());
                 });
 
-                $row->column(6, function (Column $column) {
+                $row->column(4, function (Column $column) {
                     $column->append($this->stores());
                 });
             });
+    }
+
+    public function news() {
+        $news = [];
+        $news = \App\Models\Notice::where("shop_id",0)->where("status",1)->orderBy("is_top", "desc")->select(["title","update_time"])->limit(10)->get();
+        return view('admin.dashboard.news', compact('news'));
     }
 
     public function developer() {
@@ -56,6 +65,8 @@ class HomeController extends Controller
         ];
         return view('admin.dashboard.developer', compact('envs'));
     }
+
+
 
     public function stores() {
         $extensions = [

@@ -165,6 +165,9 @@
     "Weight": "重量",
     "Volume": "面积",
     "Is delete": "是否删除",
+    "Content": "内容",
+    "Is top": "是否置顶",
+    "Prod count": "数量",
 
     "Goods number": "商品数量",
     "Pay status": "支付状态"

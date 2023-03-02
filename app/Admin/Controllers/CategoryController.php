@@ -37,7 +37,7 @@ class CategoryController extends AdminController
         $grid->column('icon', __('Icon'))->hide();
         $grid->column('pic', __('Pic'))->hide();
         $grid->column('seq', __('Seq'))->filter()->sortable()->editable();
-        $grid->column('status', __('Status'))->filter()->sortable();
+        $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();
         $grid->column('rec_time', __('Rec time'))->hide();
         $grid->column('grade', __('Grade'))->filter()->sortable()->hide();
         $grid->column('update_time', __('Update time'))->hide();

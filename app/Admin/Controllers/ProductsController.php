@@ -9,6 +9,9 @@ use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Widgets\Table;
 use Nicelizhi\Admin\Facades\Admin;
+use App\Admin\Actions\Product\Replicate;
+use App\Admin\Actions\Product\BatchReplicate;
+use App\Admin\Actions\Product\BatchAddTag;
 
 class ProductsController extends AdminController
 {
@@ -17,7 +20,7 @@ class ProductsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Product';
+    protected $title = '产品';
 
     /**
      * Make a grid builder.
@@ -43,7 +46,7 @@ class ProductsController extends AdminController
         $grid->column('content', __('Content'))->hide();
         $grid->column('pic', __('Pic'))->hide();
         $grid->column('imgs', __('Imgs'))->hide();
-        $grid->column('status', __('Status'))->sortable()->filter();
+        $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();
         $grid->column('category_id', __('Category id'));
         $grid->column('sold_num', __('Sold num'));
         $grid->column('total_stocks', __('Total stocks'));
@@ -57,6 +60,16 @@ class ProductsController extends AdminController
         $grid->model()->where("org_id", Admin::user()->org_id);
 
         $grid->model()->orderBy("prod_id", "DESC");
+
+        $grid->actions(function ($actions) {
+            $actions->add(new Replicate);
+        });
+
+        $grid->batchActions(function ($batch) {
+            $batch->add(new BatchReplicate());
+            $batch->add(new BatchAddTag());
+
+        });
 
         return $grid;
     }

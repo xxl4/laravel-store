@@ -8,6 +8,8 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
+use App\Admin\Actions\Sku\Replicate;
+use App\Admin\Actions\Sku\BatchReplicate;
 
 class SkuController extends AdminController
 {
@@ -16,7 +18,7 @@ class SkuController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Sku';
+    protected $title = '产品Sku';
 
     /**
      * Make a grid builder.
@@ -29,7 +31,7 @@ class SkuController extends AdminController
 
         $grid->column('sku_id', __('Sku id'))->sortable()->filter();
         $grid->column('prod_id', __('Prod id'))->sortable()->filter();
-        $grid->column('properties', __('Properties'));
+        //$grid->column('properties', __('Properties'));
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();
         $grid->column('stocks', __('Stocks'))->sortable()->filter();
@@ -44,8 +46,8 @@ class SkuController extends AdminController
         $grid->column('version', __('Version'))->sortable()->filter();
         $grid->column('weight', __('Weight'))->sortable()->filter();
         $grid->column('volume', __('Volume'))->sortable()->filter();
-        $grid->column('status', __('Status'))->sortable()->filter();
-        $grid->column('is_delete', __('Is delete'))->sortable()->filter();
+        $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();
+        $grid->column('is_delete')->bool(['1' => true, '0' => false])->sortable()->filter();
 
         $grid->model()->where("org_id", Admin::user()->org_id);
         $grid->model()->orderBy("sku_id","DESC");
@@ -57,6 +59,13 @@ class SkuController extends AdminController
         
             $filter->scope('is_delete', '已删除')->where('is_delete', '1');
         
+        });
+
+        $grid->actions(function ($actions) {
+            $actions->add(new Replicate);
+        });
+        $grid->batchActions(function ($batch) {
+            $batch->add(new BatchReplicate());
         });
 
         

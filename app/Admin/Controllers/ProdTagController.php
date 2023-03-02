@@ -15,7 +15,7 @@ class ProdTagController extends AdminController
      *
      * @var string
      */
-    protected $title = 'ProdTag';
+    protected $title = '标签';
 
     /**
      * Make a grid builder.
@@ -29,8 +29,8 @@ class ProdTagController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('title', __('Title'));
         $grid->column('shop_id', __('Shop id'));
-        $grid->column('status', __('Status'));
-        $grid->column('is_default', __('Is default'));
+        $grid->column('status')->bool(['1' => true, '0' => false]);
+        $grid->column('is_default')->bool(['1' => true, '0' => false]);
         $grid->column('prod_count', __('Prod count'));
         $grid->column('style', __('Style'));
         $grid->column('seq', __('Seq'));
