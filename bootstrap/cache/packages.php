@@ -56,6 +56,13 @@
       'Image' => 'Intervention\\Image\\Facades\\Image',
     ),
   ),
+  'jacobcyl/ali-oss-storage' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Jacobcyl\\AliOSS\\AliOssServiceProvider',
+    ),
+  ),
   'laravel-lang/publisher' => 
   array (
     'providers' => 
