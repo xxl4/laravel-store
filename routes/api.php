@@ -40,12 +40,14 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
     $api->post('sku/edit', 'App\Api\V1\Controllers\SkusController@edit');
     $api->delete('sku/delete', 'App\Api\V1\Controllers\SkusController@delete');
     $api->get("sku/get", 'App\Api\V1\Controllers\SkusController@get');
+    $api->get("sku/lists", 'App\Api\V1\Controllers\SkusController@get');
 
     # 订单
     $api->post('order/add', 'App\Api\V1\Controllers\SkusController@add');
     $api->put('order/edit', 'App\Api\V1\Controllers\SkusController@edit');
     $api->delete('order/delete', 'App\Api\V1\Controllers\SkusController@delete');
     $api->get("order/get", 'App\Api\V1\Controllers\SkusController@get');
+    
 
     # 售后
     $api->post('refund/add', 'App\Api\V1\Controllers\SkusController@add');

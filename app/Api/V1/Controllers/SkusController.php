@@ -158,23 +158,23 @@ class SkusController extends Controller {
         $validated = $request->validate([
             'num'   => 'required|int|max:100',
             'page'   => 'required|int',
-            'cid'   => 'int',
-            'product_id'   => 'int',
+            'sku_id'   => 'int',
+            'prod_id'   => 'int',
         ]);
 
         // 接收数据
-        $product_id = $request->input("product_id");
-        $cid = $request->input("cid");
+        $prod_id = $request->input("prod_id");
+        $sku_id = $request->input("sku_id");
         $num = $request->input('num');
         $page = $request->input('page');
 
         // 数据拼接
-        $model = \App\Models\Product::select("*");
-        if(!empty($product_id)) {
-            $model->where("prod_id", $product_id);
+        $model = \App\Models\Sku::select("*");
+        if(!empty($prod_id)) {
+            $model->where("prod_id", $prod_id);
         }
-        if(!empty($cid)) {
-            $model->where("category_id", $cid);
+        if(!empty($sku_id)) {
+            $model->where("sku_id", $sku_id);
         }
         $model->where("org_id", $this->org->id);
         //var_dump($model);
