@@ -27,7 +27,9 @@ class ProdTagController extends AdminController
         $grid = new Grid(new ProdTag());
 
         $grid->column('id', __('Id'));
-        $grid->column('title', __('Title'));
+        $grid->column('title', __('Title'))->filter()->display(function($v){
+            return '<a href="/admin/prod-tag-references?tag_id='.$this->id.'" target="_blank">'.$v.'</a>';
+        });
         $grid->column('shop_id', __('Shop id'));
         $grid->column('status')->bool(['1' => true, '0' => false]);
         $grid->column('is_default')->bool(['1' => true, '0' => false]);
@@ -37,6 +39,8 @@ class ProdTagController extends AdminController
         $grid->column('create_time', __('Create time'));
         $grid->column('update_time', __('Update time'));
         $grid->column('delete_time', __('Delete time'));
+
+        $grid->model()->orderBy("id","desc");
 
         return $grid;
     }

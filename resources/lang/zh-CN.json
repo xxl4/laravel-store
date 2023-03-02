@@ -168,6 +168,8 @@
     "Content": "内容",
     "Is top": "是否置顶",
     "Prod count": "数量",
+    "Tag id": "标签ID",
+    "Reference id": "关联ID",
 
     "Goods number": "商品数量",
     "Pay status": "支付状态"

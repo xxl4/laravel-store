@@ -11,4 +11,12 @@ class ProdTagReference extends Model
     const CREATED_AT="create_time";
     const UPDATED_AT = null;
     public $primaryKey = "reference_id";
+
+    public function tag() {
+        return $this->hasOne(ProdTag::class,"id","tag_id");
+    }
+
+    public function prod() {
+        return $this->hasOne(Product::class, "prod_id", "prod_id");
+    }
 }

@@ -13,4 +13,8 @@ class ProdTag extends Model
     const UPDATED_AT = "create_time";
     const CREATED_AT = "update_time";
     const DELETED_AT = "delete_time";
+
+    public function tag_reference() {
+        return $this->belongsTo(ProdTagReference::class);
+    }
 }

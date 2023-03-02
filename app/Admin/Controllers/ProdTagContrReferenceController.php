@@ -15,7 +15,7 @@ class ProdTagContrReferenceController extends AdminController
      *
      * @var string
      */
-    protected $title = 'ProdTagReference';
+    protected $title = '标签关联';
 
     /**
      * Make a grid builder.
@@ -28,10 +28,24 @@ class ProdTagContrReferenceController extends AdminController
 
         $grid->column('reference_id', __('Reference id'));
         $grid->column('shop_id', __('Shop id'));
-        $grid->column('tag_id', __('Tag id'));
-        $grid->column('prod_id', __('Prod id'));
-        $grid->column('status', __('Status'));
+        $grid->column('tag_id', __('Tag id'))->filter();
+        $grid->column('prod.prod_name', __('Prod id'))->limit(30)->width(260);
+        $grid->column('status')->bool(['1' => true, '0' => false]);
         $grid->column('create_time', __('Create time'));
+
+        $grid->model()->orderBy("reference_id","desc");
+
+        $grid->actions(function ($actions) {
+
+            // 去掉删除
+            //$actions->disableDelete();
+        
+            // 去掉编辑
+            $actions->disableEdit();
+        
+            // 去掉查看
+            $actions->disableView();
+        });
 
         return $grid;
     }

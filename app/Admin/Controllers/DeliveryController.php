@@ -15,7 +15,7 @@ class DeliveryController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Delivery';
+    protected $title = '物流';
 
     /**
      * Make a grid builder.
