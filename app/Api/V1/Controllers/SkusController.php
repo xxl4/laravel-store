@@ -39,18 +39,32 @@ class SkusController extends Controller {
 
         $data = $request->all();
 
+        $sysCate = $this->_getCateProp($data['category_id']);
+        $props = $data['properties'];
+        $props_items = explode('|', $props);
+        foreach($props_items as $key=>$pitem) {
+            $pi = explode(':', $pitem);
+            if(!is_array($pi)) return false;
+
+            if(!isset($sysCate[$pi[0]][$pi[1]])) {
+                return $this->response->error("属性错误，请调整".$pi[1], 500);
+            }
+            
+        }
+
         //todo save data into db
 
         //todo check props 类型
 
-        $product = new \App\Models\Sku($data);
+        $sku = new \App\Models\Sku($data);
+        $sku->stocks = 0;
         //$product->user_id = $this->org->user_id;
         //$product->organization_id = $this->org->id;
         //$product->code = date("YmdHis").mt_rand(1000000000,9999999999);
-        $product->save();
+        $sku->save();
 
         $ret = [
-            "sku_id" => $sku->id
+            "sku_id" => $sku->sku_id
         ];
 
         //response data to client
@@ -143,6 +157,24 @@ class SkusController extends Controller {
         $cid = $request->input("cid");
 
 
+    }
+
+    private function _getCateProp($cid) {
+        $ret = Cache::get("c_p_v_".$cid);
+        if(empty($ret)) {
+            $items = \App\Models\CategoryProp::where("category_id", $cid)->with("prop_value")->select(['prop_id'])->get();
+            //var_dump($items->prop_value);exit;
+            $ret = [];
+            foreach($items as $key=>$item) {
+                foreach($item->prop_value as $kk=>$value) {
+                    $ret[$value->prop_id][$value->value_id] = $value->value_id;
+                }
+                
+            }
+            Cache::put("c_p_v_".$cid, $ret);
+        }
+        return $ret;
+        
     }
 
 }

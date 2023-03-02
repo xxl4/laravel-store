@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Widgets\Table;
 
 class ProductsController extends AdminController
 {
@@ -27,7 +28,13 @@ class ProductsController extends AdminController
         $grid = new Grid(new Product());
 
         $grid->column('prod_id', __('Prod id'));
-        $grid->column('prod_name', __('Prod name'));
+        $grid->column('prod_name', __('Prod name'))->expand(function ($model) {
+
+            $skus = $model->sku()->take(10)->orderBy("sku_id","desc")->get()->map(function ($sku) {
+                return $sku->only(['sku_id', 'sku_name','properties', 'price','actual_stocks']);
+            });
+            return new Table(['SKU ID', 'SKU名称','属性', '销售价格','实际库存'], $skus->toArray());
+        });;
         $grid->column('shop_id', __('Shop id'));
         $grid->column('ori_price', __('Ori price'));
         $grid->column('price', __('Price'));

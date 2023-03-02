@@ -27,9 +27,8 @@ class ProductSkuAddRequest extends FormRequest
             'prod_id' => 'required',
             'ori_price' => 'required',
             'price' => 'required',
-            'imgs' => 'required',
             'pic' => 'required',
-            'props' => 'required'
+            'properties' => 'required'
         ];
     }
 }

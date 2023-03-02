@@ -176,22 +176,6 @@ class ProductsController extends Controller {
 
     }
 
-    private function _getCateProp($cid) {
-        $ret = Cache::get("c_p_v_".$cid);
-        if(empty($ret)) {
-            $items = \App\Models\CategoryProp::where("category_id", $cid)->with("prop_value")->select(['prop_id'])->get();
-            //var_dump($items->prop_value);exit;
-            $ret = [];
-            foreach($items as $key=>$item) {
-                foreach($item->prop_value as $kk=>$value) {
-                    $ret[$value->prop_id][$value->value_id] = $value->value_id;
-                }
-                
-            }
-            Cache::put("c_p_v_".$cid, $ret);
-        }
-        return $ret;
-        
-    }
+
 
 }
