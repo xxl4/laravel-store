@@ -45,7 +45,7 @@ class SkusController extends Controller {
             return $this->response->error("商品内容不存在", 400);
         }
 
-        $sysCate = $this->_getCateProp($data['category_id']);
+        $sysCate = $this->_getCateProp($prod->category_id);
         $props = $data['properties'];
         $props_items = explode('|', $props);
         foreach($props_items as $key=>$pitem) {
@@ -65,7 +65,7 @@ class SkusController extends Controller {
         $sku = new \App\Models\Sku($data);
         $sku->stocks = 0;
         //$product->user_id = $this->org->user_id;
-        //$product->organization_id = $this->org->id;
+        $sku->org_id = $this->org->id;
         //$product->code = date("YmdHis").mt_rand(1000000000,9999999999);
         $sku->save();
 
@@ -126,7 +126,19 @@ class SkusController extends Controller {
      * @Delete("/delete")
     */
     public function delete(ProductSkuDeleteRequest $request) {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
         $validated = $request->validated();
+        $data = $request->all();
+        $item = \App\Models\Sku::where("org_id", $this->org->id)->where("sku_id", $data['sku_id'])->first();
+        if(is_null($item)) {
+            return $this->response->error("您需要删除的商品不存在，请确认", 400);
+        }
+
+        $ret = [
+        ];
+
+        return Utils::ApiResponse($ret);
+
     }
 
     /*

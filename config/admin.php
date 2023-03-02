@@ -62,7 +62,7 @@ return [
 
         'namespace' => 'App\\Admin\\Controllers',
 
-        'middleware' => ['web', 'admin', \App\Admin\Middleware\SwitchLanguage::class],
+        'middleware' => ['web', 'admin'],
     ],
 
     /*

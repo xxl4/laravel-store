@@ -24,7 +24,7 @@ class ProductSkuDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'sku_id' => 'required|int',
         ];
     }
 }
