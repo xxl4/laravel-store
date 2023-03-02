@@ -66,6 +66,7 @@ class SkusController extends Controller {
         $sku->stocks = 0;
         //$product->user_id = $this->org->user_id;
         $sku->org_id = $this->org->id;
+        $sku->is_delete = 0;
         //$product->code = date("YmdHis").mt_rand(1000000000,9999999999);
         $sku->save();
 
@@ -133,6 +134,8 @@ class SkusController extends Controller {
         if(is_null($item)) {
             return $this->response->error("您需要删除的商品不存在，请确认", 400);
         }
+
+        \App\Models\Sku::where("sku_id", $item->sku_id)->update(['is_delete'=>1]);
 
         $ret = [
         ];

@@ -38,12 +38,11 @@ class HomeController extends Controller
 
     public function developer() {
         $uid = Admin::user()->id;
-        $orgMember = \App\Models\OrganizationUser::where("user_id", $uid)->select(["organization_id"])->first();
+        $org_id = Admin::user()->org_id;
         $secret = "";
-        if(!is_null($orgMember)) {
-            $org = \App\Models\Organization::where("id", $orgMember->organization_id)->select(["secret"])->first();
-            if(!is_null($org)) $secret = $org->secret;
-        }
+        $org = \App\Models\Organization::where("id", $org_id)->select(["secret","user_id"])->first();
+        if(!is_null($org)) $secret = $org->secret;
+        if($uid!=$org->user_id) $secret = "请联系店家管理员获取";
         
         
         $envs = [

@@ -8,6 +8,7 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Widgets\Table;
+use Nicelizhi\Admin\Facades\Admin;
 
 class ProductsController extends AdminController
 {
@@ -27,22 +28,22 @@ class ProductsController extends AdminController
     {
         $grid = new Grid(new Product());
 
-        $grid->column('prod_id', __('Prod id'));
+        $grid->column('prod_id', __('Prod id'))->sortable()->filter();
         $grid->column('prod_name', __('Prod name'))->expand(function ($model) {
 
             $skus = $model->sku()->take(10)->orderBy("sku_id","desc")->get()->map(function ($sku) {
                 return $sku->only(['sku_id', 'sku_name','properties', 'price','actual_stocks']);
             });
             return new Table(['SKU ID', 'SKU名称','属性', '销售价格','实际库存'], $skus->toArray());
-        });;
-        $grid->column('shop_id', __('Shop id'));
-        $grid->column('ori_price', __('Ori price'));
-        $grid->column('price', __('Price'));
-        $grid->column('brief', __('Brief'));
+        })->sortable()->filter();
+        $grid->column('shop_id', __('Shop id'))->sortable()->filter();
+        $grid->column('ori_price', __('Ori price'))->sortable()->filter();
+        $grid->column('price', __('Price'))->sortable()->filter();
+        $grid->column('brief', __('Brief'))->sortable()->filter();
         $grid->column('content', __('Content'))->hide();
         $grid->column('pic', __('Pic'))->hide();
         $grid->column('imgs', __('Imgs'))->hide();
-        $grid->column('status', __('Status'));
+        $grid->column('status', __('Status'))->sortable()->filter();
         $grid->column('category_id', __('Category id'));
         $grid->column('sold_num', __('Sold num'));
         $grid->column('total_stocks', __('Total stocks'));
@@ -52,6 +53,8 @@ class ProductsController extends AdminController
         $grid->column('update_time', __('Update time'));
         $grid->column('putaway_time', __('Putaway time'));
         $grid->column('version', __('Version'));
+
+        $grid->model()->where("org_id", Admin::user()->org_id);
 
         $grid->model()->orderBy("prod_id", "DESC");
 

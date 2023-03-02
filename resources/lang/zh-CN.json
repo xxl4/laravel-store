@@ -157,6 +157,15 @@
     "AMAZONCN": "亚马逊中国",
     "AMAZON": "亚马逊",
 
+
+    "Actual stocks": "实际库存",
+    "Stocks": "库存",
+    "Party code": "商家编码",
+    "Version": "版本",
+    "Weight": "重量",
+    "Volume": "面积",
+    "Is delete": "是否删除",
+
     "Goods number": "商品数量",
     "Pay status": "支付状态"
 
