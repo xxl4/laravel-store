@@ -24,7 +24,16 @@ class ProductSkuEditRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'prod_id' => 'required',
+            'ori_price' => 'required',
+            'price' => 'required',
+            'pic' => 'required',
+            'properties' => 'required',
+            'sku_name' => 'required',
+            'prod_name' => 'required',
+            'actual_stocks' => 'int',
+            'weight' => 'int',
+            'party_code' => 'required'
         ];
     }
 }

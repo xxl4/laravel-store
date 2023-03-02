@@ -99,9 +99,7 @@ class ProductsController extends Controller {
         $validated = $request->validated();
         $data = $request->all();
         
-        $ret = [
-            "product_id" => $product->id
-        ];
+        
 
         return Utils::ApiResponse($ret);
     }

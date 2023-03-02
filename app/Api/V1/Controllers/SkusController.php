@@ -39,6 +39,12 @@ class SkusController extends Controller {
 
         $data = $request->all();
 
+        //验证商品是否存在
+        $prod = \App\Models\Product::where("prod_id", $data['prod_id'])->select(['category_id'])->first();
+        if(is_null($prod)) {
+            return $this->response->error("商品内容不存在", 400);
+        }
+
         $sysCate = $this->_getCateProp($data['category_id']);
         $props = $data['properties'];
         $props_items = explode('|', $props);
@@ -81,9 +87,32 @@ class SkusController extends Controller {
     public function edit(ProductSkuEditRequest $request) {
         $validated = $request->validated();
         $data = $request->all();
+
+
+        //验证商品是否存在
+        $prod = \App\Models\Product::where("prod_id", $data['prod_id'])->select(['category_id'])->first();
+        if(is_null($prod)) {
+            return $this->response->error("商品内容不存在", 400);
+        }
+
+        $sysCate = $this->_getCateProp($prod->category_id);
+        $props = $data['properties'];
+        $props_items = explode('|', $props);
+        foreach($props_items as $key=>$pitem) {
+            $pi = explode(':', $pitem);
+            if(!is_array($pi)) return false;
+
+            if(!isset($sysCate[$pi[0]][$pi[1]])) {
+                return $this->response->error("属性错误，请调整".$pi[1], 500);
+            }
+            
+        }
+
+        \App\Models\Sku::where("sku_id",$data['sku_id'])->update($data);
+        \App\Models\Sku::where("sku_id",$data['sku_id'])->increment('version');
         
         $ret = [
-            "product_id" => $product->id
+            "sku_id" => $data['sku_id']
         ];
 
         return Utils::ApiResponse($ret);

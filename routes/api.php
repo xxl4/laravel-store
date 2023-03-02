@@ -37,7 +37,7 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
 
     # 商品SKU
     $api->post('sku/add', 'App\Api\V1\Controllers\SkusController@add');
-    $api->put('sku/edit', 'App\Api\V1\Controllers\SkusController@edit');
+    $api->post('sku/edit', 'App\Api\V1\Controllers\SkusController@edit');
     $api->delete('sku/delete', 'App\Api\V1\Controllers\SkusController@delete');
     $api->get("sku/get", 'App\Api\V1\Controllers\SkusController@get');
 
