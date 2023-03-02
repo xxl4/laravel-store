@@ -43,8 +43,13 @@ class Product extends Model
         
     }
 
+
     public function sku() {
         return $this->hasMany(Sku::class,"prod_id", "prod_id");
+    }
+
+    public function outer() {
+        return $this->hasMany(ProdOuter::class, "prod_id","prod_id");
     }
 
     public function order() {

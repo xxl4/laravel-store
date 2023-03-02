@@ -39,6 +39,7 @@ Route::group([
     $router->resource('prod-tags', ProdTagController::class);
     $router->resource('prod-tag-references', ProdTagContrReferenceController::class);
     $router->resource('skus', SkuController::class);
+    $router->resource('prod-outers', ProdOuterController::class);
 
     //商品分类
     $router->resource('categories', CategoryController::class);

@@ -12,6 +12,7 @@ use Nicelizhi\Admin\Facades\Admin;
 use App\Admin\Actions\Product\Replicate;
 use App\Admin\Actions\Product\BatchReplicate;
 use App\Admin\Actions\Product\BatchAddTag;
+use App\Admin\Actions\Product\BatchUploadOuterShop;
 
 class ProductsController extends AdminController
 {
@@ -39,7 +40,13 @@ class ProductsController extends AdminController
             });
             return new Table(['SKU ID', 'SKU名称','属性', '销售价格','实际库存'], $skus->toArray());
         })->sortable()->filter();
-        $grid->column('shop_id', __('Shop id'))->sortable()->filter();
+        $grid->column('shop_id', __('Shop id'))->expand(function ($model) {
+
+            $outers = $model->outer()->take(10)->orderBy("id","desc")->get()->map(function ($outer) {
+                return $outer->only(['shop_id', 'shop_type','outer_id', 'created_at','updated_at']);
+            });
+            return new Table(['店铺ID','类型', '外部ID','添加时间','更新时间'], $outers->toArray());
+        })->sortable()->filter();
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();
         $grid->column('brief', __('Brief'))->sortable()->filter();
@@ -68,6 +75,8 @@ class ProductsController extends AdminController
         $grid->batchActions(function ($batch) {
             $batch->add(new BatchReplicate());
             $batch->add(new BatchAddTag());
+            // 批量上传到第三方平台
+            $batch->add(new BatchUploadOuterShop());
 
         });
 
