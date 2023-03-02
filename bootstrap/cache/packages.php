@@ -1,4 +1,11 @@
 <?php return array (
+  'andrey-helldar/support' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Helldar\\Support\\ServiceProvider',
+    ),
+  ),
   'bensampo/laravel-enum' => 
   array (
     'providers' => 
@@ -47,6 +54,13 @@
     'aliases' => 
     array (
       'Image' => 'Intervention\\Image\\Facades\\Image',
+    ),
+  ),
+  'laravel-lang/publisher' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Helldar\\LaravelLangPublisher\\ServiceProvider',
     ),
   ),
   'laravel/tinker' => 

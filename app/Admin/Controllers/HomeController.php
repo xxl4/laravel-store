@@ -16,15 +16,9 @@ class HomeController extends Controller
     {
         return $content
             ->title('Dashboard')
-            ->description('基于Laravel admin 开发的一套店铺系统，包括了商品模块，购物车模块，库存模块等')
+            ->description('基于Laravel开发的一套店铺SASS管理系统，通过添加第三方店铺的API信息，轻松的完成订单，商品，商品分类，物流，售后等一系列的批量操作。')
             ->row($this->title())
             ->row(function (Row $row) {
-
-                /*
-                $row->column(4, function (Column $column) {
-                    $column->append(Dashboard::environment());
-                });
-                */
                 $row->column(4, function (Column $column) {
                     $column->append($this->news());
                 });
