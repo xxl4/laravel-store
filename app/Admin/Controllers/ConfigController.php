@@ -28,11 +28,12 @@ class ConfigController extends AdminController
     {
         $grid = new Grid(new Config());
 
-        $grid->column('id', __('Id'));
-        $grid->column('user_id', __('User id'));
-        $grid->column('type', __('Type'));
-        $grid->column('code', __('Code'));
-        $grid->column('value', __('Value'));
+        $grid->column('id', __('Id'))->filter();
+        $grid->column('shop_id', __('Shop id'))->filter();
+        $grid->column('user_id', __('User id'))->filter();
+        $grid->column('type', __('Type'))->filter();
+        $grid->column('code', __('Code'))->filter();
+        $grid->column('value', __('Value'))->limit(100);
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
@@ -78,7 +79,7 @@ class ConfigController extends AdminController
         $form->hidden('user_id', __('User id'))->default(Admin::user()->id);
         $form->select('shop_id', __('Shop id'))->options(\App\Models\OrganizationStore::where("organization_id",Admin::user()->org_id)->pluck("name","id"));
         $form->hidden('type', __('Type'))->default(Admin::user()->id);
-        $form->text('code', __('Code'));
+        $form->text('code', __('Code'))->help("这些是系统配置需要的标签，请不要去做修改，谢谢");
         $form->textarea('value', __('Value'));
 
         $form->saving(function (Form $form){
