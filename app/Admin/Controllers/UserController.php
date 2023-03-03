@@ -104,7 +104,8 @@ class UserController extends AdminController
         $form->text('sex', __('Sex'))->default('M');
         $form->text('birth_date', __('Birth date'));
         $form->image('pic', __('Pic'));
-        $form->number('status', __('Status'))->default(1);
+        /*
+        $form->radio('status', __('Status'))->options([\App\Enums\SystemStatusEnum::Status_0 => __("Status_0"), \App\Enums\SystemStatusEnum::Status_1=> __("Status_1")])->default(1);*/
         $form->number('score', __('Score'));
 
         return $form;
