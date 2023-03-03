@@ -19,6 +19,10 @@ final class CachePrefixEnum extends Enum
     const CATEGORY_ID = "category_id_";
     const CATEGORY_PROP_ID = "category_prop_id_";
 
+    const CONFIG_ID = "config_id_";
+    const CONFIG_CODE = "config_code_";
+    const CONFIG_SHOP_CODE = "config_shop_code_";
+
     
 
 }

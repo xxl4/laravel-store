@@ -8,6 +8,7 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
+use Illuminate\Support\Facades\Cache;
 
 class ConfigController extends AdminController
 {
@@ -75,9 +76,20 @@ class ConfigController extends AdminController
         $form = new Form(new Config());
 
         $form->hidden('user_id', __('User id'))->default(Admin::user()->id);
+        $form->select('shop_id', __('Shop id'))->options(\App\Models\OrganizationStore::where("organization_id",Admin::user()->org_id)->pluck("name","id"));
         $form->hidden('type', __('Type'))->default(Admin::user()->id);
         $form->text('code', __('Code'));
         $form->textarea('value', __('Value'));
+
+        $form->saving(function (Form $form){
+            Cache::delete(\App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$form->model()->shop_id.'_'.$form->model()->code);
+        });
+
+        // 数据保存后的数据操作
+        $form->saved(function (Form $form) {
+            
+            Cache::put(\App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$form->model()->shop_id.'_'.$form->model()->code, $form->model()->value);
+        });
 
         return $form;
     }
