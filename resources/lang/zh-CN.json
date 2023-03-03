@@ -185,6 +185,18 @@
     "Mobile":"手机",
     "Common addr":"常用地址",
 
+
+    "Real name":"姓名",
+    "Nick name":"昵称",
+    "User mail":"邮箱",
+    "Login password":"密码",
+    "Pay password":"支付密码",
+    "User mobile":"手机",
+    "Modify time":"修改时间",
+    "Pay password":"支付密码",
+
+
+
     "Goods number": "商品数量",
     "Pay status": "支付状态"
 
