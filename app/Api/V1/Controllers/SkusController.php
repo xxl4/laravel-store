@@ -58,14 +58,9 @@ class SkusController extends Controller {
         //todo save data into db
 
         //todo check props 类型
-
-        $sku = new \App\Models\Sku($data);
-        $sku->stocks = 0;
-        //$product->user_id = $this->org->user_id;
-        $sku->org_id = $this->org->id;
-        $sku->is_delete = 0;
-        //$product->code = date("YmdHis").mt_rand(1000000000,9999999999);
-        $sku->save();
+        $data['org_id'] = $this->org->id;
+        $data['stocks'] = 0;
+        $sku =\App\Models\Sku::create($data);
 
         $ret = [
             "sku_id" => $sku->sku_id
@@ -108,6 +103,8 @@ class SkusController extends Controller {
         $ret = [
             "sku_id" => $data['sku_id']
         ];
+
+        Cache::delete(\App\Enums\CachePrefixEnum::SKU_ID.$data['sku_id']); //清理缓存
 
         return Utils::ApiResponse($ret);
     }
@@ -197,7 +194,7 @@ class SkusController extends Controller {
     }
 
     private function _getCateProp($cid) {
-        $ret = Cache::get("c_p_v_".$cid);
+        $ret = Cache::get(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid);
         if(empty($ret)) {
             $items = \App\Models\CategoryProp::where("category_id", $cid)->with("prop_value")->select(['prop_id'])->get();
             //var_dump($items->prop_value);exit;
@@ -208,7 +205,7 @@ class SkusController extends Controller {
                 }
                 
             }
-            Cache::put("c_p_v_".$cid, $ret);
+            Cache::put(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid, $ret);
         }
         return $ret;
         
