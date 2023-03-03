@@ -13,6 +13,8 @@ use App\Admin\Actions\Product\Replicate;
 use App\Admin\Actions\Product\BatchReplicate;
 use App\Admin\Actions\Product\BatchAddTag;
 use App\Admin\Actions\Product\BatchUploadOuterShop;
+use App\Admin\Actions\Product\BatchDown;
+use App\Admin\Actions\Product\BatchOnline;
 
 class ProductsController extends AdminController
 {
@@ -77,6 +79,8 @@ class ProductsController extends AdminController
             $batch->add(new BatchAddTag());
             // 批量上传到第三方平台
             $batch->add(new BatchUploadOuterShop());
+            $batch->add(new BatchOnline());
+            $batch->add(new BatchDown());
 
         });
 
