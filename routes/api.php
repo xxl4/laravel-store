@@ -66,6 +66,7 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
 
     #系统
     $api->get("store/area", 'App\Api\V1\Controllers\StoreController@area');
+    $api->get("store/city", 'App\Api\V1\Controllers\StoreController@city');
 
 
 

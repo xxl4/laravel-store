@@ -27,4 +27,9 @@ class StoreController extends Controller {
         ];
         return Utils::ApiResponse($ret);
     }
+
+    public function city(Request $request) {
+        $provinceId = $request->get('q');
+        return \App\Models\Area::where('parent_id', $provinceId)->get([DB::raw('area_id as id'), DB::raw('area_name as text')]);
+    }
 }

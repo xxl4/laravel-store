@@ -91,12 +91,12 @@ class UserAddrController extends AdminController
 
         $form->text('user_id', __('User id'));
         $form->text('receiver', __('Receiver'));
-        $form->number('province_id', __('Province id'));
+        $form->text('province_id', __('Province id'));
         $form->text('province', __('Province'));
         $form->text('city', __('City'));
-        $form->number('city_id', __('City id'));
+        $form->text('city_id', __('City id'));
         $form->text('area', __('Area'));
-        $form->number('area_id', __('Area id'));
+        $form->text('area_id', __('Area id'));
         $form->text('post_code', __('Post code'));
         $form->text('addr', __('Addr'));
         $form->mobile('mobile', __('Mobile'));
