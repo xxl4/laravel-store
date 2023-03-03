@@ -8,6 +8,7 @@ use App\Libs\Utils;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\UserGetRequest;
 
 /**
  * User resource representation
@@ -16,15 +17,11 @@ use Illuminate\Support\Facades\Cache;
 class UserController extends Controller {
 
     /**
-     * 区域内容
+     * 用户获取
      * 
      */
-    public function area(Request $request) {
-        $area_id = $request->input("area_id"); // 默认0 开头
-        $items = \App\Models\Area::where("parent_id", $area_id)->select(["area_id","area_name"])->get();
-        $ret = [
-            'items'=>$items
-        ];
-        return Utils::ApiResponse($ret);
+    public function get(UserGetRequest $request) {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
+        $validated = $request->validated();
     }
 }

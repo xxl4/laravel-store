@@ -173,6 +173,18 @@
     "Dvy time": "发货时间",
     "Remarks": "备注",
 
+    "Receiver":"接收人",
+    "Province id":"省ID",
+    "Province":"省",
+    "City":"市",
+    "City id":"市ID",
+    "Area":"区ID",
+    "Area id":"区",
+    "Post code":"邮政编码",
+    "Addr":"地址",
+    "Mobile":"手机",
+    "Common addr":"常用地址",
+
     "Goods number": "商品数量",
     "Pay status": "支付状态"
 

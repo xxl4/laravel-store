@@ -52,6 +52,10 @@ Route::group([
     $router->get('/messages/{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
     $router->put('/messages/{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
 
+    //客户
+    $router->resource('users', UserController::class);
+    $router->resource('user-addrs', UserAddrController::class);
+
     //系统
     $router->resource('areas', AreaController::class);
     $router->resource('deliveries', DeliveryController::class);
