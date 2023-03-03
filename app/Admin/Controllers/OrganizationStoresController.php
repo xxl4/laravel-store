@@ -10,6 +10,7 @@ use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
 use App\Enums\StoreTypeEnum;
 use App\Admin\Actions\OrgStore\TestConfig;
+use App\Admin\Actions\OrgStore\StoreMoreConfig;
 
 class OrganizationStoresController extends AdminController
 {
@@ -41,12 +42,13 @@ class OrganizationStoresController extends AdminController
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
-        //$grid->model()->where("org_id", Admin::user()->org_id); //todo
+        $grid->model()->where("organization_id", Admin::user()->org_id);
 
         $grid->model()->orderBy("id", "DESC");
 
         $grid->actions(function ($actions) {
             $actions->add(new TestConfig);
+            $actions->add(new StoreMoreConfig);
         });
 
         return $grid;
