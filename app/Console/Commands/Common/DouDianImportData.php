@@ -4,6 +4,7 @@ namespace App\Console\Commands\Common;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
 class DouDianImportData extends Command
 {
     /**
@@ -11,7 +12,7 @@ class DouDianImportData extends Command
      *
      * @var string
      */
-    protected $signature = 'common:doudian:import:data';
+    protected $signature = 'common:doudian:import:data {cid}';
 
     /**
      * The console command description.
@@ -37,22 +38,45 @@ class DouDianImportData extends Command
      */
     public function handle()
     {
+        $cid = $this->argument('cid');
+        $this->info($cid);
+        $shop_id = 3;
         //$this->createToken();exit;
         $doudian_token_obj = Cache::get("doudian_token_obj");
         $access_token = unserialize($doudian_token_obj);
         //var_dump($access_token);exit;
         //
-        $store = \App\Models\OrganizationStore::where("id", 3)->first();
+        $store = \App\Models\OrganizationStore::where("id", $shop_id)->first();
         $req = new \ShopGetShopCategoryRequest();
         $p = new \ShopGetShopCategoryParam();
         $config = new \DoudianOpConfig();
         $config->appKey = $store->key;
         $config->appSecret = $store->secret;
         $req->setConfig($config);
-        $p->cid = 0;
+        $p->cid = $cid;
         $req->setParam($p);
         $resp = $req->execute($access_token);
         var_dump($resp, $req);
+        if($resp->code=='10000') {
+            $cache_key = "shop_category_".$p->cid;
+            Cache::put($cache_key, json_encode($resp->data));
+            $items = $resp->data;
+            foreach($items as $key=>$item) {
+                $category = \App\Models\Category::where("category_id", $item->id)->where("shop_id",$shop_id)->first();
+                if(is_null($category)) $category = new \App\Models\Category();
+                $category->category_id = $item->id;
+                $category->shop_id = $shop_id;
+                $category->parent_id = $item->parent_id;
+                $category->category_name = $item->name;
+                $category->status = 1;
+                $category->seq = 1;
+                $category->grade = $item->level;
+                $category->save();
+                if($item->enable==true && $item->is_leaf==false) {
+                    Artisan::call("common:doudian:import:data",['cid'=>$item->id]);
+                }
+            }
+        }
     }
 
     public function createToken() {
