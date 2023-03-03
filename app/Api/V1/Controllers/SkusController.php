@@ -47,15 +47,12 @@ class SkusController extends Controller {
 
         $sysCate = $this->_getCateProp($prod->category_id);
         $props = $data['properties'];
-        $props_items = explode('|', $props);
-        foreach($props_items as $key=>$pitem) {
-            $pi = explode(':', $pitem);
-            if(!is_array($pi)) return false;
-
-            if(!isset($sysCate[$pi[0]][$pi[1]])) {
-                return $this->response->error("属性错误，请调整".$pi[1], 500);
+        $props = json_decode($props);
+        //var_dump($sysCate);
+        foreach($props as $key=>$prop) {
+            if(!isset($sysCate[$key][$prop])) {
+                return $this->response->error("属性错误，请调整".$key, 500);
             }
-            
         }
 
         //todo save data into db
@@ -98,17 +95,13 @@ class SkusController extends Controller {
 
         $sysCate = $this->_getCateProp($prod->category_id);
         $props = $data['properties'];
-        $props_items = explode('|', $props);
-        foreach($props_items as $key=>$pitem) {
-            $pi = explode(':', $pitem);
-            if(!is_array($pi)) return false;
-
-            if(!isset($sysCate[$pi[0]][$pi[1]])) {
-                return $this->response->error("属性错误，请调整".$pi[1], 500);
+        $props = json_decode($props);
+        //var_dump($sysCate);
+        foreach($props as $key=>$prop) {
+            if(!isset($sysCate[$key][$prop])) {
+                return $this->response->error("属性错误，请调整".$key, 500);
             }
-            
         }
-
         \App\Models\Sku::where("sku_id",$data['sku_id'])->update($data);
         \App\Models\Sku::where("sku_id",$data['sku_id'])->increment('version');
         
