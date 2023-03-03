@@ -143,10 +143,31 @@ class SkuController extends AdminController
         $form->decimal('volume', __('Volume'));
         $form->switch('status', __('Status'))->default(1);
         $form->switch('is_delete', __('Is delete'));
+        $form->hidden("org_id");
 
         // 数据保存后的权限调整
         $form->saving(function (Form $form) {
-            $from->org_id = Admin::user()->org_id;
+            $form->org_id = Admin::user()->org_id;
+            $prod = \App\Models\Product::where("prod_id", $form->prod_id)->select(['category_id'])->first();
+            // 返回一个简单response
+            if(is_null($prod)) return response('商品不存在');
+            
+            $sysCate = \App\Libs\Utils::GetCateProp($prod->category_id);
+            $props = $form->properties;
+            //var_dump($props);
+            //$props = json_decode($props);
+            //var_dump($sysCate);
+            foreach($props as $key=>$prop) {
+                if(!isset($sysCate[$key][$prop])) {
+                    return response('属性内容错误');
+                }
+            }
+
+        });
+
+        // 数据保存后的数据操作
+        $form->saved(function (Form $form) {
+
         });
 
         return $form;

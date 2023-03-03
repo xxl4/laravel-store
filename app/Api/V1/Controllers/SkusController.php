@@ -45,7 +45,7 @@ class SkusController extends Controller {
             return $this->response->error("商品内容不存在", 400);
         }
 
-        $sysCate = $this->_getCateProp($prod->category_id);
+        $sysCate = \App\Libs\Utils::GetCateProp($prod->category_id);
         $props = $data['properties'];
         $props = json_decode($props);
         //var_dump($sysCate);
@@ -88,7 +88,7 @@ class SkusController extends Controller {
             return $this->response->error("商品内容不存在", 400);
         }
 
-        $sysCate = $this->_getCateProp($prod->category_id);
+        $sysCate = \App\Libs\Utils::GetCateProp($prod->category_id);
         $props = $data['properties'];
         $props = json_decode($props);
         //var_dump($sysCate);
@@ -193,22 +193,6 @@ class SkusController extends Controller {
 
     }
 
-    private function _getCateProp($cid) {
-        $ret = Cache::get(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid);
-        if(empty($ret)) {
-            $items = \App\Models\CategoryProp::where("category_id", $cid)->with("prop_value")->select(['prop_id'])->get();
-            //var_dump($items->prop_value);exit;
-            $ret = [];
-            foreach($items as $key=>$item) {
-                foreach($item->prop_value as $kk=>$value) {
-                    $ret[$value->prop_id][$value->value_id] = $value->value_id;
-                }
-                
-            }
-            Cache::put(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid, $ret);
-        }
-        return $ret;
-        
-    }
+   
 
 }

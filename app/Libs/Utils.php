@@ -39,4 +39,20 @@ final class Utils
             'message' => __($message)
         ];
     }
+
+    static function GetCateProp($cid) {
+        $ret = Cache::get(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid);
+        if(empty($ret)) {
+            $items = \App\Models\CategoryProp::where("category_id", $cid)->with("prop_value")->select(['prop_id'])->get();
+            $ret = [];
+            foreach($items as $key=>$item) {
+                foreach($item->prop_value as $kk=>$value) {
+                    $ret[$value->prop_id][$value->value_id] = $value->value_id;
+                }
+                
+            }
+            Cache::put(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid, $ret);
+        }
+        return $ret;
+    }
 }
