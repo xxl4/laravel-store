@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Cache;
 use App\Enums\OrganizationUserEnableEnum;
+use Carbon\Carbon;
+use Cmgmyr\Messenger\Models\Message;
+use Cmgmyr\Messenger\Models\Participant;
+use Cmgmyr\Messenger\Models\Thread;
 
 
 final class Utils
@@ -54,5 +58,33 @@ final class Utils
             Cache::put(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid, $ret);
         }
         return $ret;
+    }
+
+    /**
+     * 
+     * 发送站点内消息模块
+     * @param from uid
+     * @param to uid
+     * @param string subject
+     * @param string body
+     * @return boolean|null
+     * 
+     */
+    static function sendMessage($from, $to,$subject,$body) {
+        $thread = Thread::create([
+            'subject' => $subject,
+        ]);
+        // Message
+        Message::create([
+            'thread_id' => $thread->id,
+            'user_id' => $from,
+            'body' => $body,
+        ]);
+        Participant::create([
+            'thread_id' => $thread->id,
+            'user_id' => $from,
+            'last_read' => new Carbon(),
+        ]);
+        return $thread->addParticipant($to);
     }
 }
