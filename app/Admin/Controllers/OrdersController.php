@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Widgets\Table;
 
 class OrdersController extends AdminController
 {
@@ -27,10 +28,17 @@ class OrdersController extends AdminController
         $grid = new Grid(new Order());
 
         $grid->column('order_id', __('Order id'));
-        $grid->column('shop_id', __('Shop id'));
-        $grid->column('prod_name', __('Prod name'));
-        $grid->column('user_id', __('User id'));
-        $grid->column('order_number', __('Order number'));
+        //$grid->column('shop_id', __('Shop id'));
+        //$grid->column('prod_name', __('Prod name'));
+        //$grid->column('user_id', __('User id'));
+        $grid->column('order_number', __('Order number'))->expand(function ($model) {
+
+            $outers = $model->item()->take(10)->orderBy("order_item_id","desc")->get()->map(function ($outer) {
+                return $outer->only(['prod_name','sku_name', 'prod_count','price','product_total_amount','rec_time']);
+            });
+            return new Table(['商品名称','SKU名称','数量','价格','总价', '添加时间'], $outers->toArray());
+
+        })->sortable()->filter();
         $grid->column('total', __('Total'));
         $grid->column('actual_total', __('Actual total'));
         $grid->column('pay_type', __('Pay type'));
@@ -40,7 +48,7 @@ class OrdersController extends AdminController
         $grid->column('dvy_id', __('Dvy id'));
         $grid->column('dvy_flow_id', __('Dvy flow id'));
         $grid->column('freight_amount', __('Freight amount'));
-        $grid->column('addr_order_id', __('Addr order id'));
+        //$grid->column('addr_order_id', __('Addr order id'));
         $grid->column('product_nums', __('Product nums'));
         $grid->column('create_time', __('Create time'));
         $grid->column('update_time', __('Update time'));
@@ -54,6 +62,8 @@ class OrdersController extends AdminController
         $grid->column('reduce_amount', __('Reduce amount'));
         $grid->column('order_type', __('Order type'));
         $grid->column('close_type', __('Close type'));
+
+        $grid->model()->orderBy("order_id","desc");
 
         return $grid;
     }
