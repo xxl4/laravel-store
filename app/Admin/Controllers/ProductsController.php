@@ -10,6 +10,7 @@ use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Widgets\Table;
 use Nicelizhi\Admin\Facades\Admin;
 use App\Admin\Actions\Product\Replicate;
+use App\Admin\Actions\Product\AddSku;
 use App\Admin\Actions\Product\BatchReplicate;
 use App\Admin\Actions\Product\BatchAddTag;
 use App\Admin\Actions\Product\BatchUploadOuterShop;
@@ -40,7 +41,9 @@ class ProductsController extends AdminController
             $skus = $model->sku()->take(10)->orderBy("sku_id","desc")->get()->map(function ($sku) {
                 return $sku->only(['sku_id', 'sku_name','properties', 'price','actual_stocks']);
             });
+
             return new Table(['SKU ID', 'SKU名称','属性', '销售价格','实际库存'], $skus->toArray());
+
         })->sortable()->filter();
         $grid->column('shop_id', __('Shop id'))->expand(function ($model) {
 
@@ -48,6 +51,7 @@ class ProductsController extends AdminController
                 return $outer->only(['shop_id', 'shop_type','outer_id', 'created_at','updated_at']);
             });
             return new Table(['店铺ID','类型', '外部ID','添加时间','更新时间'], $outers->toArray());
+
         })->sortable()->filter();
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();
@@ -56,15 +60,15 @@ class ProductsController extends AdminController
         $grid->column('pic', __('Pic'))->hide();
         $grid->column('imgs', __('Imgs'))->hide();
         $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();
-        $grid->column('category_id', __('Category id'));
-        $grid->column('sold_num', __('Sold num'));
-        $grid->column('total_stocks', __('Total stocks'));
-        $grid->column('delivery_mode', __('Delivery mode'));
-        $grid->column('delivery_template_id', __('Delivery template id'));
+        $grid->column('category_id', __('Category id'))->filter();
+        $grid->column('sold_num', __('Sold num'))->filter();
+        $grid->column('total_stocks', __('Total stocks'))->filter();
+        //$grid->column('delivery_mode', __('Delivery mode'));
+        //$grid->column('delivery_template_id', __('Delivery template id'));
         $grid->column('create_time', __('Create time'));
         $grid->column('update_time', __('Update time'));
         $grid->column('putaway_time', __('Putaway time'));
-        $grid->column('version', __('Version'));
+        $grid->column('version', __('Version'))->filter();
 
         $grid->model()->where("org_id", Admin::user()->org_id);
 
@@ -72,6 +76,7 @@ class ProductsController extends AdminController
 
         $grid->actions(function ($actions) {
             $actions->add(new Replicate);
+            $actions->add(new AddSku);
         });
 
         $grid->batchActions(function ($batch) {
@@ -79,7 +84,9 @@ class ProductsController extends AdminController
             $batch->add(new BatchAddTag());
             // 批量上传到第三方平台
             $batch->add(new BatchUploadOuterShop());
+            // 批量上架
             $batch->add(new BatchOnline());
+            // 批量下架
             $batch->add(new BatchDown());
 
         });

@@ -28,7 +28,7 @@ class ProdPropValueController extends AdminController
 
         $grid->column('value_id', __('Value id'));
         $grid->column('prop_value', __('Prop value'));
-        $grid->column('prop_id', __('Prop id'))->filter()->hide();
+        $grid->column('prop_id', __('Prop id'))->filter();
 
         return $grid;
     }

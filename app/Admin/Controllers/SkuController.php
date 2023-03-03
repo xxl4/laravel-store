@@ -31,7 +31,17 @@ class SkuController extends AdminController
 
         $grid->column('sku_id', __('Sku id'))->sortable()->filter();
         $grid->column('prod_id', __('Prod id'))->sortable()->filter();
-        //$grid->column('properties', __('Properties'));
+        $grid->column('properties', __('Properties'))->display(function ($v){
+            $str = "";
+            foreach($v as $key=>$item) {
+                $prop = \App\Models\ProdProp::where("prop_id",$key)->select(["prop_name"])->first();
+                $propValue = \App\Models\ProdPropValue::where("value_id",$item)->select(["prop_value"])->first();
+                if(!is_null($prop) && !is_null($propValue)) {
+                    $str.= $prop->prop_name.":".$propValue->prop_value."<br />";
+                }
+            }
+            return $str;
+        });
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();
         $grid->column('stocks', __('Stocks'))->sortable()->filter();
@@ -103,6 +113,8 @@ class SkuController extends AdminController
         $show->field('status', __('Status'));
         $show->field('is_delete', __('Is delete'));
 
+        
+
         return $show;
     }
 
@@ -116,7 +128,7 @@ class SkuController extends AdminController
         $form = new Form(new Sku());
 
         $form->number('prod_id', __('Prod id'));
-        $form->text('properties', __('Properties'));
+        $form->keyValue('properties', __('Properties'));
         $form->decimal('ori_price', __('Ori price'));
         $form->decimal('price', __('Price'));
         $form->number('stocks', __('Stocks'));
@@ -131,6 +143,11 @@ class SkuController extends AdminController
         $form->decimal('volume', __('Volume'));
         $form->switch('status', __('Status'))->default(1);
         $form->switch('is_delete', __('Is delete'));
+
+        // 数据保存后的权限调整
+        $form->saving(function (Form $form) {
+            $from->org_id = Admin::user()->org_id;
+        });
 
         return $form;
     }
