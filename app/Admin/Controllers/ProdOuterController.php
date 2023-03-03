@@ -15,7 +15,7 @@ class ProdOuterController extends AdminController
      *
      * @var string
      */
-    protected $title = 'ProdOuter';
+    protected $title = '外部商品';
 
     /**
      * Make a grid builder.

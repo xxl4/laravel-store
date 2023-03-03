@@ -9,6 +9,7 @@ use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
 use App\Enums\StoreTypeEnum;
+use App\Admin\Actions\OrgStore\TestConfig;
 
 class OrganizationStoresController extends AdminController
 {
@@ -39,6 +40,14 @@ class OrganizationStoresController extends AdminController
         $grid->column('token2', __('Token Kefu'))->limit(30);
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+
+        //$grid->model()->where("org_id", Admin::user()->org_id); //todo
+
+        $grid->model()->orderBy("id", "DESC");
+
+        $grid->actions(function ($actions) {
+            $actions->add(new TestConfig);
+        });
 
         return $grid;
     }
@@ -94,5 +103,12 @@ class OrganizationStoresController extends AdminController
         */
 
         return $form;
+    }
+
+    /**
+     * 店铺配置内容测试
+     */
+    public function test(Request $request) {
+
     }
 }
