@@ -109,6 +109,7 @@
     "CANCELED":"已取消",
     "INVALID":"无效",
     "RETURNED":"退货",
+    "Freight amount":"运费",
 
     "UNPAYED":"未付款",
     "PAYING":"付款中",
