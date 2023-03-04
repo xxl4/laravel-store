@@ -15,6 +15,8 @@ class GetOrder extends Command
 
     private $fields = "waybill,logisticsId,realPin,pin,returnOrder,open_id_buyer,xid_buyer,orderState,deliveryType,itemInfoList,orderId,isShipmenttype,scDT,idSopShipmenttype,orderStartTime,orderTotalPrice,consigneeInfo,payType,orderStartTime,paymentConfirmTime,orderRemark,orderPayment,orderTotalPrice,freightPrice,orderSource,payType,invoiceInfo,invoiceCode,invoiceEasyInfo,orderType";
 
+    private $orderStatus = "WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,FINISHED_L,TRADE_CANCELED,LOCKED,POP_ORDER_PAUSE";
+
     private $size = 100;
     private $total = 0;
 
@@ -53,19 +55,32 @@ class GetOrder extends Command
                 return false;
             }
         }
+        $this->getOnline(1, $store);
+        $this->info("Total ". $this->total);
+        if($this->total > $this->size) {
+            $pages = ceil($this->total / $this->size);
+            //前面获取了第一页面数据了，所以从第二页开始
+            for($i=1; $i<=$pages; $i++) {
+                $this->getOnline($i, $store);
+            }
+        }
+    }
+
+    private function getOnline($page, $store) {
         $c = new \JdClient();
         $c->appKey = $store->key;
         $c->appSecret = $store->secret;
         $c->accessToken = $store->token;
 
         $req = new \PopOrderSearchRequest();
-        $req->setOrderState("WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,FINISHED_L,TRADE_CANCELED,LOCKED,POP_ORDER_PAUSE");
+        $req->setOrderState($this->orderStatus);
         $req->setOptionalFields($this->fields);
-        $req->setPage(1);
+        $req->setPage($page);
         $req->setPageSize($this->size);
         $resp = $c->execute($req, $c->accessToken);
-        var_dump($resp);
+        //var_dump($resp);
         if($resp->jingdong_pop_order_search_responce->code==0) {
+            $this->total = $resp->jingdong_pop_order_search_responce->searchorderinfo_result->orderTotal;
             foreach ($resp->jingdong_pop_order_search_responce->searchorderinfo_result->orderInfoList as $key=> $item) {
                 $order = \App\Models\Order::where("order_number", $item->orderId)->first();
                 if(is_null($order)) $order = new \App\Models\Order();
@@ -115,16 +130,9 @@ class GetOrder extends Command
                     $orderItem->save();
                     
                 }
-
                 $order->save();
-
-
-
             }
             
         }
-        
-
-
     }
 }
