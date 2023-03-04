@@ -8,6 +8,7 @@ class OrderRefund extends Model
 {
     //
     public $table = "order_refund";
+    public $primaryKey = "refund_id";
     const CREATED_AT="apply_time";
     const UPDATED_AT = "updated_at";
 }

@@ -83,16 +83,32 @@ class GetRefund extends Command
             $this->total = $resp->data->total;
             foreach($resp->data->items as $key=>$item) {
                 var_dump($item->aftersale_info);
-                $refund = \App\Models\OrderRefund::where("order_number", $item->aftersale_info->aftersale_id)->first();
+                $localOrder = \App\Models\Order::where("order_number", $item->aftersale_info->related_id)->first();
+                $localOrderSettlement = \App\Models\OrderSettlement::where("order_number", $item->aftersale_info->related_id)->first();
+                $refund = \App\Models\OrderRefund::where("refund_sn", $item->aftersale_info->aftersale_id)->first();
                 if(is_null($refund)) $refund = new \App\Models\OrderRefund();
                 $refund->shop_id =  $store->id;
-                $refund->order_number = $item->aftersale_info->aftersale_id;
+                $refund->order_id = $localOrder->order_id;
+                $refund->order_number = $item->aftersale_info->related_id;
+                $refund->refund_sn = $item->aftersale_info->aftersale_id;
                 $refund->goods_num = $item->aftersale_info->aftersale_num;
                 $refund->refund_amount = $item->aftersale_info->refund_amount;
-                $refund->remark = $item->aftersale_info->remark;
+                $refund->buyer_msg = $item->aftersale_info->remark;
+                $refund->express_name = $item->aftersale_info->return_logistics_company_name;
+                $refund->express_no = $item->aftersale_info->return_logistics_code;
+                $refund->apply_type = $item->aftersale_info->aftersale_refund_type;
+
+                //$refund->flow_trade_no = $item->aftersale_info->aftersale_refund_type;
+
+                $refund->order_amount = $localOrder->actual_total;
+                $refund->user_id = $localOrder->user_id;
+                $refund->flow_trade_no = $localOrderSettlement->pay_no;
+
+
 
                 $related_id = $item->aftersale_info->related_id;
                 //和订单关联
+
                 
                 $refund->apply_time = date("Y-m-d H:i:s", $item->aftersale_info->apply_time);
                 $refund->save();

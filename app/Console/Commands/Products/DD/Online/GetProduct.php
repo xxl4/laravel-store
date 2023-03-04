@@ -105,12 +105,4 @@ class GetProduct extends Command
             
         }
     }
-
-    /**
-     * 
-     * 获取订单详情
-     */
-    private function getOrderDetail($shop_order_id) {
-
-    }
 }

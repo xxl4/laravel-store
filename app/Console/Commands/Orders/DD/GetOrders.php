@@ -4,6 +4,7 @@ namespace App\Console\Commands\Orders\DD;
 
 use Illuminate\Console\Command;
 use App\Libs\Utils;
+use Illuminate\Support\Facades\Cache;
 
 class GetOrders extends Command
 {
@@ -49,13 +50,12 @@ class GetOrders extends Command
         $access_token = unserialize($access_token);
         if($order_id > 0) {
             $outer = \App\Models\Order::where("order_id", $order_id)->select(["order_number"])->first();
-            
             if(is_null($outer)) {
                 $outer_order_id = $outer->order_number;
                 return false;
             }else{
                 //$this->getOrderDetail($outer->order_number);
-                $order_number="4996989871028342018";
+                //$order_number="4996989871028342018";
                 $this->getOrderDetail($order_number, $access_token , $store);
             }
         } 
@@ -125,7 +125,24 @@ class GetOrders extends Command
             $order->actual_total = $order_detail->pay_amount;
             $order->pay_type = $order_detail->pay_type;
             $order->user_id = $order_detail->pay_type;
-            //$order->dvy_time = $order_detail->ship_time;
+            
+            //加密内容处理
+            $items = [];
+            $list = [];
+            $list['auth_id'] = $order_detail->order_id;
+            $list['cipher_text'] = $resp->data->shop_order_detail->encrypt_post_tel;
+            $items[] = $list;
+            $list = [];
+            $list['auth_id'] = $order_detail->order_id;
+            $list['cipher_text'] = $resp->data->shop_order_detail->encrypt_post_receiver;
+            $items[] = $list;
+            $list = [];
+            $list['auth_id'] = $order_detail->order_id;
+            $list['cipher_text'] = $resp->data->shop_order_detail->post_addr->encrypt_detail;
+            $items[] = $list;
+
+            $decrypt = $this->batchDecrypt($order_detail->order_id, $access_token, $store, $items);
+            var_dump($decrypt);
             
             
             $order->save();
@@ -134,7 +151,10 @@ class GetOrders extends Command
 
     // 批量解密操作
     private function batchDecrypt($order_sn,$access_token, $store, $list = array()) {
-        $redis_key = "doudian_".$order_sn."_d";
+        $redis_key = \App\Enums\CachePrefixEnum::DOUDIAN_STORE_ORDER_ENCRYPT.$order_sn;
+        if(Cache::has($redis_key)) {
+            //return Cache::get($redis_key);
+        }
         $req = new \OrderBatchDecryptRequest();
         $q = new \OrderBatchDecryptParam();
         $config = new \DoudianOpConfig();
@@ -144,13 +164,14 @@ class GetOrders extends Command
         $q->cipher_infos = $list;
         $req->setParam($q);
         $resp = $req->execute($access_token);
-
+        var_dump($resp);
         if($resp->code==10000) {
             $data = $resp->data;
             $out = [];
             $out['encrypt_post_tel'] = $data->decrypt_infos[1]->decrypt_text;
             $out['encrypt_post_receiver'] = $data->decrypt_infos[2]->decrypt_text;
             $out['encrypt_detail'] = $data->decrypt_infos[0]->decrypt_text;
+            Cache::put($redis_key, $out, 3600);
             return $out;
         }
 
