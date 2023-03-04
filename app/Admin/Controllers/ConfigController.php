@@ -83,13 +83,15 @@ class ConfigController extends AdminController
         $form->textarea('value', __('Value'));
 
         $form->saving(function (Form $form){
-            Cache::delete(\App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$form->model()->shop_id.'_'.$form->model()->code);
+            //Cache::delete(\App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$form->model()->shop_id.'_'.$form->model()->code);
+            \App\Libs\Utils::GetStoreConfig($form->model()->org_id, $form->model()->shop_id, $form->model()->code, true);
         });
 
         // 数据保存后的数据操作
         $form->saved(function (Form $form) {
             
-            Cache::put(\App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$form->model()->shop_id.'_'.$form->model()->code, $form->model()->value);
+            //Cache::put(\App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$form->model()->shop_id.'_'.$form->model()->code, $form->model()->value);
+            \App\Libs\Utils::GetStoreConfig($form->model()->org_id, $form->model()->shop_id, $form->model()->code);
         });
 
         return $form;

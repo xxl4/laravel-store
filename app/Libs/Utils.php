@@ -94,10 +94,12 @@ final class Utils
      * @param int org_id
      * @param int shop_id
      * @param string code
+     * @param boolean is_update 是否强制更新
      * @return string|boolean
      */
-    static function GetStoreConfig($org_id, $shop_id, $code) {
+    static function GetStoreConfig($org_id, $shop_id, $code, $is_update=false) {
         $key = \App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$org_id."_".$shop_id."_".$code;
+        if($is_update) Cache::delete($key);
         if(Cache::has($key)) {
             return Cache::get($key);
         }else{
