@@ -12,9 +12,9 @@ class GetProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products.DD.get.online {store} {prod_id}';
+    protected $signature = 'products:DD:get:online {store} {prod_id}';
 
-    private $_field = "approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity";
+    private $total = 0; // 商品总数量
 
     /**
      * The console command description.
@@ -42,36 +42,67 @@ class GetProduct extends Command
     {
         $store = $this->argument('store');
         $prod_id = $this->argument('prod_id'); // 但prod_id 为 0 的时候获取全部的商品数据
+        $outer_prod_id = 0;
+        if($prod_id > 0) {
+            $outer = \App\Models\ProdOuter::where("prod_id", $prod_id)->select(["outer_id"])->first();
+            var_dump($prod_id);
+            if(is_null($outer)) {
+                $outer_prod_id = $outer->outer_id;
+                return false;
+            }
+        } 
         //
         $this->info("get from online info start".$store." prod_id ".$prod_id." if prod_id eq 0 and get all");
-        $c = new \TopClient();
         $access_token = Utils::GetDoudianStoreToken($store->id);
         $access_token = unserialize($access_token);
+        $size = 100;
         
 
+        $this->getOnline(1,$outer_prod_id, $access_token, $store);
+
+        $this->info("product total ".$this->total);
+
+        // 如果有超过size的，需要做分页动作
+        if($this->total > $size) {
+            $pages = ceil($this->total / $size);
+            //前面获取了第一页面数据了，所以从第二页开始
+            for($i=2; $i<=$pages; $i++) {
+                $this->getOnline($i,$outer_prod_id, $access_token, $store);
+            }
+        }    
+    }
+
+    private function getOnline($page,$outer_prod_id, $access_token, $store) {
+        $this->info($page." outer_id ". $outer_prod_id);
         $req = new \ProductListV2Request();
         $p = new \ProductListV2Param();
         $config = new \DoudianOpConfig();
         $config->appKey = $store->key;
         $config->appSecret = $store->secret;
         $req->setConfig($config);
-        //$p->status = 1;
-        $p->size = 100;
-        $p->page = 1;
+        $size = 100;
+        $p->size = $size;
+        $p->page = $page;
+        if($outer_prod_id  > 0) $p->product_id = $outer_prod_id;
         $req->setParam($p);
         $resp = $req->execute($access_token);
-        foreach ($resp->data->data as $key=>$item) {
-            $this->info($item->product_id);
-            //check the doudian goods table
-            $product = \App\Models\ProdOuter::where("outer_id", $item->product_id)->first();
-            if(is_null($product)) $product = new \App\Models\ProdOuter();
-                
-            $product->outer_id = $item->product_id;
-            $product->prod_id = $item->out_product_id;
-            $product->shop_id = $store->id;
-            $product->shop_type = $store->shop_type;
-            $product->content = json_encode($item);
-            $product->save();
-        }       
+        if($resp->code==10000) {
+            $this->total = $resp->data->total;
+            foreach ($resp->data->data as $key=>$item) {
+                $this->info($item->product_id);
+                //check the doudian goods table
+                $product = \App\Models\ProdOuter::where("outer_id", $item->product_id)->first();
+                if(is_null($product)) $product = new \App\Models\ProdOuter();
+                    
+                $product->outer_id = $item->product_id;
+                $product->prod_id = $item->out_product_id;
+                $product->shop_id = $store->id;
+                $product->shop_type = $store->shop_type;
+                $product->content = json_encode($item);
+                $product->save();
+            }
+        }else{
+            
+        }
     }
 }
