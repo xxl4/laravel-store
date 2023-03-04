@@ -6,12 +6,13 @@ use Nicelizhi\Admin\Actions\BatchAction;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Redis;
 use Nicelizhi\Admin\Facades\Admin;
+use Illuminate\Http\Request;
 
 class BatchOnline extends BatchAction
 {
     public $name = '批量上架';
 
-    public function handle(Collection $collection)
+    public function handle(Collection $collection, Request $request)
     {
         $is_outer_sync = $request->get('is_outer_sync');
         // 对每一个行的数据模型复制
