@@ -9,6 +9,10 @@ use Nicelizhi\Admin\Layout\Content;
 use Nicelizhi\Admin\Layout\Row;
 use Illuminate\Support\Arr;
 use Nicelizhi\Admin\Facades\Admin;
+use Carbon\Carbon;
+use Cmgmyr\Messenger\Models\Message;
+use Cmgmyr\Messenger\Models\Participant;
+use Cmgmyr\Messenger\Models\Thread;
 
 class HomeController extends Controller
 {
@@ -18,6 +22,7 @@ class HomeController extends Controller
             ->title('Dashboard')
             ->description('基于Laravel开发的一套店铺SASS管理系统，通过添加第三方店铺的API信息，轻松的完成订单，商品，商品分类，物流，售后等一系列的批量操作。')
             ->row($this->title())
+            ->row($this->message())
             ->row(function (Row $row) {
                 $row->column(4, function (Column $column) {
                     $column->append($this->news());
@@ -31,6 +36,11 @@ class HomeController extends Controller
                     $column->append($this->stores());
                 });
             });
+    }
+
+    public function message() {
+        $threads = Thread::forUserWithNewMessages(Admin::user()->id)->latest('updated_at')->get();
+        return view('admin.dashboard.message', compact('threads'));
     }
 
     public function news() {
