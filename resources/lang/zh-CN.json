@@ -194,7 +194,19 @@
     "Pay password":"支付密码",
     "User mobile":"手机",
     "Modify time":"修改时间",
-    "Pay password":"支付密码",
+
+    "Pay type":"支付类型",
+    "Dvy type":"快递类型",
+    "Dvy id":"快递ID",
+    "Dvy flow id":"快递编号",
+    "Total":"总共",
+    "Actual total":"实际总共",
+    "Product nums":"商品数量",
+    "Finally time":"完成时间",
+    "Cancel time":"取消时间",
+    "Is payed":"是否支付",
+    "Delete status":"删除状态",
+    "Order number":"编号",
 
 
 
