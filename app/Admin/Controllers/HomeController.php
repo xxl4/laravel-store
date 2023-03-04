@@ -40,6 +40,7 @@ class HomeController extends Controller
 
     public function message() {
         $threads = Thread::forUserWithNewMessages(Admin::user()->id)->latest('updated_at')->get();
+
         return view('admin.dashboard.message', compact('threads'));
     }
 
