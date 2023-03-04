@@ -9,4 +9,6 @@ class OrderItem extends Model
     //
     public $table = "order_item";
     public $primaryKey = "order_item_id";
+    const CREATED_AT = "rec_time";
+    const UPDATED_AT = null;
 }
