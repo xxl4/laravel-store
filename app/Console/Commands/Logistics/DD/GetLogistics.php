@@ -42,10 +42,17 @@ class GetLogistics extends Command
         //
         $store = $this->argument('store');
         $order_id = $this->argument('order_id'); // 用于发货
-        $store = $this->argument('store');
+
         $access_token = Utils::GetDoudianStoreToken($store->id);
         $access_token = unserialize($access_token);
 
+        $this->logisticsCompanyList($store, $access_token);
+        $this->freightTemplateList($store, $access_token);
+        
+
+    }
+
+    private function logisticsCompanyList($store, $access_token) {
         $req = new \OrderLogisticsCompanyListRequest();
         $config = new \DoudianOpConfig();
         $config->appKey = $store->key;
@@ -64,7 +71,33 @@ class GetLogistics extends Command
                 $logistics->save();
             }
         }
-        
+    }
 
+    private function freightTemplateList($store, $access_token) {
+        $req = new \FreightTemplateListRequest();
+        $p = new \FreightTemplateListParam();
+        $config = new \DoudianOpConfig();
+        $config->appKey = $store->key;
+        $config->appSecret = $store->secret;
+        $req->setConfig($config);
+        $p->page = 0;
+        $p->size = 10;
+        $req->setParam($p);
+        $resp = $req->execute($access_token);
+        //var_dump($resp);
+        if($resp->code==10000) {
+            foreach($resp->data->List as $key=>$item) {
+                $transport = \App\Models\Transport::where("outer_id",$item->template->id)->where("shop_id", $store->id)->first();
+                if(is_null($transport)) $transport = new \App\Models\Transport();
+                $transport->shop_id = $store->id;
+                $transport->trans_name = $item->template->template_name;
+                $transport->outer_id = $item->template->id;
+                $transport->charge_type = 0;
+                $transport->is_free_fee = 0;
+                $transport->has_free_condition = 0;
+                $transport->save();
+            }
+           
+        }
     }
 }
