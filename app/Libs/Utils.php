@@ -110,4 +110,36 @@ final class Utils
         }
         return false;
     }
+
+    /**
+     * 
+     * 获取Doudian Token 数据
+     * @param int $shop_id
+     */
+    static function GetDoudianStoreToken($shop_id) {
+        $key = \App\Enums\CachePrefixEnum::DOUDIAN_STORE_TOKEN.$shop_id;
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        }else{
+            $store = \App\Models\OrganizationStore::where("id", $shop_id)->first();
+            $req = new \TokenCreateRequest();
+            $config = new \DoudianOpConfig();
+            $config->appKey = $store->key;
+            $config->appSecret = $store->secret;
+            $req->setConfig($config);
+            $param = new \TokenCreateParam();
+            $param->code = "";
+            $param->grant_type="authorization_self";
+            $param->shop_id=$store->shop_id;
+            $req->setParam($param);
+            $resp = $req->execute("");
+            if($resp->code=10000) {
+                $access_token = \AccessToken::wrap($resp);
+                $access_token = serialize($access_token);
+                Cache::put(\App\Enums\CachePrefixEnum::DOUDIAN_STORE_TOKEN.$shop_id, $access_token, $resp->data->expires_in);
+                return $access_token;
+            }
+        }
+        return false;
+    }
 }

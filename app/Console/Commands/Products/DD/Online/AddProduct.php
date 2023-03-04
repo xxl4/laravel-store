@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Products\DD\Online;
 
 use Illuminate\Console\Command;
+use App\Libs\Utils;
 
 class AddProduct extends Command
 {
@@ -18,7 +19,7 @@ class AddProduct extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = '基于机构店铺的商品上传';
 
     /**
      * Create a new command instance.
@@ -38,8 +39,10 @@ class AddProduct extends Command
     public function handle()
     {
         ///
+        //$org_id = $this->argument("org_id");
         $store = $this->argument('store');
         $prod_id = $this->argument("prod_id");
+        
         //
         $this->info("get from online info start".$store);
         $c = new \TopClient();
@@ -47,5 +50,7 @@ class AddProduct extends Command
         $c->secretKey = $store->scret;
 
         //获取对应商品的内容，完成商品的数据更新
+        $access_token = Utils::GetDoudianStoreToken($store->id);
+        
     }
 }

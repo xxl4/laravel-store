@@ -12,7 +12,7 @@ class GetOnlineGoods extends Command
      *
      * @var string
      */
-    protected $signature = 'products:get:online {store_id}';
+    protected $signature = 'products:get:online {store_id} {prod_id}';
 
     /**
      * The console command description.
@@ -40,12 +40,13 @@ class GetOnlineGoods extends Command
     {
         //
         $store_id = $this->argument('store_id');
+        $prod_id = $this->argument("prod_id");
         $this->info("start get online goods from ".$store_id);
         $store = \App\Models\OrganizationStore::where("id", $store_id)->first();
         if(is_null($store)) {
             $this->error("no have");
             return false;
         }
-        Artisan::call("products.".$store->shop_type.".get.online", ['store'=>$store]);
+        Artisan::call("products.".$store->shop_type.".get.online", ['store'=>$store,"prod_id"=>$prod_id]);
     }
 }

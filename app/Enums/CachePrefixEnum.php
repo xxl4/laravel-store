@@ -23,6 +23,8 @@ final class CachePrefixEnum extends Enum
     const CONFIG_CODE = "config_code_";
     const CONFIG_SHOP_CODE = "config_shop_code_";
 
+    const DOUDIAN_STORE_TOKEN = "doudian_store_token_";
+
     
 
 }
