@@ -18,7 +18,7 @@ class DeleteProduct extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'JD 商品的删除操作';
 
     /**
      * Create a new command instance.

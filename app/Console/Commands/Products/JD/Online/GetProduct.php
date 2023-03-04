@@ -11,7 +11,7 @@ class GetProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products.JD.get.online {store} {prod_id}';
+    protected $signature = 'products:JD:get:online {store} {prod_id}';
 
     private $_field = 'title,offlineTime,onlineTime,wareId,wareStatus,categoryId,outerId,itemNum,colType,stockNum';
 
@@ -70,6 +70,8 @@ class GetProduct extends Command
             $checkGood = \App\Models\ProdOuter::where("outer_id", $item['wareId'])->first();
             if(!is_null($checkGood)) continue;
 
+            $item['outerId'] = str_replace('sd','', $item['outerId']);
+
             $checkGood = new \App\Models\ProdOuter();
 
             
@@ -100,6 +102,7 @@ class GetProduct extends Command
                 $item = (array) $item;
                 $checkGood = \App\Models\ProdOuter::where("outer_id", $item['wareId'])->first();
                 if(!is_null($checkGood)) continue;
+                $item['outerId'] = str_replace('sd','', $item['outerId']);
 
                 $checkGood = new \App\Models\ProdOuter();
                 $checkGood->outer_id = trim($item['wareId']);

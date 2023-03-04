@@ -18,7 +18,7 @@ class AddProduct extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'JD 商品的添加处理';
 
     /**
      * Create a new command instance.

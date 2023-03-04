@@ -18,7 +18,7 @@ class UpdateProduct extends Command
      *
      * @var string
      */
-    protected $description = '更新天猫线上商品内容';
+    protected $description = 'JD 商品的批量操作内容';
 
     /**
      * Create a new command instance.
