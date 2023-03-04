@@ -11,6 +11,7 @@ use Nicelizhi\Admin\Facades\Admin;
 use App\Enums\StoreTypeEnum;
 use App\Admin\Actions\OrgStore\TestConfig;
 use App\Admin\Actions\OrgStore\StoreMoreConfig;
+use App\Admin\Actions\OrgStore\StoreSyncCategory;
 
 class OrganizationStoresController extends AdminController
 {
@@ -48,6 +49,7 @@ class OrganizationStoresController extends AdminController
 
         $grid->actions(function ($actions) {
             $actions->add(new TestConfig);
+            $actions->add(new StoreSyncCategory);
             $actions->add(new StoreMoreConfig);
         });
 

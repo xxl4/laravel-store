@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redis;
 
 class TestConfig extends RowAction
 {
-    public $name = '验证配置';
+    public $name = '1) 验证配置';
 
     public function handle(Model $model)
     {
