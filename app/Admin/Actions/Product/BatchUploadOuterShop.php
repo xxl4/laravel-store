@@ -6,6 +6,7 @@ use Nicelizhi\Admin\Actions\BatchAction;
 use Illuminate\Database\Eloquent\Collection;
 use Nicelizhi\Admin\Facades\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class BatchUploadOuterShop extends BatchAction
 {
@@ -28,6 +29,13 @@ class BatchUploadOuterShop extends BatchAction
             $prodouter->prod_id = $model->prod_id;
             //$prodouter->status = 1;
             $prodouter->save();
+
+            $data = [];
+            $data['type'] = $model->prod_id;
+            $data['shop_id'] = $store;
+            $data['shop_type'] = $storeDetail->shop_type;
+            Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_UPLOAD_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
+
         }
 
         //\App\Models\ProdTag::where("id", $tag)->increment('prod_count', $num);
