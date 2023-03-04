@@ -13,7 +13,10 @@ class GetProduct extends Command
      */
     protected $signature = 'products:TM:get:online {store} {prod_id}';
 
-    private $_field = "approve_status,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity";
+    private $_field = "approve_status,iid,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity";
+
+    private $total = 0;
+    private $size = 100;
 
     /**
      * The console command description.
@@ -43,41 +46,49 @@ class GetProduct extends Command
         $prod_id = $this->argument('prod_id'); // 但prod_id 为 0 的时候获取全部的商品数据
         //
         $this->info("get from online info start".$store);
+        //
+        $this->getOnline(1, $store);
+
+        $this->info("get from online info Total ".$this->total);
+
+        // 如果有超过size的，需要做分页动作
+        if($this->total > $this->size) {
+            $pages = ceil($this->total / $this->size);
+            //前面获取了第一页面数据了，所以从第二页开始
+            for($i=2; $i<=$pages; $i++) {
+                $this->getOnline($i, $store);
+            }
+        } 
+
+    }
+
+    private function getOnline($page, $store) {
+        $this->info("pages". $page);
         $c = new \TopClient();
         $c->appkey = $store->key;
-        $c->secretKey = $store->scret;
-
-        $size = 100;
+        $c->secretKey = $store->secret;
 
         $req = new \ItemsOnsaleGetRequest();
         $req->setFields($this->_field);
-        $req->setPageNo(1);
-        $req->setPageSize($size);
+        $req->setPageNo($page);
+        $req->setPageSize($this->size);
         $resp = $c->execute($req, $store->token);
-        //var_dump($resp);
-        $total = $resp->total_results;
-        var_dump($total,$resp);
+        //var_dump($resp,$req, $store,$c);exit;
+        $this->total = (int)$resp->total_results;
+        //var_dump($total,$resp);
         foreach ($resp->items->item as $key=> $item) {
-            $item = (array) $item;
-            $item['created_at'] = date("Y-m-d H:i:s");
-            $item['updated_at'] = date("Y-m-d H:i:s");
-            DB::table("taobao_goods")->insert($item);
+            
+            //$item = (array) $item;
+            $product = \App\Models\ProdOuter::where("outer_id", $item->num_iid)->first();
+            if(is_null($product)) $product = new \App\Models\ProdOuter();
+            $product->outer_id = $item->num_iid;
+            $product->prod_id = (int)$item->outer_id;
+            $product->shop_id = $store->id;
+            $product->shop_type = $store->shop_type;
+            $product->content = json_encode($item);
+            $product->save();
         }
 
-        $pages = ceil($total / $size);
-        for ($i=2;$i<=$pages;$i++) {
-            $req = new \ItemsOnsaleGetRequest();
-            $req->setFields($this->_field);
-            $req->setPageNo($i);
-            $req->setPageSize($size);
-            $resp = $c->execute($req, $store->token);
-            foreach ($resp->items->item as $key=> $item) {
-                $item = (array) $item;
-                $item['created_at'] = date("Y-m-d H:i:s");
-                $item['updated_at'] = date("Y-m-d H:i:s");
-                DB::table("taobao_goods")->insert($item);
-            }
-
-        }
+        
     }
 }
