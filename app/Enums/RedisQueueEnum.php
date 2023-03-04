@@ -19,5 +19,7 @@ final class RedisQueueEnum extends Enum
     const AMAZON_REDIS_QUEUE = "amazon-queue";
     const PRODUCT_UPLOAD_QUEUE = "product_upload_queue";
     const PRODUCT_QUEUE = "product_queue";
-    const STORE_VALIDATE_QUEUE = "";
+    const ORDER_QUEUE = "order_queue";
+    const STORE_VALIDATE_QUEUE = "store_validate_queue";
+    const STORE_SYNC_QUEUE = "store_sync_queue"; // 店铺的常规同步
 }
