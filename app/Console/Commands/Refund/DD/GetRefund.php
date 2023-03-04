@@ -48,7 +48,7 @@ class GetRefund extends Command
         if($outer_refund_id > 0) {
             $outer = \App\Models\RefundOrder::where("order_id", $order_id)->select(["order_number"])->first();
             if(is_null($outer)) {
-                $outer_refund_id = $outer->order_number;
+                //todo
                 return false;
             }
         }
