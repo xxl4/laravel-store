@@ -87,4 +87,25 @@ final class Utils
         ]);
         return $thread->addParticipant($to);
     }
+
+    /**
+     * 
+     * 获取机构店铺配置内容
+     * @param int org_id
+     * @param int shop_id
+     * @param string code
+     * @return string|boolean
+     */
+    static function GetStoreConfig($org_id, $shop_id, $code) {
+        $key = \App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$org_id."_".$shop_id."_".$code;
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        }else{
+            $data = \App\Models\Config::where("org_id", $org_id)->where("shop_id", $shop_id)->where("code", $code)->select(['value'])->first();
+            if(is_null($data)) return false;
+            Cache::put($key, $data);
+            return $data;
+        }
+        return false;
+    }
 }
