@@ -142,7 +142,7 @@ class ProductsController extends AdminController
         $form->decimal('ori_price', __('Ori price'))->default(0.00);
         $form->decimal('price', __('Price'));
         $form->text('brief', __('Brief'));
-        $form->textarea('content', __('Content'));
+        $form->editor('content', __('Content'));
         $form->image('pic', __('Pic'));
         $form->multipleImage('imgs', __('Imgs'));
         $form->number('status', __('Status'));
