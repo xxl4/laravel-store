@@ -29,11 +29,13 @@ class ProdOuterController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('prod_id', __('Prod id'));
         $grid->column('outer_id', __('Outer id'));
-        $grid->column('content', __('Content'))->width(400);
+        $grid->column('content', __('Content'))->limit(400);
         $grid->column('shop_type', __('Shop type'));
-        $grid->column('shop_id', __('Shop id'));
+        $grid->column('shop_id', __('Shop id'))->filter();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+
+        $grid->model()->orderBy("id","desc");
 
         return $grid;
     }
