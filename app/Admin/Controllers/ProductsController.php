@@ -143,8 +143,8 @@ class ProductsController extends AdminController
         $form->decimal('price', __('Price'));
         $form->text('brief', __('Brief'));
         $form->editor('content', __('Content'));
-        $form->image('pic', __('Pic'));
-        $form->multipleImage('imgs', __('Imgs'));
+        $form->image('pic', __('Pic'))->uniqueName();
+        $form->image('imgs', __('Imgs'))->uniqueName();
         $form->number('status', __('Status'));
         $form->number('category_id', __('Category id'));
         $form->number('sold_num', __('Sold num'));

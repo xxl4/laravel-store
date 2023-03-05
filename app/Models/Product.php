@@ -10,8 +10,9 @@ class Product extends Model
     const CREATED_AT="create_time";
     const UPDATED_AT = "update_time";
     public $primaryKey = "prod_id";
+
     //
-    protected $fillable = ["prod_name","ori_price","pic","content","imgs","price","category_id","brief","total_stocks"];
+    protected $fillable = ["prod_name","ori_price","pic","content","price","category_id","brief","total_stocks"];
 
     protected $guarded = ["user_id","organization_id"];
 
@@ -19,7 +20,7 @@ class Product extends Model
 
     }
 
-    public function SetImgsAttribute($imgs) {
+    public function setImagsAttribute($imgs) {
         if(is_array($imgs)) {
             $this->attributes['imgs'] = json_encode($imgs);
         }
