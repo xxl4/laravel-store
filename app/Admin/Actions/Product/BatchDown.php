@@ -26,19 +26,22 @@ class BatchDown extends BatchAction
                 $data['shop_id'] = $store;
                 $data['act_type'] = "down";
                 $data['user_id'] = Admin::user()->id;
-                Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
+                //Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
+                if($is_outer_sync==1) {
+                    \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
+                 }
             }
 
         }
 
         // 返回一个`复制成功`的成功信息，并且刷新页面
-        return $this->response()->success('复制成功.')->refresh();
+        return $this->response()->success('商品批量下架中.')->refresh();
     }
 
     public function form()
     {
         $stores = ["1"=>"同步"];
-        $this->checkbox('is_outer_sync', '是否同步到第三方平台')->options($stores)->rules("required");
+        $this->checkbox('is_outer_sync', '是否同步到第三方平台')->options($stores)->rules("required")->help("只是针对与已做过上架的商品有效");
     }
 
 }
