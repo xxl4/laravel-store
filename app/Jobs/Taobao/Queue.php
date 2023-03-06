@@ -7,6 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Artisan;
 
 class Queue implements ShouldQueue
 {
@@ -22,6 +23,7 @@ class Queue implements ShouldQueue
     public function __construct($item)
     {
         //
+        $this->item = $item;
     }
 
     /**
@@ -36,6 +38,8 @@ class Queue implements ShouldQueue
         // 针对不同类型做不同的动作
         switch($this->item->act_type) {
             case 'upload': // 上新
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:".$this->item->shop_type.":".$$this->item->type.":online", $data);
                 break;
             case 'edit': //更新
                 break;

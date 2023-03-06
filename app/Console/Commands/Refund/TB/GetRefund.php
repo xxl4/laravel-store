@@ -25,7 +25,7 @@ class GetRefund extends Command
      *
      * @var string
      */
-    protected $description = '获取天猫售后内容';
+    protected $description = '获取淘宝售后内容';
 
     /**
      * Create a new command instance.
@@ -156,7 +156,7 @@ class GetRefund extends Command
         $refund->order_amount = $item->total_fee;
         $refund->refund_amount = $item->refund_fee;
         $refund->buyer_msg = $item->reason;
-        $refund->goods_num = $item->num;
+        $refund->goods_num = (int)$item->num;
 
         $refund->apply_time = $item->created;
         $refund->order_id = $localOrder->order_id;
