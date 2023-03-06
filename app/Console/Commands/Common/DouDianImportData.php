@@ -5,6 +5,7 @@ namespace App\Console\Commands\Common;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Artisan;
+use App\Libs\Utils;
 class DouDianImportData extends Command
 {
     /**
@@ -12,7 +13,7 @@ class DouDianImportData extends Command
      *
      * @var string
      */
-    protected $signature = 'common:doudian:import:data {cid}';
+    protected $signature = 'common:doudian:import:data {shop_id} {cid}';
 
     /**
      * The console command description.
@@ -39,11 +40,12 @@ class DouDianImportData extends Command
     public function handle()
     {
         $cid = $this->argument('cid');
+        $shop_id = $this->argument('shop_id');
         $this->info($cid);
-        $shop_id = 3;
+        //$shop_id = 3;
         //$this->createToken();exit;
-        $doudian_token_obj = Cache::get("doudian_token_obj");
-        $access_token = unserialize($doudian_token_obj);
+        $access_token = Utils::GetDoudianStoreToken($shop_id);
+        $access_token = unserialize($access_token);
         //var_dump($access_token);exit;
         //
         $store = \App\Models\OrganizationStore::where("id", $shop_id)->first();
@@ -73,7 +75,7 @@ class DouDianImportData extends Command
                 $category->grade = $item->level;
                 $category->save();
                 if($item->enable==true && $item->is_leaf==false) {
-                    Artisan::call("common:doudian:import:data",['cid'=>$item->id]);
+                    Artisan::call("common:doudian:import:data",['cid'=>$item->id,'shop_id'=>$shop_id]);
                 }
             }
         }
