@@ -52,7 +52,7 @@ class GetOrders extends Command
             $outer = \App\Models\Order::where("order_id", $order_id)->where("shop_id", $store->id)->select(["order_number"])->first();
             if(is_null($outer)) {
                 //todo
-                return false;
+                return $this->OrderDetail($outer->order_number, $store);
             }
             return $this->OrderDetail($outer->order_number, $store);
         }
@@ -92,61 +92,7 @@ class GetOrders extends Command
         }
         $this->total = $resp->total_results;
         foreach($resp->trades->trade as $key=>$item) {
-            $order = \App\Models\Order::where("order_number", $item->tid)->first();
-            if(is_null($order)) $order = new \App\Models\Order();
-            $order->shop_id = $store->id;
-            $order->order_number = $item->tid;
-
-            $order->total = $item->total_fee;
-            $order->actual_total = $item->payment;
-            $order->freight_amount = $item->post_fee;
-
-            $remark = "";
-            $remark.="卖家的小旗帜为:".$item->seller_flag;
-            $remark.="买家是否有留意:".$item->has_buyer_message;
-
-            $order->remarks = $remark;
-
-            $order->product_nums = count($item->orders);
-            $order->pay_type = 1;
-
-            $order->status = \App\Enums\TM\OrderState::fromKey($item->status);
-
-
-
-            $user = \App\Models\User::where("outer_id",$item->buyer_open_uid)->first();
-            if(is_null($user)) $user = new \App\Models\User();
-            $user->outer_id = $item->buyer_open_uid;
-            $user->nick_name = $item->buyer_nick;
-            $user->status = 1;
-            $user->save();
-            $order->user_id = $user->user_id;
-
-            if(isset($item->pay_time)) $order->pay_time = $item->pay_time;
-            $order->reduce_amount = $item->discount_fee;
-
-            $order->save();
-
-            //订单商品的同步
-            foreach ($item->orders->order as $key=> $good) {
-                //var_dump($good);
-                $goods_id = str_replace('sd', '', $good->outer_sku_id);
-                $orderItem = \App\Models\OrderItem::where("shop_id", $store->id)->where("order_number", $item->tid)->where("prod_id", $goods_id)->first();
-                if(is_null($orderItem)) $orderItem = new \App\Models\OrderItem();
-                $orderItem->shop_id = $store->id;
-                $orderItem->order_number = $item->tid;
-                $orderItem->prod_count = $good->num;
-                $orderItem->sku_id = (int)$good->sku_id;
-                $orderItem->prod_id = (int)$goods_id;
-                $orderItem->sku_name = $good->sku_properties_name;
-                $orderItem->prod_name = $good->title;
-                $orderItem->price = $good->price;
-                $orderItem->user_id = $user->user_id;
-                $orderItem->product_total_amount = $good->total_fee;
-
-                $orderItem->save();
-                
-            }
+            $this->saveToDB($item, $store);
         }
     }
 
@@ -166,6 +112,10 @@ class GetOrders extends Command
         }
         $item = $resp->trade;
 
+        $this->saveToDB($item, $store);
+    }
+
+    private function saveToDB($item, $store) {
         $order = \App\Models\Order::where("order_number", $item->tid)->first();
         if(is_null($order)) $order = new \App\Models\Order();
         $order->shop_id = $store->id;

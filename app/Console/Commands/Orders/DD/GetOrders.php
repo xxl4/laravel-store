@@ -51,12 +51,10 @@ class GetOrders extends Command
         if($order_id > 0) {
             $outer = \App\Models\Order::where("order_id", $order_id)->select(["order_number"])->first();
             if(is_null($outer)) {
-                $outer_order_id = $outer->order_number;
+                return $this->getOrderDetail($order_id, $access_token , $store);
                 return false;
             }else{
-                //$this->getOrderDetail($outer->order_number);
-                //$order_number="4996989871028342018";
-                $this->getOrderDetail($order_number, $access_token , $store);
+                return $this->getOrderDetail($outer->order_number, $access_token , $store);
             }
         } 
         
