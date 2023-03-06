@@ -142,4 +142,35 @@ final class Utils
         }
         return false;
     }
+
+    /**
+     * 
+     * 基于店铺ID获取对应的配置内容
+     * @param int $shop_id
+     * @return boolean | object
+     */
+    static function GetShopConfig($shop_id, $type='0') {
+        if($type=='0') {
+            $key = \App\Enums\CachePrefixEnum::CONFIG_SHOP_ID.$shop_id;
+        }else {
+            $key = \App\Enums\CachePrefixEnum::CONFIG_SHOP_TYPE_ID.$shop_id."_".$type;
+        }
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        }else{
+            if($type > 0 ){
+                $items = \App\Models\Config::where("shop_id", $shop_id)->where('type', $type)->pluck('value', 'code');
+            }else{
+                $items = \App\Models\Config::where("shop_id", $shop_id)->select(['code','value'])->pluck('value', 'code');
+            }
+
+            if(!is_null($items)) {
+                $items = $items->toArray();
+                Cache::put($key, $items, 600);
+                return $items;
+            }
+            
+        }
+        return false;
+    }
 }

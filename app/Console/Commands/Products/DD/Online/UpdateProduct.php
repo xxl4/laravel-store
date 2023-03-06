@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Products\DD\Online;
 
 use Illuminate\Console\Command;
+use App\Libs\Utils;
 
 class UpdateProduct extends Command
 {
@@ -18,7 +19,7 @@ class UpdateProduct extends Command
      *
      * @var string
      */
-    protected $description = '更新天猫线上商品内容';
+    protected $description = '更新抖店线上商品内容';
 
     /**
      * Create a new command instance.
@@ -42,11 +43,13 @@ class UpdateProduct extends Command
         $prod_id = $this->argument("prod_id");
         //
         $this->info("get from online info start".$store);
-        $c = new \TopClient();
-        $c->appkey = $store->key;
-        $c->secretKey = $store->scret;
+
+        $access_token = Utils::GetDoudianStoreToken($store->id);
+        $access_token = unserialize($access_token);
 
         //获取对应商品的内容，完成商品的数据更新
+
+        
         
     }
 }
