@@ -12,7 +12,7 @@ class GetCategory extends Command
      *
      * @var string
      */
-    protected $signature = 'category:onlie {store_id} {type} {cid}';
+    protected $signature = 'category:online {store_id} {type} {cid}';
 
     /**
      * The console command description.
