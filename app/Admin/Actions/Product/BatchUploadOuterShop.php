@@ -34,7 +34,9 @@ class BatchUploadOuterShop extends BatchAction
             $data['type'] = $model->prod_id;
             $data['shop_id'] = $store;
             $data['shop_type'] = $storeDetail->shop_type;
-            Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_UPLOAD_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
+            //Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_UPLOAD_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
+            $data['act_type'] = "upload";
+            \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
 
         }
 

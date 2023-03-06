@@ -16,6 +16,9 @@ use App\Admin\Actions\Product\BatchAddTag;
 use App\Admin\Actions\Product\BatchUploadOuterShop;
 use App\Admin\Actions\Product\BatchDown;
 use App\Admin\Actions\Product\BatchOnline;
+use App\Admin\Actions\Product\BatchDownAndDelete;
+use App\Admin\Actions\Product\BatchEdit;
+use App\Admin\Actions\Product\BatchSyncQty;
 
 class ProductsController extends AdminController
 {
@@ -88,6 +91,12 @@ class ProductsController extends AdminController
             $batch->add(new BatchOnline());
             // 批量下架
             $batch->add(new BatchDown());
+
+            $batch->add(new BatchDownAndDelete());
+
+            $batch->add(new BatchEdit());
+
+            $batch->add(new BatchSyncQty());
 
         });
 
