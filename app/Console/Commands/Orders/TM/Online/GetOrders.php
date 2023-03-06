@@ -69,7 +69,7 @@ class GetOrders extends Command
         $req->setPageSize($this->size);
         $req->setPageNo($page);
         $resp = $c->execute($req, $store->token);
-        //var_dump($resp);
+
         if (!property_exists($resp, 'trades')) {
             //todo 
         }

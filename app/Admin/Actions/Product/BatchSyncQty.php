@@ -24,7 +24,7 @@ class BatchEdit extends BatchAction
                 $data = [];
                 $data['prod_id'] = $model->prod_id;
                 $data['shop_id'] = $store;
-                $data['act_type'] = "down_delete";
+                $data['act_type'] = "sync_qty";
                 $data['user_id'] = Admin::user()->id;
                 //Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
                 if($is_outer_sync==1) {
