@@ -120,12 +120,15 @@ class GetProduct extends Command
         $resp = $req->execute($access_token);
         var_dump($resp);
         if($resp->code==10000) {
-            //$product->outer_id = $item->product_id;
-            //$product->prod_id = $item->out_product_id;
-            //$product->shop_id = $store->id;
-            //$product->shop_type = $store->shop_type;
-            //$product->content = json_encode($item);
-            //$product->save();
+            $prod = \App\Models\ProdOuter::where("outer_id", $outer_id)->first();
+            if(is_null($prod)) $prod = new \App\Models\ProdOuter();
+            $item = $resp->data;
+            $prod->outer_id = $item->product_id;
+            $prod->prod_id = $item->out_product_id;
+            $prod->shop_id = $store->id;
+            $prod->shop_type = $store->shop_type;
+            $prod->content = json_encode($item);
+            $prod->save();
         }
     }
 }
