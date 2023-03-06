@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Refund\TM;
+namespace App\Console\Commands\Refund\TB;
 
 use Illuminate\Console\Command;
 use App\Libs\Utils;
@@ -13,7 +13,7 @@ class GetRefund extends Command
      *
      * @var string
      */
-    protected $signature = 'refund:TM:get:online {store} {refund_id}';
+    protected $signature = 'refund:TB:get:online {store} {refund_id}';
 
     private $total = 0; // 订单总量
     private $size = 100; // 订单数量

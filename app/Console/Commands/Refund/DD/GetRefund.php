@@ -46,7 +46,7 @@ class GetRefund extends Command
         $refund_id = $this->argument('refund_id'); // 但prod_id 为 0 的时候获取全部的商品数据
         $outer_refund_id = 0;
         if($outer_refund_id > 0) {
-            $outer = \App\Models\RefundOrder::where("order_id", $order_id)->select(["order_number"])->first();
+            $outer = \App\Models\RefundOrder::where("order_id", $order_id)->select(["refund_sn"])->first();
             if(is_null($outer)) {
                 //todo
                 return false;
