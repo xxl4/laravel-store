@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Orders\TM\Online;
+namespace App\Console\Commands\Orders\TB\Online;
 
 use Illuminate\Console\Command;
 
@@ -11,7 +11,7 @@ class GetOrders extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:TM:get:online {store} {order_id}';
+    protected $signature = 'orders:TB:get:online {store} {order_id}';
 
     /**
      * The console command description.
