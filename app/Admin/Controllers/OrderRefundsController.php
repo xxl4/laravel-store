@@ -28,7 +28,7 @@ class OrderRefundsController extends AdminController
         $grid = new Grid(new OrderRefund());
 
         $grid->column('refund_id', __('Refund id'));
-        $grid->column('shop_id', __('Shop id'));
+        //$grid->column('shop_id', __('Shop id'));
         $grid->column('order_id', __('Order id'));
         $grid->column('order_number', __('Order number'));
         $grid->column('order_amount', __('Order amount'));
@@ -66,7 +66,6 @@ class OrderRefundsController extends AdminController
                 $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
             }
             
-        
         });
 
         return $grid;

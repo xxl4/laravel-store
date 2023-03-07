@@ -37,7 +37,7 @@ class ProdOuterController extends AdminController
         $grid->column('outer_id', __('Outer id'))->filter();
         $grid->column('content', __('Content'))->limit(400)->width(500);
         $grid->column('shop_type', __('Shop type'))->filter();
-        $grid->column('shop_id', __('Shop id'))->filter();
+        //$grid->column('shop_id', __('Shop id'))->filter();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 

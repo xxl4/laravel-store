@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Facades\Admin;
 
 class ProdPropController extends AdminController
 {
@@ -29,7 +30,16 @@ class ProdPropController extends AdminController
         $grid->column('prop_id', __('Prop id'));
         $grid->column('prop_name', __('Prop name'));
         $grid->column('rule', __('Rule'));
-        $grid->column('shop_id', __('Shop id'))->hide();
+        //$grid->column('shop_id', __('Shop id'))->hide();
+
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            } 
+        });
 
         return $grid;
     }

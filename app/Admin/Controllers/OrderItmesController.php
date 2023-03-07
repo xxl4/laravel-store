@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Facades\Admin;
 
 class OrderItmesController extends AdminController
 {
@@ -42,6 +43,17 @@ class OrderItmesController extends AdminController
         $grid->column('comm_sts', __('Comm sts'));
         $grid->column('distribution_card_no', __('Distribution card no'));
         $grid->column('basket_date', __('Basket date'));
+
+        $grid->filter(function($filter){
+
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            }
+            
+        });
 
         return $grid;
     }
