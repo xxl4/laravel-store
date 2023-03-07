@@ -12,7 +12,7 @@ class GetOnlineOrder extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:online {store_id} {type} {order_id}';
+    protected $signature = 'orders:online {store_id} {type} {order_id} {data?}';
 
     /**
      * The console command description.
@@ -43,13 +43,14 @@ class GetOnlineOrder extends Command
         $store_id = $this->argument('store_id');
         $type = $this->argument('type');
         $order_id = $this->argument("order_id");
+        $data = $this->argument("data");
         $this->info("start ".$type." online goods from ".$store_id);
         $store = \App\Models\OrganizationStore::where("id", $store_id)->first();
         if(is_null($store)) {
             $this->error("no have");
             return false;
         }
-        $data = ['store'=>$store,"order_id"=>$order_id];
+        $data = ['store'=>$store,"order_id"=>$order_id, "data"=>$data];
         $this->info("orders:".$store->shop_type.":".$type.":online params ".json_encode($data));
         Artisan::call("orders:".$store->shop_type.":".$type.":online", $data);
     }

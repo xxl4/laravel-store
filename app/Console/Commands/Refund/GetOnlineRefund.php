@@ -12,7 +12,7 @@ class GetOnlineRefund extends Command
      *
      * @var string
      */
-    protected $signature = 'refund:online {store_id} {type} {refund_id}';
+    protected $signature = 'refund:online {store_id} {type} {refund_id} {data?}';
 
     /**
      * The console command description.
@@ -42,13 +42,14 @@ class GetOnlineRefund extends Command
         $store_id = $this->argument('store_id');
         $type = $this->argument('type');
         $refund_id = $this->argument("refund_id");
+        $data = $this->argument("data");
         $this->info("start ".$type." online goods from ".$store_id);
         $store = \App\Models\OrganizationStore::where("id", $store_id)->first();
         if(is_null($store)) {
             $this->error("no have");
             return false;
         }
-        $data = ['store'=>$store,"refund_id"=>$refund_id];
+        $data = ['store'=>$store,"refund_id"=>$refund_id, "data"=>$data];
         $this->info("refund:".$store->shop_type.":".$type.":online params ".json_encode($data));
         Artisan::call("refund:".$store->shop_type.":".$type.":online", $data);
     }

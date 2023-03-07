@@ -12,7 +12,7 @@ class GetCategory extends Command
      *
      * @var string
      */
-    protected $signature = 'category:online {store_id} {type} {cid}';
+    protected $signature = 'category:online {store_id} {type} {cid} {data?}';
 
     /**
      * The console command description.
@@ -42,13 +42,14 @@ class GetCategory extends Command
         $store_id = $this->argument('store_id');
         $type = $this->argument('type');
         $cid = $this->argument("cid");
+        $data = $this->argument("data");
         $this->info("start ".$type." online goods from ".$store_id);
         $store = \App\Models\OrganizationStore::where("id", $store_id)->first();
         if(is_null($store)) {
             $this->error("no have");
             return false;
         }
-        $data = ['store'=>$store,"cid"=>$cid];
+        $data = ['store'=>$store,"cid"=>$cid, "data"=>$data];
         $this->info("category:".$store->shop_type.":".$type.":online params ".json_encode($data));
         Artisan::call("category:".$store->shop_type.":".$type.":online", $data);
     }

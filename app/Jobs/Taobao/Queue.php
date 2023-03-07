@@ -39,29 +39,55 @@ class Queue implements ShouldQueue
         switch($this->item->act_type) {
             case 'upload': // 上新
                 $data = ['data'=> $this->item->data];
-                Artisan::call("products:".$this->item->shop_type.":".$$this->item->type.":online", $data);
+                Artisan::call("products:online", $data);
                 break;
-            case 'edit': //更新
+            case 'product_edit': //更新
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:online", $data);
                 break;
             case 'sync_qty': //同步库存
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:online", $data);
                 break;
             case 'putaway': // 上架
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:online", $data);
                 break;
             case 'down': // 下架
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:online", $data);
                 break;
             case 'sys_category': // 系统分类
+                $data = ['data'=> $this->item->data];
+                Artisan::call("category:online", $data);
                 break;
             case 'shipping': // 物流同步
+                Artisan::call("orders:online", $data);
                 break;
             case 'add_sku': // 添加SKU
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:".$this->item->shop_type.":".$$this->item->type.":online", $data);
                 break;
             case 'edit_sku': //编辑SKU
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:".$this->item->shop_type.":".$$this->item->type.":online", $data);
                 break;
             case 'delete_sku': //删除SKU
+                $data = ['data'=> $this->item->data];
+                Artisan::call("products:online", $data);
                 break;
             case 'get_logistics': //获取快递支持与运费情况
+                $data = ['data'=> $this->item->data];
+                Artisan::call("logistics:online", $data);
                 break;
             case 'sync_orders': // 订单同步
+                Artisan::call("orders:online", $data);
+                break;
+            case 'send-logistics': // 发货
+                Artisan::call("orders:online", $data);
+                break;
+            case 'resend-logistics': // 重新发货
+                Artisan::call("orders:online", $data);
                 break;
             default:
                 break;
