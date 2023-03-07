@@ -7,6 +7,11 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use App\Admin\Actions\ProdOuter\BatchDown;
+use App\Admin\Actions\ProdOuter\BatchOnline;
+use App\Admin\Actions\ProdOuter\BatchDownAndDelete;
+use App\Admin\Actions\ProdOuter\BatchEdit;
+use App\Admin\Actions\ProdOuter\BatchSyncQty;
 
 class ProdOuterController extends AdminController
 {
@@ -29,13 +34,27 @@ class ProdOuterController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('prod_id', __('Prod id'))->filter();
         $grid->column('outer_id', __('Outer id'))->filter();
-        $grid->column('content', __('Content'))->limit(400);
+        $grid->column('content', __('Content'))->limit(400)->width(500);
         $grid->column('shop_type', __('Shop type'))->filter();
         $grid->column('shop_id', __('Shop id'))->filter();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
         $grid->model()->orderBy("id","desc");
+
+        $grid->batchActions(function ($batch) {
+            // 批量上架
+            $batch->add(new BatchOnline());
+            // 批量下架
+            $batch->add(new BatchDown());
+
+            $batch->add(new BatchDownAndDelete());
+
+            $batch->add(new BatchEdit());
+
+            $batch->add(new BatchSyncQty());
+
+        });
 
         return $grid;
     }

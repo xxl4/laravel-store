@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Actions\Product;
+namespace App\Admin\Actions\ProdOuter;
 
 use Nicelizhi\Admin\Actions\BatchAction;
 use Illuminate\Database\Eloquent\Collection;
