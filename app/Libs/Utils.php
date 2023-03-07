@@ -201,4 +201,46 @@ final class Utils
             \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
         }
     }
+
+    /**
+     * 
+     * 获取机构下的店铺列表
+     * @param int org_id
+     * @return array|boolean
+     */
+    static function getOrgStores($org_id) {
+        $key = \App\Enums\CachePrefixEnum::ORG_STORE_LIST.$org_id;
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        }else{
+            $items = \App\Models\OrganizationStore::where("organization_id", $org_id)->pluck("name","id");
+            if(!is_null($items)) {
+                $items = $items->toArray();
+                Cache::put($key, $items, 600);
+                return $items;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * 
+     * 获取机构下的店铺列表
+     * @param int org_id
+     * @return array|boolean
+     */
+    static function getOrgStoresType($org_id) {
+        $key = \App\Enums\CachePrefixEnum::ORG_STORE_TYPE.$org_id;
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        }else{
+            $items = \App\Models\OrganizationStore::where("organization_id", $org_id)->pluck("name","shop_type");
+            if(!is_null($items)) {
+                $items = $items->toArray();
+                Cache::put($key, $items, 600);
+                return $items;
+            }
+        }
+        return false;
+    }
 }

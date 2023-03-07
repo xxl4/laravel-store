@@ -42,6 +42,8 @@ Route::group([
     $router->resource('prod-outers', ProdOuterController::class);
 
     //商品分类
+    $router->any('categories/category_api_data', "CategoryController@category_api_data");
+    $router->any('categories/category_api_data2', "CategoryController@category_api_data2");
     $router->resource('categories', CategoryController::class);
     $router->resource('category-props', CategoryPropController::class);
 

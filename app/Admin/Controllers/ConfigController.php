@@ -29,7 +29,7 @@ class ConfigController extends AdminController
         $grid = new Grid(new Config());
 
         $grid->column('id', __('Id'))->filter();
-        $grid->column('shop_id', __('Shop id'))->filter();
+        $grid->column('shop_id', __('Shop id'))->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id));
         $grid->column('user_id', __('User id'))->filter();
         $grid->column('type', __('Type'))->filter();
         $grid->column('code', __('Code'))->filter();

@@ -28,6 +28,9 @@ final class CachePrefixEnum extends Enum
     const DOUDIAN_STORE_TOKEN = "doudian_store_token_";
     const DOUDIAN_STORE_ORDER_ENCRYPT= "doudian_store_order_decrypt_";
 
+    const ORG_STORE_LIST = "org_store_list_";
+    const ORG_STORE_TYPE = "org_store_type_";
+
     
 
 }

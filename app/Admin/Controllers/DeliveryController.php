@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Facades\Admin;
 
 class DeliveryController extends AdminController
 {
@@ -28,10 +29,14 @@ class DeliveryController extends AdminController
 
         $grid->column('dvy_id', __('Dvy id'));
         $grid->column('dvy_name', __('Dvy name'));
-        $grid->column('company_home_url', __('Company home url'));
+        $grid->column('code', __('Code'));
+        $grid->column('shop_type', __('Shop type'))->filter();
+        //$grid->column('company_home_url', __('Company home url'));
         $grid->column('rec_time', __('Rec time'));
         $grid->column('modify_time', __('Modify time'));
-        $grid->column('query_url', __('Query url'));
+        //$grid->column('query_url', __('Query url'));
+        
+        $grid->model()->orderBy("dvy_id", "desc");
 
         return $grid;
     }

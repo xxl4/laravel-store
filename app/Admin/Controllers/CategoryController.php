@@ -10,6 +10,8 @@ use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
 use App\Libs\Utils;
 use Nicelizhi\Admin\Widgets\Table;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 class CategoryController extends AdminController
 {
     /**
@@ -31,7 +33,7 @@ class CategoryController extends AdminController
         $grid->column('category_id', __('Category id'))->filter()->sortable()->display(function($id) {
             return "<a href='/admin/categories?parent_id=".$this->category_id."'>".$id."</a>";
         });
-        $grid->column('shop_id', __('Shop id'))->filter()->editable()->sortable();
+        $grid->column('shop_id', __('Shop id'))->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->sortable();
         $grid->column('parent_id', __('Parent id'))->filter()->sortable();
         $grid->column('category_name', __('Category name'))->expand(function ($model) {
 
@@ -123,5 +125,19 @@ class CategoryController extends AdminController
         $form->hidden('grade', __('Grade'));
 
         return $form;
+    }
+
+    public function category_api_data(Request $request) {
+
+        $q = $request->get('q');
+
+        return \App\Models\Category::where('shop_id', $q)->where("parent_id",0)->get([DB::raw('category_id as id'), DB::raw('category_name as text')]);
+    }
+
+    public function category_api_data2(Request $request) {
+
+        $q = $request->get('q');
+        return \App\Models\Category::where('parent_id', $q)->get([DB::raw('category_id as id'), DB::raw('category_name as text')]);
+        
     }
 }

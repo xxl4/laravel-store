@@ -19,6 +19,7 @@ use App\Admin\Actions\Product\BatchOnline;
 use App\Admin\Actions\Product\BatchDownAndDelete;
 use App\Admin\Actions\Product\BatchEdit;
 use App\Admin\Actions\Product\BatchSyncQty;
+use Illuminate\Support\Facades\Log;
 
 class ProductsController extends AdminController
 {
@@ -55,7 +56,7 @@ class ProductsController extends AdminController
             });
             return new Table(['店铺ID','类型', '外部ID','添加时间','更新时间'], $outers->toArray());
 
-        })->sortable()->filter();
+        })->sortable()->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id));
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();
         $grid->column('brief', __('Brief'))->sortable()->filter();
@@ -144,7 +145,7 @@ class ProductsController extends AdminController
     protected function form()
     {
         $form = new Form(new Product());
-
+        /*
         $form->number('prod_id', __('Prod id'));
         $form->text('prod_name', __('Prod name'));
         $form->number('shop_id', __('Shop id'));
@@ -163,6 +164,61 @@ class ProductsController extends AdminController
         $form->datetime('update_time', __('Update time'))->default(date('Y-m-d H:i:s'));
         $form->datetime('putaway_time', __('Putaway time'))->default(date('Y-m-d H:i:s'));
         $form->hidden('version', __('Version'));
+        */
+
+        $form->tab('分类', function ($form) {
+            if($form->isEditing()) {
+                $form->select('first_cat', __('Category id'))->options()->load('second_cat', '/admin/categories/category_api_data2');
+                $form->select("second_cat")->load("third_cat", '/admin/categories/category_api_data2');
+                $form->select("third_cat")->load("category_id", '/admin/categories/category_api_data2');
+                $form->select("category_id");
+            }
+
+            if($form->isCreating()) {
+                $form->select('shop_id', __('Shop id'))->options(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->load('first_cat', '/admin/categories/category_api_data');
+                $form->select('first_cat', __('Category id'))->load('second_cat', '/admin/categories/category_api_data2');
+                $form->select("second_cat")->load("third_cat", '/admin/categories/category_api_data2');
+                $form->select("third_cat")->load("category_id", '/admin/categories/category_api_data2');
+                $form->select("category_id");
+            }
+            
+        
+        })->tab('基础信息', function ($form) {
+
+            $form->hidden('prod_id', __('Prod id'));
+            $form->text('prod_name', __('Prod name'));
+            $form->decimal('ori_price', __('Ori price'))->default(0.00);
+            $form->decimal('price', __('Price'));
+            $form->text('brief', __('Brief'));
+
+            $states = [
+                'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+                'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+            ];
+            $form->switch('status', __('Status'))->states($states);
+        
+        })->tab('商品图片', function($form){
+
+            $form->image('pic', __('Pic'))->uniqueName();
+            $form->image('imgs', __('Imgs'))->uniqueName();
+
+        })->tab('商品详情', function($form) {
+            $form->editor('content', __('Content'));
+        });
+
+        //
+        $form->submitted(function (Form $form) {
+            
+        });
+
+        //保存前回调
+        $form->saving(function (Form $form) {
+            $form->category_id = $form->third_cat;
+            if(empty($form->category_id)) $form->category_id = $form->second_cat;
+            Log::info(json_encode($form));
+            Log::info($form->category_id);
+        });
+        
 
         return $form;
     }
