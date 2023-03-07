@@ -5,7 +5,7 @@ namespace App\Admin\Actions\OrgStore;
 use Nicelizhi\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
-use Libs\Utils;
+use App\Libs\Utils;
 
 class TestConfig extends RowAction
 {

@@ -21,15 +21,16 @@ class BatchEdit extends BatchAction
             $model->save();
 
             if($is_outer_sync==1) {
-                $data = [];
-                $data['prod_id'] = $model->prod_id;
-                $data['shop_id'] = $store;
-                $data['act_type'] = "down_delete";
-                $data['user_id'] = Admin::user()->id;
-                //Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
-                if($is_outer_sync==1) {
-                    \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
-                 }
+                $outerProds = \App\Models\ProdOuter::where("prod_id", $model->prod_id)->get();
+                foreach($outerProds as $key=>$item) {
+                    $storeDetail = \App\Models\OrganizationStore::where("id",$item->shop_id)->select(['shop_type'])->first();
+                    $data = [];
+                    $data['prod_id'] = $model->prod_id;
+                    $data['shop_id'] = $item->shop_id;
+                    $data['act_type'] = "product_edit";
+                    $data['user_id'] = Admin::user()->id;
+                    \App\Libs\Utils::pushQueueByShopType($storeDetail->shop_type, $data); // 推送到队列中去处理
+                } 
             }
 
         }

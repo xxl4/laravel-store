@@ -6,6 +6,7 @@ use Nicelizhi\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 use Nicelizhi\Admin\Facades\Admin;
+use App\Libs\Utils;
 
 class StoreSyncCategory extends RowAction
 {
@@ -21,7 +22,8 @@ class StoreSyncCategory extends RowAction
         $data['user_id'] = Admin::user()->id;
         $data['act_type'] = "sync_shop_shipping";
         
-        Redis::lpush(\App\Enums\RedisQueueEnum::STORE_SYNC_QUEUE, json_encode($data));
+        //Redis::lpush(\App\Enums\RedisQueueEnum::STORE_SYNC_QUEUE, json_encode($data));
+        Utils::pushQueueByShopType($model->shop_type, $data); // 推送到队列中去处理
         return $this->response()->success('同步已在操作，完成后会在消息中心同步到您，请关注留意')->refresh();
     }
 

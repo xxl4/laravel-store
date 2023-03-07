@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Nicelizhi\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use App\Libs\Utils;
 
 class BatchUploadOuterShop extends BatchAction
 {
@@ -36,7 +37,8 @@ class BatchUploadOuterShop extends BatchAction
             $data['shop_type'] = $storeDetail->shop_type;
             //Redis::lpush(\App\Enums\RedisQueueEnum::PRODUCT_UPLOAD_QUEUE, json_encode($data)); //针对需要上传的数据插入队列过程中
             $data['act_type'] = "upload";
-            \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
+            //\App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
+            Utils::pushQueueByShopType($storeDetail->shop_type, $data); // 推送到队列中去处理
 
         }
 
