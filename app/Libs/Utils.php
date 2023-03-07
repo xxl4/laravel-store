@@ -173,4 +173,31 @@ final class Utils
         }
         return false;
     }
+
+    /**
+     * 根据店铺类型不一样，配置不一样的队列处理
+     * @param string shop_type
+     * @param array data
+     */
+    static function pushQueueByShopType($shop_type, $data) {
+        switch($shop_type) {
+            case "TM":
+                \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
+            break;
+            case "TB":
+                \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
+            break;
+            case "DD":
+                \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::DOUDIAN_REDIS_QUEUE);
+            break;
+            case "JD":
+                \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::JD_REDIS_QUEUE);
+            break;
+            case "WD":
+                \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::WD_REDIS_QUEUE);
+            break;
+            default:
+            \App\Jobs\Taobao\Queue::dispatch(json_encode($data))->onConnection('redis')->onQueue(\App\Enums\RedisQueueEnum::TAOBAO_REDIS_QUEUE);
+        }
+    }
 }
