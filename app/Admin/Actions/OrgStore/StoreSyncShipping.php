@@ -18,7 +18,7 @@ class StoreSyncCategory extends RowAction
         //todo
         $data = [];
         $data['shop_type'] = $model->shop_type;
-        $data['shop_id'] = $model->shop_id;
+        $data['shop_id'] = $model->id;
         $data['user_id'] = Admin::user()->id;
         $data['act_type'] = "sync_shop_shipping";
         

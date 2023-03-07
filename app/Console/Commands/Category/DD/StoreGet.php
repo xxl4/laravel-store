@@ -13,7 +13,7 @@ class StoreGet extends Command
      *
      * @var string
      */
-    protected $signature = 'category:DD:get:online {store} {cid} {data?}';
+    protected $signature = 'category:DD:storeget:online {store} {cid} {data?}';
 
     /**
      * The console command description.

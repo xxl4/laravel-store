@@ -17,7 +17,7 @@ class TestConfig extends RowAction
         //todo
         $data = [];
         $data['type'] = $model->shop_type;
-        $data['shop_id'] = $model->shop_id;
+        $data['shop_id'] = $model->id;
         $data['act_type'] = "test_config";
         
         Utils::pushQueueByShopType($model->shop_type, $data); // 推送到队列中去处理

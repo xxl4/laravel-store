@@ -111,6 +111,7 @@ class GetOrders extends Command
         $p->shop_order_id = $shop_order_id;
         $req->setParam($p);
         $resp = $req->execute($access_token);
+        var_dump($resp);
         if($resp->code==10000) {
             $order_detail = $resp->data->shop_order_detail;
             $order = \App\Models\Order::where("order_number", $order_detail->order_id)->first();

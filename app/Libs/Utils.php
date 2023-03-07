@@ -139,6 +139,7 @@ final class Utils
                 Cache::put(\App\Enums\CachePrefixEnum::DOUDIAN_STORE_TOKEN.$shop_id, $access_token, $resp->data->expires_in);
                 return $access_token;
             }
+            return false;
         }
         return false;
     }

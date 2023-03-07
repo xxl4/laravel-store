@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Artisan;
+use Throwable;
 
 class Queue implements ShouldQueue
 {
@@ -20,10 +21,10 @@ class Queue implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($item)
+    public function __construct($input)
     {
         //
-        $this->item = $item;
+        $this->item = $input;
     }
 
     /**
@@ -35,10 +36,14 @@ class Queue implements ShouldQueue
     {
         //
         $this->item = json_decode($this->item);
+        var_dump($this->item);
+        $data = [];
+        $data['store_id'] = $this->item->shop_id;
+        //$data['data'] = $this->item->data;
         // 针对不同类型做不同的动作
         switch($this->item->act_type) {
             case 'upload': // 上新
-                $data = ['data'=> $this->item->data];
+                $data['data'] = $this->item->data;
                 Artisan::call("products:online", $data);
                 break;
             case 'product_edit': //更新
@@ -61,7 +66,13 @@ class Queue implements ShouldQueue
                 $data = ['data'=> $this->item->data];
                 Artisan::call("category:online", $data);
                 break;
+            case 'sync_shop_category': //同步自己店铺的分类
+                $data['type'] = 'storeget';
+                $data['cid'] = 0;
+                Artisan::call("category:online", $data);
+                break;
             case 'shipping': // 物流同步
+                $data = ['data'=> $this->item->data];
                 Artisan::call("orders:online", $data);
                 break;
             case 'add_sku': // 添加SKU
@@ -89,9 +100,18 @@ class Queue implements ShouldQueue
             case 'resend-logistics': // 重新发货
                 Artisan::call("orders:online", $data);
                 break;
+            case 'test_config': // 验证接口是否正常
+                $data = [];
+                $data = ['store_id'=>$this->item->shop_id,'type'=>$this->item->act_type];
+                Artisan::call("system:online", $data);
             default:
+                var_dump($this->item);
                 break;
         }
         
+    }
+     //针对处理失败的情况发送消息
+    public function failed(Throwable $exception) {
+        \App\Libs\Utils::sendMessage(1, 1, "程序报错了，请检查", $exception->getMessage());
     }
 }
