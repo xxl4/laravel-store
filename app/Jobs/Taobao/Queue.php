@@ -43,11 +43,13 @@ class Queue implements ShouldQueue
         // 针对不同类型做不同的动作
         switch($this->item->act_type) {
             case 'upload': // 上新
-                $data['data'] = $this->item->data;
+                $data['type'] = "add";
+                $data['prod_id'] = $this->item->prod_id;
                 Artisan::call("products:online", $data);
                 break;
             case 'product_edit': //更新
-                $data = ['data'=> $this->item->data];
+                $data['data'] = $this->item->data;
+                $data['type'] = "edit";
                 Artisan::call("products:online", $data);
                 break;
             case 'sync_qty': //同步库存
@@ -62,6 +64,12 @@ class Queue implements ShouldQueue
                 $data = ['data'=> $this->item->data];
                 Artisan::call("products:online", $data);
                 break;
+            case 'sync_good': // 同步商品
+                $data['type'] = "get";
+                $data['prod_id'] = $this->item->prod_id;
+                Artisan::call("products:online", $data);
+                break;
+            /* 花费时间太长了，不建议使用job 的方式来处理
             case 'sys_category': // 系统分类
                 $data = ['data'=> $this->item->data];
                 Artisan::call("category:online", $data);
@@ -70,7 +78,7 @@ class Queue implements ShouldQueue
                 $data['type'] = 'storeget';
                 $data['cid'] = 0;
                 Artisan::call("category:online", $data);
-                break;
+                break;*/
             case 'shipping': // 物流同步
                 $data = ['data'=> $this->item->data];
                 Artisan::call("orders:online", $data);

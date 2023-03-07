@@ -15,7 +15,6 @@ class BatchOnline extends BatchAction
     public function handle(Collection $collection, Request $request)
     {
         $is_outer_sync = $request->get('is_outer_sync');
-        $storInfo = Utils::StorInfo($store);
         // 对每一个行的数据模型复制
         foreach ($collection as $model) {
             //$model->replicate()->save();

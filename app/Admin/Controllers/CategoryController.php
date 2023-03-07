@@ -9,7 +9,7 @@ use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
 use App\Libs\Utils;
-
+use Nicelizhi\Admin\Widgets\Table;
 class CategoryController extends AdminController
 {
     /**
@@ -33,7 +33,15 @@ class CategoryController extends AdminController
         });
         $grid->column('shop_id', __('Shop id'))->filter()->editable()->sortable();
         $grid->column('parent_id', __('Parent id'))->filter()->sortable();
-        $grid->column('category_name', __('Category name'))->filter()->sortable()->editable();
+        $grid->column('category_name', __('Category name'))->expand(function ($model) {
+
+            $skus = $model->category_prop()->take(20)->get()->map(function ($sku) {
+                return $sku->only(['id', 'prop_id']);
+            });
+
+            return new Table(['ID','属性ID'], $skus->toArray());
+
+        })->sortable()->filter();
         $grid->column('icon', __('Icon'))->hide();
         $grid->column('pic', __('Pic'))->hide();
         $grid->column('seq', __('Seq'))->filter()->sortable()->editable();

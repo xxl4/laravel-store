@@ -59,8 +59,9 @@ class StoreGet extends Command
             foreach($items as $key=>$item) {
                 $this->saveToDB($item, $store);
                 if($item->enable==true && $item->is_leaf==false) {
-                    Artisan::call("category:online",['cid'=>$item->id, 'type'=>'get', 'store_id'=>$store->id]);
+                    Artisan::call("category:online",['cid'=>$item->id, 'type'=>'storeget', 'store_id'=>$store->id]);
                     sleep(2);
+
                 }
                 //
                 if($item->is_leaf==true && $item->enable==true) {

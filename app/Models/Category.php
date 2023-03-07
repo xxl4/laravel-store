@@ -16,6 +16,10 @@ class Category extends Model
         return $this->belongsToMany(ProdProp::class,"category_prop","category_id","prop_id");
     }
 
+    public function category_prop() {
+        return $this->hasMany(CategoryProp::class, "category_id", "category_id");
+    }
+
     
 
 
