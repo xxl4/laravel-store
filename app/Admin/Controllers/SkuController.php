@@ -53,7 +53,7 @@ class SkuController extends AdminController
         //$grid->column('pic', __('Pic'));
         $grid->column('sku_name', __('Sku name'))->sortable()->filter();
         $grid->column('prod_name', __('Prod name'))->sortable()->filter();
-        $grid->column('version', __('Version'))->sortable()->filter();
+        //$grid->column('version', __('Version'))->sortable()->filter();
         $grid->column('weight', __('Weight'))->sortable()->filter();
         $grid->column('volume', __('Volume'))->sortable()->filter();
         $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();

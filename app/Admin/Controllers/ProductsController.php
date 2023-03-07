@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
@@ -180,10 +181,22 @@ class ProductsController extends AdminController
 
         $form->tab('分类', function ($form) {
             if($form->isEditing()) {
-                $form->select('first_cat', __('Category id'))->options()->load('second_cat', '/admin/categories/category_api_data2');
-                $form->select("second_cat")->load("third_cat", '/admin/categories/category_api_data2');
-                $form->select("third_cat")->load("category_id", '/admin/categories/category_api_data2');
-                $form->select("category_id");
+                $form->select('first_cat', __('First cat'))->options(function($id){
+                    $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
+                    if($category) return [$category->category_id => $category->category_name];
+                })->load('second_cat', '/admin/categories/category_api_data2');
+                $form->select("second_cat", __('Second cat'))->options(function($id){
+                    $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
+                    if($category) return [$category->category_id => $category->category_name];
+                })->load("third_cat", '/admin/categories/category_api_data2');
+                $form->select("third_cat" , __('Third cat'))->options(function($id){
+                    $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
+                    if($category) return [$category->category_id => $category->category_name];
+                })->load("category_id", '/admin/categories/category_api_data2');
+                $form->select("category_id" , __('Category id'))->options(function($id){
+                    $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
+                    if($category) return [$category->category_id => $category->category_name];
+                });
             }
 
             if($form->isCreating()) {
@@ -216,6 +229,23 @@ class ProductsController extends AdminController
 
         })->tab('商品详情', function($form) {
             $form->editor('content', __('Content'));
+        })->tab('Sku', function ($form) {
+
+            $form->hasMany('sku', function ($form) {
+                $form->embeds('properties', function ($form) {
+                    
+                    $form->text('key1')->rules('required');
+                    $form->email('key2')->rules('required');
+                    $form->datetime('key3');
+                    
+                });
+
+                $form->currency('price')->symbol('￥');
+                $form->number('stocks');
+                $form->text('party_code');
+                $form->text('weight');
+                $form->text('volumen');
+            });
         });
 
         //
