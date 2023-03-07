@@ -42,14 +42,15 @@ class GetCategory extends Command
         $store_id = $this->argument('store_id');
         $type = $this->argument('type');
         $cid = $this->argument("cid");
-        $data = $this->argument("data");
+        $options = $this->argument("data");
         $this->info("start ".$type." online goods from ".$store_id);
         $store = \App\Models\OrganizationStore::where("id", $store_id)->first();
         if(is_null($store)) {
             $this->error("no have");
             return false;
         }
-        $data = ['store'=>$store,"cid"=>$cid, "data"=>$data];
+        $options['org_id'] = $store->organization_id;
+        $data = ['store'=>$store,"cid"=>$cid, "data"=>$options];
         $this->info("category:".$store->shop_type.":".$type.":online params ".json_encode($data));
         Artisan::call("category:".$store->shop_type.":".$type.":online", $data);
     }

@@ -42,14 +42,15 @@ class Online extends Command
         $store_id = $this->argument('store_id');
         $type = $this->argument('type');
         $order_id = $this->argument('order_id');
-        $data = $this->argument("data");
+        $options = $this->argument("data");
         $this->info("start ".$type." online logistics from ".$store_id);
         $store = \App\Models\OrganizationStore::where("id", $store_id)->first();
         if(is_null($store)) {
             $this->error("no have");
             return false;
         }
-        $data = ['store'=>$store,"order_id"=>$order_id, "data"=>$data];
+        $options['org_id'] = $store->organization_id;
+        $data = ['store'=>$store,"order_id"=>$order_id, "data"=>$options];
         $this->info("logistics:".$store->shop_type.":".$type.":online params ".json_encode($data));
         Artisan::call("logistics:".$store->shop_type.":".$type.":online", $data);
     }
