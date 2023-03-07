@@ -33,7 +33,7 @@ class CategoryController extends AdminController
         $grid->column('category_id', __('Category id'))->filter()->sortable()->display(function($id) {
             return "<a href='/admin/categories?parent_id=".$this->category_id."'>".$id."</a>";
         });
-        $grid->column('shop_id', __('Shop id'))->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->sortable();
+        //$grid->column('shop_id', __('Shop id'))->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->sortable();
         $grid->column('parent_id', __('Parent id'))->filter()->sortable();
         $grid->column('category_name', __('Category name'))->expand(function ($model) {
 
