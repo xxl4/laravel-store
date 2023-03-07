@@ -11,7 +11,7 @@ class GetProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products:JD:get:online {store} {prod_id}';
+    protected $signature = 'products:JD:get:online {store} {prod_id} {data?}';
 
     private $_field = 'title,offlineTime,onlineTime,wareId,wareStatus,categoryId,outerId,itemNum,colType,stockNum';
 

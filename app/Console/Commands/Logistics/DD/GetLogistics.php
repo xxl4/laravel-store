@@ -13,7 +13,7 @@ class GetLogistics extends Command
      *
      * @var string
      */
-    protected $signature = 'logistics:DD:get:online {store} {order_id}';
+    protected $signature = 'logistics:DD:get:online {store} {order_id} {data?}';
 
     /**
      * The console command description.

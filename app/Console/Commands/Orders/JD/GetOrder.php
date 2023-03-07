@@ -11,7 +11,7 @@ class GetOrder extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:JD:get:online {store} {order_id}';
+    protected $signature = 'orders:JD:get:online {store} {order_id} {data?}';
 
     private $fields = "waybill,logisticsId,realPin,pin,returnOrder,open_id_buyer,xid_buyer,orderState,deliveryType,itemInfoList,orderId,isShipmenttype,scDT,idSopShipmenttype,orderStartTime,orderTotalPrice,consigneeInfo,payType,orderStartTime,paymentConfirmTime,orderRemark,orderPayment,orderTotalPrice,freightPrice,orderSource,payType,invoiceInfo,invoiceCode,invoiceEasyInfo,orderType";
 

@@ -11,7 +11,7 @@ class DeleteProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products:TB:delete:online {store} {prod_id}';
+    protected $signature = 'products:TB:delete:online {store} {prod_id} {data?}';
 
     /**
      * The console command description.

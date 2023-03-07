@@ -12,7 +12,7 @@ class GetProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products:DD:get:online {store} {prod_id}';
+    protected $signature = 'products:DD:get:online {store} {prod_id} {data?}';
 
     private $total = 0; // 商品总数量
 

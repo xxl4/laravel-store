@@ -12,7 +12,7 @@ class GetOrders extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:TM:get:online {store} {order_id}';
+    protected $signature = 'orders:TM:get:online {store} {order_id} {data?}';
 
     /**
      * The console command description.

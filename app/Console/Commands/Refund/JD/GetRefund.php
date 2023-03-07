@@ -11,7 +11,7 @@ class GetRefund extends Command
      *
      * @var string
      */
-    protected $signature = 'refund:JD:get:online {store} {refund_id}';
+    protected $signature = 'refund:JD:get:online {store} {refund_id} {data?}';
 
     /**
      * The console command description.

@@ -13,7 +13,7 @@ class Get extends Command
      *
      * @var string
      */
-    protected $signature = 'category:DD:get:online {store} {cid}';
+    protected $signature = 'category:DD:get:online {store} {cid} {data?}';
 
     /**
      * The console command description.

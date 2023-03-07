@@ -11,7 +11,7 @@ class GetLogistics extends Command
      *
      * @var string
      */
-    protected $signature = 'logistics:TB:get:online {store} {order_id}';
+    protected $signature = 'logistics:TB:get:online {store} {order_id} {data?}';
 
     private $_field = "id,code,name,reg_mail_no";
     private $_field2 = "template_id,template_name,created,modified,supports,assumer,valuation,query_express,query_ems,query_cod,query_post";

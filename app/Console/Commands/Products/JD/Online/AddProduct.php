@@ -11,7 +11,7 @@ class AddProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products:JD:add:online {store} {prod_id}';
+    protected $signature = 'products:JD:add:online {store} {prod_id} {data?}';
 
     /**
      * The console command description.

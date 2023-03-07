@@ -13,7 +13,7 @@ class GetRefund extends Command
      *
      * @var string
      */
-    protected $signature = 'refund:TM:get:online {store} {refund_id}';
+    protected $signature = 'refund:TM:get:online {store} {refund_id} {data?}';
 
     private $total = 0; // 订单总量
     private $size = 100; // 订单数量

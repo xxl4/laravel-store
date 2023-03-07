@@ -13,7 +13,7 @@ class GetOrders extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:DD:get:online {store} {order_id}';
+    protected $signature = 'orders:DD:get:online {store} {order_id} {data?}';
 
     private $total = 0; // 订单总量
     private $size = 1; // 订单数量
