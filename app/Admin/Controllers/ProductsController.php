@@ -78,6 +78,18 @@ class ProductsController extends AdminController
 
         $grid->model()->orderBy("prod_id", "DESC");
 
+        $grid->filter(function($filter){
+
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            }
+            
+        
+        });
+
         $grid->actions(function ($actions) {
             $actions->add(new Replicate);
             $actions->add(new AddSku);

@@ -12,6 +12,7 @@ use App\Admin\Actions\ProdOuter\BatchOnline;
 use App\Admin\Actions\ProdOuter\BatchDownAndDelete;
 use App\Admin\Actions\ProdOuter\BatchEdit;
 use App\Admin\Actions\ProdOuter\BatchSyncQty;
+use Nicelizhi\Admin\Facades\Admin;
 
 class ProdOuterController extends AdminController
 {
@@ -54,6 +55,15 @@ class ProdOuterController extends AdminController
 
             $batch->add(new BatchSyncQty());
 
+        });
+
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            } 
         });
 
         return $grid;

@@ -60,16 +60,19 @@ class CategoryController extends AdminController
         }else{
             //$grid->model()->whereIN("shop_id", $shop_ids->toArray());
         }
-        $grid->model()->orderBy("seq", "asc");
-        if(isset($_GET['parent_id'])) {
-            $parent_id = trim($_GET['parent_id']);
-            $grid->model()->where("parent_id", $parent_id);
-        }else{
-            $grid->model()->where("parent_id", 0);
-        }
+        $grid->model()->orderBy("id", "asc");
 
         $grid->actions(function ($actions) {
-            $actions->add(new \App\Admin\Actions\Category\ProdProp);
+            //$actions->add(new \App\Admin\Actions\Category\ProdProp);
+        });
+
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            } 
         });
         
 

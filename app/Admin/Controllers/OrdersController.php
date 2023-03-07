@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Widgets\Table;
+use Nicelizhi\Admin\Facades\Admin;
 
 class OrdersController extends AdminController
 {
@@ -63,6 +64,15 @@ class OrdersController extends AdminController
         $grid->column('close_type', __('Close type'));
 
         $grid->model()->orderBy("order_id","desc");
+
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            } 
+        });
 
         return $grid;
     }

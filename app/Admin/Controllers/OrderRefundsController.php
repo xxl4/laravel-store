@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Facades\Admin;
 
 class OrderRefundsController extends AdminController
 {
@@ -55,6 +56,18 @@ class OrderRefundsController extends AdminController
         $grid->column('updated_at', __('Updated at'));
         $grid->column('receive_time', __('Receive time'));
         $grid->column('receive_message', __('Receive message'));
+
+        $grid->filter(function($filter){
+
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            }
+            
+        
+        });
 
         return $grid;
     }
