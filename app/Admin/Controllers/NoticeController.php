@@ -48,11 +48,11 @@ class NoticeController extends AdminController
     {
         $show = new Show(Notice::findOrFail($id));
 
-        $show->field('id', __('Id'));
-        $show->field('shop_id', __('Shop id'));
+        //$show->field('id', __('Id'));
+        //$show->field('shop_id', __('Shop id'));
         $show->field('title', __('Title'));
         $show->field('content', __('Content'));
-        $show->field('status', __('Status'));
+        //$show->field('status', __('Status'));
         $show->field('is_top', __('Is top'));
         $show->field('publish_time', __('Publish time'));
         $show->field('update_time', __('Update time'));
