@@ -17,7 +17,7 @@ class BrandController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Brand';
+    protected $title = '品牌';
 
     /**
      * Make a grid builder.
@@ -40,7 +40,7 @@ class BrandController extends AdminController
 
         })->help("中文名与英文名，中间使用|分割");
         $grid->column('brand_pic', __('Brand pic'));
-        $grid->column('user_id', __('User id'));
+        //$grid->column('user_id', __('User id'));
         $grid->column('memo', __('Memo'));
         $grid->column('seq', __('Seq'));
         $grid->column('status', __('Status'));
