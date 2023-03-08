@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Widgets\Table;
 
 class BrandController extends AdminController
 {
@@ -27,7 +28,15 @@ class BrandController extends AdminController
         $grid = new Grid(new Brand());
 
         $grid->column('brand_id', __('Brand id'));
-        $grid->column('brand_name', __('Brand name'));
+        $grid->column('brand_name', __('Brand name'))->expand(function ($model) {
+
+            $skus = $model->category()->take(20)->get()->map(function ($sku) {
+                return $sku->only(['id', 'category_id']);
+            });
+
+            return new Table(['ID','分类ID'], $skus->toArray());
+
+        });
         $grid->column('brand_pic', __('Brand pic'));
         $grid->column('user_id', __('User id'));
         $grid->column('memo', __('Memo'));

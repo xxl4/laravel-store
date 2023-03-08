@@ -86,13 +86,13 @@ class ConfigController extends AdminController
         $form = new Form(new Config());
 
         $form->hidden('user_id', __('User id'))->default(Admin::user()->id);
+        $form->hidden('org_id', __('User id'))->default(Admin::user()->org_id);
         $form->select('shop_id', __('Shop id'))->options(\App\Models\OrganizationStore::where("organization_id",Admin::user()->org_id)->pluck("name","id"));
         $form->select('type', __('Type'))->options(\App\Enums\ShopConfigTypeEnum::getInstances())->help("根据类型的不同，相应的会使用在不同的场景需要，如商品上新过程中的默认参数配置，订单同步发货同步等");
-        $form->text('code', __('Code'))->help("这些是系统配置需要的标签，请不要去做修改，谢谢");
+        $form->text('code', __('Code'))->help("这些是系统配置需要的标签，请不要去做修改，谢谢 更多，请查看 <a href='https://www.baidu.com'>https://www.baidu.com</a>");
         $form->textarea('value', __('Value'));
 
         $form->saving(function (Form $form){
-            //Cache::delete(\App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$form->model()->shop_id.'_'.$form->model()->code);
             \App\Libs\Utils::GetStoreConfig($form->model()->org_id, $form->model()->shop_id, $form->model()->code, true);
         });
 
