@@ -8,6 +8,7 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Widgets\Table;
+use Nicelizhi\Admin\Facades\Admin;
 
 class BrandController extends AdminController
 {
@@ -28,6 +29,7 @@ class BrandController extends AdminController
         $grid = new Grid(new Brand());
 
         $grid->column('brand_id', __('Brand id'));
+        $grid->column('outer_id', __('Outer id'))->help("数据完成同步到第三方后才会有数值");
         $grid->column('brand_name', __('Brand name'))->expand(function ($model) {
 
             $skus = $model->category()->take(20)->get()->map(function ($sku) {
@@ -36,7 +38,7 @@ class BrandController extends AdminController
 
             return new Table(['ID','分类ID'], $skus->toArray());
 
-        });
+        })->help("中文名与英文名，中间使用|分割");
         $grid->column('brand_pic', __('Brand pic'));
         $grid->column('user_id', __('User id'));
         $grid->column('memo', __('Memo'));
@@ -48,7 +50,16 @@ class BrandController extends AdminController
         $grid->column('updated_at', __('Updated at'));
         //$grid->column('first_char', __('First char'));
 
-        $grid->model->orderBy("brand_id", "desc");
+        $grid->model()->orderBy("brand_id", "desc");
+
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $items = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
+            foreach($items as $key=>$item) {
+                $filter->scope('shop_type_'.$key, "查看".$item)->where('shop_id', $key);
+            } 
+        });
 
         return $grid;
     }
