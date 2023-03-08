@@ -4,6 +4,7 @@ namespace App\Console\Commands\Products\DD\Online;
 
 use Illuminate\Console\Command;
 use App\Libs\Utils;
+use Illuminate\Support\Facades\Cache;
 
 class GetProduct extends Command
 {
@@ -75,6 +76,10 @@ class GetProduct extends Command
     }
 
     private function getOnline($page,$outer_prod_id, $access_token, $store) {
+        $cacheKey = \App\Enums\CachePrefixEnum::RUNING_PRODUCT_ALL_PAGE.$store->id."_".$page;
+        if(Cache::has($cacheKey)) {
+            return true;
+        }
         $this->info($page." outer_id ". $outer_prod_id);
         $req = new \ProductListV2Request();
         $p = new \ProductListV2Param();
@@ -103,9 +108,8 @@ class GetProduct extends Command
                 $product->content = json_encode($item);
                 $product->save();
             }
-        }else{
-            
         }
+        Cache::put($cacheKey, $page, 3600);
     }
 
     public function GetDetail($outer_id, $access_token, $store) {

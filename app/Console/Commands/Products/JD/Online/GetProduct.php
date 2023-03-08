@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Products\JD\Online;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class GetProduct extends Command
 {

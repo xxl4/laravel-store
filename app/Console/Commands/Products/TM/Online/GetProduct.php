@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Products\TM\Online;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class GetProduct extends Command
 {
@@ -11,7 +12,7 @@ class GetProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products:TM:get:online {store} {prod_id}';
+    protected $signature = 'products:TM:get:online {store} {prod_id} {data?}';
 
     private $_field = "approve_status,iid,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity";
 
@@ -48,21 +49,24 @@ class GetProduct extends Command
         $this->info("get from online info start".$store);
         //
         $this->getOnline(1, $store);
-
         $this->info("get from online info Total ".$this->total);
-
+        echo $this->total."\r\n";
         // 如果有超过size的，需要做分页动作
         if($this->total > $this->size) {
             $pages = ceil($this->total / $this->size);
             //前面获取了第一页面数据了，所以从第二页开始
             for($i=2; $i<=$pages; $i++) {
+                echo $i."\r\n";
                 $this->getOnline($i, $store);
             }
         } 
-
     }
 
     private function getOnline($page, $store) {
+        $cacheKey = \App\Enums\CachePrefixEnum::RUNING_PRODUCT_ALL_PAGE.$store->id."_".$page;
+        if(Cache::has($cacheKey)) {
+            return true;
+        }
         $this->info("pages". $page);
         $c = new \TopClient();
         $c->appkey = $store->key;
@@ -73,9 +77,11 @@ class GetProduct extends Command
         $req->setPageNo($page);
         $req->setPageSize($this->size);
         $resp = $c->execute($req, $store->token);
-        //var_dump($resp,$req, $store,$c);exit;
+        if (!property_exists($resp, 'items')) {
+            var_dump($resp);
+            return false;
+        }
         $this->total = (int)$resp->total_results;
-        //var_dump($total,$resp);
         foreach ($resp->items->item as $key=> $item) {
             
             //$item = (array) $item;
@@ -89,6 +95,7 @@ class GetProduct extends Command
             $product->save();
         }
 
+        Cache::put($cacheKey, $page, 3600);
         
     }
 }

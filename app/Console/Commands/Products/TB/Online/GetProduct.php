@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Products\TB\Online;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class GetProduct extends Command
 {
@@ -63,6 +64,10 @@ class GetProduct extends Command
     }
 
     private function getOnline($page, $store) {
+        $cacheKey = \App\Enums\CachePrefixEnum::RUNING_PRODUCT_ALL_PAGE.$store->id."_".$page;
+        if(Cache::has($cacheKey)) {
+            return true;
+        }
         $this->info("pages". $page);
         $c = new \TopClient();
         $c->appkey = $store->key;
@@ -89,6 +94,6 @@ class GetProduct extends Command
             $product->save();
         }
 
-        
+        Cache::put($cacheKey, $page, 3600);
     }
 }
