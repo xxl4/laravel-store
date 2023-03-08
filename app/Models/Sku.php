@@ -19,4 +19,8 @@ class Sku extends Model
     protected $casts = [
         'properties' => 'json',
     ];
+
+    public function prod() {
+        return $this->hasOne(Product::class, "prod_id", "prod_id");
+    }
 }

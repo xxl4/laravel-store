@@ -211,16 +211,20 @@ class ProductsController extends AdminController
         })->tab('基础信息', function ($form) {
 
             $form->hidden('prod_id', __('Prod id'));
+            $form->hidden('org_id', __('Prod id'))->default(Admin::user()->org_id);
             $form->text('prod_name', __('Prod name'));
-            $form->decimal('ori_price', __('Ori price'))->default(0.00);
-            $form->decimal('price', __('Price'));
+            //$form->decimal('ori_price', __('Ori price'))->default(0.00);
+            $form->currency('ori_price',__('Ori price'))->symbol('￥');
+            //$form->decimal('price', __('Price'));
+            $form->currency('price', __('Price'))->symbol('￥');
             $form->text('brief', __('Brief'));
 
             $states = [
-                'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
-                'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+                '1'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+                '0' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
             ];
             $form->switch('status', __('Status'))->states($states);
+            //$form->hidden("status")->default(1);
         
         })->tab('商品图片', function($form){
 
@@ -231,15 +235,12 @@ class ProductsController extends AdminController
             $form->editor('content', __('Content'));
         })->tab('Sku', function ($form) {
 
+            
             $form->hasMany('sku', function ($form) {
-                $form->embeds('properties', function ($form) {
-                    
-                    $form->text('key1')->rules('required');
-                    $form->email('key2')->rules('required');
-                    $form->datetime('key3');
-                    
-                });
-
+                if($form->isEditing()) {
+                    $form->keyValue('properties');
+                }
+                $form->hidden('org_id', __('Prod id'))->default(Admin::user()->org_id);
                 $form->currency('price')->symbol('￥');
                 $form->number('stocks');
                 $form->text('party_code');
