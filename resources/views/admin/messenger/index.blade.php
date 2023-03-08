@@ -1,5 +1,6 @@
 
 @section('content')
+<section class="content-header">
 <h1><a href="/admin/messages/create" class="btn btn-success">消息创建</a></h1>
 <table class="table table-striped">
     <thead>
@@ -13,5 +14,6 @@
     @include('admin.messenger.partials.flash')
     @each('admin.messenger.partials.thread', $threads, 'thread', 'admin.messenger.partials.no-threads')
 </table>
+<section>
 @stop
     

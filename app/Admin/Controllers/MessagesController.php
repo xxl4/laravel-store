@@ -77,7 +77,8 @@ class MessagesController extends Controller {
     public function create(Content $content)
     {
 
-        $users = Administrator::where('id', '!=', Auth::id())->get();
+        //$users = Administrator::where('id', '!=', Auth::id())->get();
+        $users = Administrator::where("org_id", Admin::user()->org_id)->get();
 
         return $content->title("消息创建")->view('admin.messenger.create', compact('users'));
     }
