@@ -46,7 +46,9 @@ class BrandController extends AdminController
         $grid->column('content', __('Content'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-        $grid->column('first_char', __('First char'));
+        //$grid->column('first_char', __('First char'));
+
+        $grid->model->orderBy("brand_id", "desc");
 
         return $grid;
     }
