@@ -79,6 +79,11 @@ class Queue implements ShouldQueue
                 $data['cid'] = 0;
                 Artisan::call("category:online", $data);
                 break;*/
+            case 'sync_shop_category': //同步自己店铺的分类
+                $data['type'] = 'storeget';
+                $data['cid'] = 0;
+                Artisan::call("category:online", $data);
+                break;
             case 'shipping': // 物流同步
                 $data = ['data'=> $this->item->data];
                 Artisan::call("orders:online", $data);
