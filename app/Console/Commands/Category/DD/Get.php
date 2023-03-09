@@ -83,7 +83,7 @@ class Get extends Command
         $p->category_leaf_id = $cid;
         $req->setParam($p);
         $resp = $req->execute($access_token);
-        
+        var_dump($resp);
         if($resp->code=='10000') {
             foreach($resp->data->data as $key=>$item) {
                 $prop = \App\Models\ProdProp::where("prop_id",$item->property_id)->where("shop_id", $store->id)->first();

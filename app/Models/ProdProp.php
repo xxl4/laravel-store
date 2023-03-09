@@ -11,6 +11,11 @@ class ProdProp extends Model
     public $primaryKey = "prop_id";
     public $timestamps = false;
 
+    //rule
+    protected $casts = [
+        'rule' => 'json',
+    ];
+
     public function prop_value() {
         return $this->hasMany(ProdPropValue::class, "prop_id");
     }

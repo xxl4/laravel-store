@@ -8,6 +8,7 @@ use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
 use Nicelizhi\Admin\Facades\Admin;
+use Nicelizhi\Admin\Widgets\Table;
 
 class ProdPropController extends AdminController
 {
@@ -27,8 +28,16 @@ class ProdPropController extends AdminController
     {
         $grid = new Grid(new ProdProp());
 
-        $grid->column('prop_id', __('Prop id'));
-        $grid->column('prop_name', __('Prop name'));
+        $grid->column('prop_id', __('Prop id'))->sortable()->filter();
+        $grid->column('prop_name', __('Prop name'))->expand(function ($model) {
+
+            $skus = $model->prop_value()->take(10)->get()->map(function ($sku) {
+                return $sku->only(['value_id', 'prop_value']);
+            });
+
+            return new Table(['ID','属性'], $skus->toArray());
+
+        });
         $grid->column('rule', __('Rule'));
         //$grid->column('shop_id', __('Shop id'))->hide();
 
