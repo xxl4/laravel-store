@@ -54,6 +54,7 @@ class Get extends Command
         $p->cid = $cid;
         $req->setParam($p);
         $resp = $req->execute($access_token);
+        var_dump($resp);
         if($resp->code=='10000') {
             $items = $resp->data;
             foreach($items as $key=>$item) {
@@ -72,6 +73,7 @@ class Get extends Command
     }
 
     private function categoryProperty($cid, $store, $access_token) {
+        
         $req = new \ProductGetCatePropertyV2Request();
         $p = new \ProductGetCatePropertyV2Param();
         $config = new \DoudianOpConfig();
@@ -81,6 +83,7 @@ class Get extends Command
         $p->category_leaf_id = $cid;
         $req->setParam($p);
         $resp = $req->execute($access_token);
+        
         if($resp->code=='10000') {
             foreach($resp->data->data as $key=>$item) {
                 $prop = \App\Models\ProdProp::where("prop_id",$item->property_id)->where("shop_id", $store->id)->first();
@@ -97,6 +100,7 @@ class Get extends Command
                 $rule['status'] = $item->status;
                 $rule['multi_select_max'] = $item->multi_select_max;
                 $prop->rule = json_encode($rule);
+                $prop->shop_id = $store->id;
                 $prop->save();
 
                 // 保存到prop_value
