@@ -16,6 +16,10 @@ class Queue implements ShouldQueue
 
     private $item;
 
+    public $tries = 3;
+    
+    public $timeout = 120;
+
     /**
      * Create a new job instance.
      *
@@ -53,15 +57,20 @@ class Queue implements ShouldQueue
                 Artisan::call("products:online", $data);
                 break;
             case 'sync_qty': //同步库存
-                $data = ['data'=> $this->item->data];
+                $data['data'] = $this->item->data;
+                $data['type'] = "sync_qty";
                 Artisan::call("products:online", $data);
                 break;
             case 'putaway': // 上架
-                $data = ['data'=> $this->item->data];
+                $data['data'] = $this->item->data;
+                $data['type'] = "putaway";
+                $data['prod_id'] = $this->item->prod_id;
                 Artisan::call("products:online", $data);
                 break;
             case 'down': // 下架
-                $data = ['data'=> $this->item->data];
+                $data['data'] = $this->item->data;
+                $data['type'] = "down";
+                $data['prod_id'] = $this->item->prod_id;
                 Artisan::call("products:online", $data);
                 break;
             case 'sync_good': // 同步商品
