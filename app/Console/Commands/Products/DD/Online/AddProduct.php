@@ -73,7 +73,7 @@ class AddProduct extends Command
         $config->appKey = $store->key;
         $config->appSecret = $store->secret;
         $req->setConfig($config);
-        $req->setParam($p);
+        
         $p->outer_product_id = $this->prod_id;
         $p->product_type = 0;
         $p->category_leaf_id = 23430;
@@ -97,10 +97,12 @@ class AddProduct extends Command
         $p->limit_per_buyer = $storeConfig['limit_per_buyer'];
         $p->minimum_per_order = $storeConfig['minimum_per_order'];
 
+        $req->setParam($p);
+
         
 
         //$resp = $req->execute($access_token);
-
+        
         
     }
 }

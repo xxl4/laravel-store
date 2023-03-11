@@ -49,7 +49,7 @@ class ProductsController extends AdminController
 
             return new Table(['SKU ID', 'SKU名称','属性', '实际库存'], $skus->toArray());
 
-        })->sortable()->filter();
+        })->filter();
         $grid->column('shop_id', __('Shop id'))->expand(function ($model) {
 
             $outers = $model->outer()->take(10)->orderBy("id","desc")->get()->map(function ($outer) {
@@ -60,7 +60,7 @@ class ProductsController extends AdminController
         })->sortable()->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id));
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();
-        $grid->column('brief', __('Brief'))->sortable()->filter();
+        $grid->column('brief', __('Brief'))->limit(20);
         $grid->column('content', __('Content'))->hide();
         $grid->column('pic', __('Pic'))->hide();
         $grid->column('imgs', __('Imgs'))->hide();
@@ -181,6 +181,7 @@ class ProductsController extends AdminController
 
         $form->tab('分类', function ($form) {
             if($form->isEditing()) {
+                $form->select('shop_id', __('Shop id'))->options(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->load('first_cat', '/admin/categories/category_api_data');
                 $form->select('first_cat', __('First cat'))->options(function($id){
                     $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
                     if($category) return [$category->category_id => $category->category_name];
@@ -233,6 +234,15 @@ class ProductsController extends AdminController
 
         })->tab('商品详情', function($form) {
             $form->editor('content', __('Content'));
+        })->tab('Prop', function($form){
+            //$form->hasMany('')
+            $form->hasMany('properties', function ($form) {
+                $form->text('name');
+                $form->text('value');
+                
+            });
+            
+
         })->tab('Sku', function ($form) {
 
             

@@ -61,4 +61,9 @@ class Product extends Model
         return $this->hasMany(OrderRefund::class);
     }
 
+    public function properties()
+    {
+        return $this->hasMany(ProdProperty::class,"prod_id","prod_id");
+    }
+
 }
