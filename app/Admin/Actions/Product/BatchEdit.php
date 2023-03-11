@@ -42,7 +42,7 @@ class BatchEdit extends BatchAction
     public function form()
     {
         $stores = ["1"=>"同步"];
-        $this->checkbox('is_outer_sync', '是否同步到第三方平台')->options($stores)->rules("required")->help("只是针对与已做过上架的商品有效");
+        $this->radio('is_outer_sync', '是否同步到第三方平台')->options($stores)->rules("int")->help("只是针对与已做过上架的商品有效");
     }
 
 }

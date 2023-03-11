@@ -20,7 +20,7 @@ class BatchDown extends BatchAction
             $model->status = 0;
             $model->save();
 
-            if($is_outer_sync==1) {
+            if($is_outer_sync=="1") {
                 $outerProds = \App\Models\ProdOuter::where("prod_id", $model->prod_id)->get();
                 foreach($outerProds as $key=>$item) {
                     $storeDetail = \App\Models\OrganizationStore::where("id",$item->shop_id)->select(['shop_type'])->first();
@@ -36,13 +36,13 @@ class BatchDown extends BatchAction
         }
 
         // 返回一个`复制成功`的成功信息，并且刷新页面
-        return $this->response()->success('商品批量下架中.')->refresh();
+        return $this->response()->success('商品批量下架中.'.$is_outer_sync)->refresh();
     }
 
     public function form()
     {
         $stores = ["1"=>"同步"];
-        $this->checkbox('is_outer_sync', '是否同步到第三方平台')->options($stores)->rules("required")->help("只是针对与已做过上架的商品有效");
+        $this->radio('is_outer_sync', '是否同步到第三方平台')->options($stores)->rules("int")->help("只是针对与已做过上架的商品有效");
     }
 
 }
