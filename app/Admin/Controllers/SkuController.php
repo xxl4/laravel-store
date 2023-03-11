@@ -32,15 +32,7 @@ class SkuController extends AdminController
         $grid->column('sku_id', __('Sku id'))->sortable()->filter();
         $grid->column('prod_id', __('Prod id'))->sortable()->filter();
         $grid->column('properties', __('Properties'))->display(function ($v){
-            $str = "";
-            foreach($v as $key=>$item) {
-                $prop = \App\Models\ProdProp::where("prop_id",$key)->select(["prop_name"])->first();
-                $propValue = \App\Models\ProdPropValue::where("value_id",$item)->select(["prop_value"])->first();
-                if(!is_null($prop) && !is_null($propValue)) {
-                    $str.= $prop->prop_name.":".$propValue->prop_value."<br />";
-                }
-            }
-            return $str;
+            return $v;
         });
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();

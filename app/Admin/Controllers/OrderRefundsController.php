@@ -68,6 +68,8 @@ class OrderRefundsController extends AdminController
             
         });
 
+        $grid->model()->orderBy("refund_id", "desc");
+
         return $grid;
     }
 

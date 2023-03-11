@@ -16,7 +16,7 @@
 
                 @foreach($news as $new)
                 <tr>
-                    <td><a href="">{{ $new['title'] }}</a></td>
+                    <td><a href="/admin/notices/{{ $new['id'] }}" title="{{ $new['title'] }}" target="_blank">{{ $new['title'] }}</a></td>
                     <td width="150px" align="right">{{ $new['update_time'] }}</td>
                 </tr>
                 @endforeach

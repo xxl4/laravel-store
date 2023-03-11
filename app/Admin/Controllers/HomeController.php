@@ -46,7 +46,7 @@ class HomeController extends Controller
 
     public function news() {
         $news = [];
-        $news = \App\Models\Notice::where("shop_id",0)->where("status",1)->orderBy("is_top", "desc")->select(["title","update_time"])->limit(10)->get();
+        $news = \App\Models\Notice::where("shop_id",0)->where("status",1)->orderBy("is_top", "desc")->select(["title","update_time","id"])->limit(10)->get();
         return view('admin.dashboard.news', compact('news'));
     }
 
