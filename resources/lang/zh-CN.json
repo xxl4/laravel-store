@@ -211,7 +211,7 @@
 
 
 
-    "config_desc_standard_brand_id":"抖店标准品牌ID",
+    "config_desc_standard_brand_id":"品牌id，通过/brand/list获取，无品牌id则传596120136",
     "config_desc_freight_id":"抖店默认快递ID",
     "config_desc_pickup_method":"提取方式新字段，推荐使用。'0': 普通商品-使用物流发货, '1': 虚拟商品-无需物流与电子交易凭证, '2': 虚拟商品-使用电子交易凭证, '3': 虚拟商品-充值直连",
     "config_desc_start_sale_type":"审核通过后上架售卖时间配置:0-立即上架售卖 1-放入仓库",
@@ -221,7 +221,24 @@
     "config_desc_limit_per_buyer":"每个用户累计限购件数",
     "config_desc_maximum_per_order":"每个用户每次下单限购件数",
     "config_desc_remark":"商家可见备注",
+    "config_desc_mobile":"客服电话号码",
+    "config_desc_supply_7day_return":"是否支持7天无理由，0不支持，1支持，2支持（拆封后不支持）",
+    "config_desc_commit":"false仅保存，true保存+提审",
+    "config_desc_presell_config_level":"0：全款预售，1：sku预售，2：现货+预售 ，3：新预售",
+    "config_desc_presell_delivery_type":"全款预售和sku预售时传递，其他不传： 0 预售结束后发货 1支付完成后发货",
+    "config_desc_white_back_ground_pic_url":"白底图url(仅素材中心url有效)，白底图比例要求1:1",
+    "config_desc_pay_type":"支付方式，0货到付款 1在线支付，2，货到付款+在线支付",
+    "config_desc_delivery_method":"海南免税生效0离岛免税1邮寄2离岛自提邮寄",
+    "config_desc_weight_unit":"重量单位，0-kg, 1-g",
+    "config_desc_reduce_type":"1 减库存类型：1-拍下减库存 2-付款减库存",
+    "config_desc_presell_type":"发货模式，0-现货发货，1-预售发货，2-阶梯发货，默认0",
+    "config_desc_presell_end_time":"预售结束时间，格式2020-02-21 18:54:27，最多支持设置距离当前30天",
+    "config_desc_presell_delay":"发货模式，0-现货发货，1-预售发货，2-阶梯发货，默认0",
+    "config_desc_delivery_delay_day":"delivery_delay_day： 承诺发货时间，单位是天,不传则默认为2天。现货发货(presell_type=0)和阶梯发货模式(presell_type=2)时必填，支持传入9999 、1、 2 （分别表示当日发、次日发、48小时发），具体支持传入的参数范围/product/getProductUpdateRule",
 
+    "config_desc_notice_enable":"通知是否开启 1 开启 0 关闭",
+    "config_desc_notice_type":"通知方式 dingding 钉钉 wecom 企业微信 feishu 飞书",
+    "config_desc_notice_url":"通知Web URL",
 
 
     "Goods number": "商品数量",
