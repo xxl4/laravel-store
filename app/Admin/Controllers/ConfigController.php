@@ -34,6 +34,9 @@ class ConfigController extends AdminController
         $grid->column('type', __('Type'))->filter(\App\Enums\ShopConfigTypeEnum::getInstances());
         $grid->column('code', __('Code'))->filter();
         $grid->column('value', __('Value'))->limit(100);
+        $grid->column('desc', __('Desc'))->display(function($t){
+            return __("config_desc_".$this->code);
+        })->limit(100);
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 

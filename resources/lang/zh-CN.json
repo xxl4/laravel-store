@@ -211,8 +211,23 @@
 
 
 
+    "config_desc_standard_brand_id":"抖店标准品牌ID",
+    "config_desc_freight_id":"抖店默认快递ID",
+    "config_desc_pickup_method":"提取方式新字段，推荐使用。'0': 普通商品-使用物流发货, '1': 虚拟商品-无需物流与电子交易凭证, '2': 虚拟商品-使用电子交易凭证, '3': 虚拟商品-充值直连",
+    "config_desc_start_sale_type":"审核通过后上架售卖时间配置:0-立即上架售卖 1-放入仓库",
+    "config_desc_sell_channel":"售卖方式;0:全渠道手售卖,1:仅指定直播间售卖",
+    "config_desc_appoint_delivery_day":"可预约发货天数",
+    "config_desc_minimum_per_order":"每个用户每次下单至少购买的件数",
+    "config_desc_limit_per_buyer":"每个用户累计限购件数",
+    "config_desc_maximum_per_order":"每个用户每次下单限购件数",
+    "config_desc_remark":"商家可见备注",
+
+
+
     "Goods number": "商品数量",
     "Pay status": "支付状态"
+
+    
 
     
 }
