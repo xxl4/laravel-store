@@ -21,6 +21,7 @@ use App\Admin\Actions\Product\BatchDownAndDelete;
 use App\Admin\Actions\Product\BatchEdit;
 use App\Admin\Actions\Product\BatchSyncQty;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class ProductsController extends AdminController
 {
@@ -235,9 +236,9 @@ class ProductsController extends AdminController
         })->tab('商品详情', function($form) {
             $form->editor('content', __('Content'));
         })->tab('Prop', function($form){
-            //$form->hasMany('')
+
             $form->hasMany('properties', function ($form) {
-                $form->text('name');
+                $form->select('name')->options([]);
                 $form->text('value');
                 
             });
@@ -252,7 +253,7 @@ class ProductsController extends AdminController
                 }
                 $form->hidden('org_id', __('Prod id'))->default(Admin::user()->org_id);
                 $form->currency('price')->symbol('￥');
-                $form->number('stocks');
+                $form->text('stocks');
                 $form->text('party_code');
                 $form->text('weight');
                 $form->text('volumen');
