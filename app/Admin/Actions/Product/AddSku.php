@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AddSku extends RowAction
 {
-    public $name = '添加Sku';
+    public $name = '完善商品属性';
 
     public function handle(Model $model)
     {
@@ -19,7 +19,7 @@ class AddSku extends RowAction
 
     public function href()
     {
-        return "/admin/skus/create?prod_id=".$this->getKey();
+        return "/admin/products/prod_edit/".$this->getKey();
     }
 
 }

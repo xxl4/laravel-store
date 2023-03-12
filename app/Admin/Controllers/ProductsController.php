@@ -183,10 +183,14 @@ class ProductsController extends AdminController
 
         $form->tab('分类', function ($form) {
             if($form->isEditing()) {
-                $form->select('shop_id', __('Shop id'))->options(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->load('first_cat', '/admin/categories/category_api_data');
+                //$form->select('shop_id', __('Shop id'))->options(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->load('first_cat', '/admin/categories/category_api_data');
                 $form->select('first_cat', __('First cat'))->options(function($id){
                     $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
-                    if($category) return [$category->category_id => $category->category_name];
+                    if($category) {
+                        return [$category->category_id => $category->category_name];
+                    }else{
+                        return \App\Models\Category::where("shop_id", $this->shop_id)->where("parent_id",0)->pluck("category_name","category_id");
+                    } 
                 })->load('second_cat', '/admin/categories/category_api_data2');
                 $form->select("second_cat", __('Second cat'))->options(function($id){
                     $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
@@ -236,15 +240,6 @@ class ProductsController extends AdminController
 
         })->tab('商品详情', function($form) {
             $form->editor('content', __('Content'));
-        })->tab('Prop', function($form){
-
-            $form->hasMany('properties', function ($form) {
-                $form->select('name')->options([]);
-                $form->text('value');
-                
-            });
-            
-
         })->tab('Sku', function ($form) {
 
             
@@ -280,13 +275,51 @@ class ProductsController extends AdminController
 
     // 编辑商品的属性内容
     public function prod_edit($id, Content $content, Request $request) {
+        if($request->isMethod('post')) {
+            $values = $request->input("value");
+            foreach($values as $key=>$value) {
+                if(is_null($value)) continue;
+                //var_dump($key,$value);
+                $prop = \App\Models\ProdProperty::where("prod_id", $id)->where("name", $key)->first();
+                if(is_null($prop)) $prop = new \App\Models\ProdProperty();
+                $prop->prod_id = $id;
+                $prop->name = $key;
+                $prop->value = $value;
+                $prop->save();
+            }
+            admin_toastr('您内容保存成功', 'success', ['timeOut' => 5000]);
+            return back();
+        }
 
-        $prod = \App\Models\Product::where("prod_id", $id)->select(['category_id'])->first();
+        $prod = \App\Models\Product::where("prod_id", $id)->select(['category_id','prod_name'])->first();
         if(is_null($prod)) {
             // todo
         }
         $categoryProp = \App\Libs\Utils::GetCateProp($prod->category_id, $prod->shop_id);
+        $categoryMoreProp = [];
+        foreach($categoryProp as $key=>$prop) {
+            $rule = \App\Models\ProdProp::where("prop_id", $key)->value("rule");
+            $rule = json_decode($rule);
+            //if($rule->property_type!="1") continue;
+            $categoryMoreProp[$key]['name'] = $prop;
+            
+            $categoryMoreProp[$key]['rule']['required'] = $rule->required;
+            $categoryMoreProp[$key]['rule']['type'] = $rule->type;
+            $categoryMoreProp[$key]['rule']['property_type'] = $rule->property_type;
+            $categoryMoreProp[$key]['prop_value'] = "";
+            if($rule->type=="select") {
+                $categoryMoreProp[$key]['prop_value'] = \App\Models\ProdPropValue::where("prop_id",$key)->pluck("prop_value","value_id");
+            }
+            
 
-        return $content->title("商品编辑")->body(new \App\Admin\Forms\Product($id, $categoryProp));
+        }
+
+        $ProdProperty = \App\Models\ProdProperty::where("prod_id", $id)->pluck("value","name")->toArray();
+
+        //var_dump($ProdProperty);
+
+        return $content->title("商品编辑".$prod->prod_name)->view('admin.products.prop', compact('categoryMoreProp',"id","ProdProperty"));
+
+        //return $content->title("商品编辑")->view("/admin/product/prop");
     }
 }

@@ -60,12 +60,14 @@ class Get extends Command
             foreach($items as $key=>$item) {
                 $this->saveToDB($item, $store);
                 if($item->enable==true && $item->is_leaf==false) {
+                    echo $item->id." parent id \r\n";
                     Artisan::call("category:online",['cid'=>$item->id, 'type'=>'get', 'store_id'=>$store->id]);
                     sleep(2);
                 }
                 //
                 if($item->is_leaf==true && $item->enable==true) {
                     //ProductGetCatePropertyV2Request
+                    echo $item->id." property get \r\n";
                    $this->categoryProperty($item->id, $store, $access_token);
                 }
             }
@@ -109,6 +111,7 @@ class Get extends Command
                     if(is_null($propval)) $propval = new \App\Models\ProdPropValue();
                     $propval->value_id = $opt->value_id;
                     $propval->prop_value = $opt->name;
+                    $propval->prop_id = $item->property_id;
                     $propval->save();
                 }
 
@@ -126,6 +129,7 @@ class Get extends Command
     private function saveToDB($item, $store) {
         $category = \App\Models\Category::where("category_id", $item->id)->where("shop_id",$store->id)->first();
         if(is_null($category)) $category = new \App\Models\Category();
+        //$parent_id = \App\Models\Category::where("category_id", $item->id)->value("id");
         $category->category_id = $item->id;
         $category->shop_id = $store->id;
         $category->parent_id = $item->parent_id;

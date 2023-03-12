@@ -33,7 +33,7 @@ Route::group([
 
     // 商品
     $router->any('products/prod_edit/{id}', "ProductsController@prod_edit")->name('admin.products.edit_prod');
-    //$router->post('products/prod_edit/{id}', "ProductsController@prod_edit");
+    $router->post('products/prod_edit/{id}', "ProductsController@prod_edit");
     //$router->get('products_edit', ProductsEditController::class);
     $router->resource('products', ProductsController::class);
     $router->resource('prod-props', ProdPropController::class);
