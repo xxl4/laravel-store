@@ -22,6 +22,7 @@ use App\Admin\Actions\Product\BatchEdit;
 use App\Admin\Actions\Product\BatchSyncQty;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Nicelizhi\Admin\Layout\Content;
 
 class ProductsController extends AdminController
 {
@@ -275,5 +276,17 @@ class ProductsController extends AdminController
         
 
         return $form;
+    }
+
+    // 编辑商品的属性内容
+    public function prod_edit($id, Content $content, Request $request) {
+
+        $prod = \App\Models\Product::where("prod_id", $id)->select(['category_id'])->first();
+        if(is_null($prod)) {
+            // todo
+        }
+        $categoryProp = \App\Libs\Utils::GetCateProp($prod->category_id, $prod->shop_id);
+
+        return $content->title("商品编辑")->body(new \App\Admin\Forms\Product($id, $categoryProp));
     }
 }

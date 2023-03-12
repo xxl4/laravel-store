@@ -44,18 +44,19 @@ final class Utils
         ];
     }
 
-    static function GetCateProp($cid) {
-        $ret = Cache::get(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid);
-        if(empty($ret)) {
-            $items = \App\Models\CategoryProp::where("category_id", $cid)->with("prop_value")->select(['prop_id'])->get();
+    static function GetCateProp($cid, $shop_id=0) {
+        //$ret = Cache::get();
+        $cacheKey = \App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid;
+        if(Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }else{
+            $items = \App\Models\CategoryProp::where("category_id", $cid)->select(['prop_id'])->get();
             $ret = [];
             foreach($items as $key=>$item) {
-                foreach($item->prop_value as $kk=>$value) {
-                    $ret[$value->prop_id][$value->value_id] = $value->value_id;
-                }
-                
+                $ret[$item->prop_id] = \App\Models\ProdProp::where("prop_id", $item->prop_id)->value("prop_name");
             }
-            Cache::put(\App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid, $ret);
+            //var_dump($ret);
+            Cache::put($cacheKey, $ret);
         }
         return $ret;
     }
