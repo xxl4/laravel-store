@@ -29,6 +29,7 @@ class BatchDown extends BatchAction
                     $data['shop_id'] = $item->shop_id;
                     $data['act_type'] = "down";
                     $data['user_id'] = Admin::user()->id;
+                    $datap['data'] = [];
                     \App\Libs\Utils::pushQueueByShopType($storeDetail->shop_type, $data); // 推送到队列中去处理
                 } 
             }

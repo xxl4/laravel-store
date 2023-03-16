@@ -48,14 +48,14 @@ class AddProduct extends Command
         $goods_upload_log = \App\Models\ProdOuter::where("prod_id", $this->prod_id)->where('shop_id', $store->id)->first();
         if(!is_null($goods_upload_log)) {
             $this->info("对应的的prod id 已在".$goods_upload_log->created_at."完成了上传");
-            echo "对应的的prod id 已存在\r\n";
+            echo "对应的的prod id".$this->prod_id." 已存在\r\n";
             return false;
         }
         //检查对应的商品是否在线和存在
         $prod = \App\Models\Product::where("prod_id", $this->prod_id)->first();
         if(is_null($prod)) {
             $this->info("对应的的prod id 不存在");
-            echo "对应的的prod id 不存在\r\n";
+            echo "对应的的prod id ".$this->prod_id." 不存在\r\n";
             return false;
         }
         //获取对应商品的内容，完成商品的数据更新

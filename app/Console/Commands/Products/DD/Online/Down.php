@@ -41,8 +41,20 @@ class Down extends Command
         $store = $this->argument('store');
         $this->prod_id = $this->argument("prod_id");
 
+        echo "prod id is".$this->prod_id."\r\n";
+
         $access_token = \App\Libs\Utils::GetDoudianStoreToken($store->id);
         $access_token = unserialize($access_token);
+
+        $prodouter = \App\Models\ProdOuter::where("prod_id", $this->prod_id)->select("outer_id")->first();
+        if(is_null($prodouter)) {
+            echo $this->prod_id." is not online now ";
+            return false;
+        }
+        if(empty($prodouter->outer_id)) {
+            echo $this->prod_id." is not online now ";
+            return false;
+        }
 
         $req = new \ProductSetOfflineRequest();
         $p = new \ProductSetOfflineParam();
@@ -50,12 +62,13 @@ class Down extends Command
         $config->appKey = $store->key;
         $config->appSecret = $store->secret;
         $req->setConfig($config);
-        $p->product_id = $prod_id;
+        $p->product_id = $prodouter->outer_id;
         $req->setParam($p);
         $resp = $req->execute($access_token);
-        var_dump($resp);
+        var_dump($resp,$req);
         if($resp->code=='10000') {
-            
+            //var_dump($resp);
+            //todo
         }
     }
 }

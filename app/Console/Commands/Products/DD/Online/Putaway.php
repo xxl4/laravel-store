@@ -44,6 +44,16 @@ class Putaway extends Command
         $access_token = \App\Libs\Utils::GetDoudianStoreToken($store->id);
         $access_token = unserialize($access_token);
 
+        $prodouter = \App\Models\ProdOuter::where("prod_id", $this->prod_id)->select("outer_id")->first();
+        if(is_null($prodouter)) {
+            echo $this->prod_id." is not online now ";
+            return false;
+        }
+        if(empty($prodouter->outer_id)) {
+            echo $this->prod_id." is not online now ";
+            return false;
+        }
+
         $req = new \ProductEditV2Request();
         $p = new \ProductEditV2Param();
         $config = new \DoudianOpConfig();
@@ -51,11 +61,12 @@ class Putaway extends Command
         $config->appSecret = $store->secret;
         $req->setConfig($config);
         $p->commit = true;
+        $p->product_id = $prodouter->outer_id;
         $req->setParam($p);
         $resp = $req->execute($access_token);
-        var_dump($resp);
+        var_dump($resp, $req);
         if($resp->code=='10000') {
-            
+            //todo
         }
     }
 }

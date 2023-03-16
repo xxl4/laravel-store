@@ -51,6 +51,7 @@ class GetOnlineGoods extends Command
         }
         $data = ['store'=>$store,"prod_id"=>$prod_id, "data"=>$data];
         $this->info("products:".$store->shop_type.":".$type.":online params ".json_encode($data));
+        echo "products:".$store->shop_type.":".$type.":online params ".json_encode($data)."\r\n";
         Artisan::call("products:".$store->shop_type.":".$type.":online", $data);
     }
 }

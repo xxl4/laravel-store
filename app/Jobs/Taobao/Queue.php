@@ -62,13 +62,13 @@ class Queue implements ShouldQueue
                 Artisan::call("products:online", $data);
                 break;
             case 'putaway': // 上架
-                $data['data'] = $this->item->data;
+                //$data['data'] = $this->item->data;
                 $data['type'] = "putaway";
                 $data['prod_id'] = $this->item->prod_id;
                 Artisan::call("products:online", $data);
                 break;
             case 'down': // 下架
-                $data['data'] = $this->item->data;
+                //$data['data'] = $this->item->data;
                 $data['type'] = "down";
                 $data['prod_id'] = $this->item->prod_id;
                 Artisan::call("products:online", $data);
@@ -134,6 +134,6 @@ class Queue implements ShouldQueue
     }
      //针对处理失败的情况发送消息
     public function failed(Throwable $exception) {
-        \App\Libs\Utils::sendMessage(1, 1, "程序报错了，请检查", $exception->getMessage());
+        \App\Libs\Utils::sendMessage(1, 1, "程序报错了，请检查", $exception->getMessage()."--".$exception->getFile()."--".$exception->getLine());
     }
 }
