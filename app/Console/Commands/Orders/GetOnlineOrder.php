@@ -38,13 +38,11 @@ class GetOnlineOrder extends Command
      */
     public function handle()
     {
-        //
-        //
         $store_id = $this->argument('store_id');
         $type = $this->argument('type');
         $order_id = $this->argument("order_id");
         $options = $this->argument("data");
-        $this->info("start ".$type." online goods from ".$store_id);
+        $this->info("start ".$type." online orders from ".$store_id);
         $store = \App\Models\OrganizationStore::where("id", $store_id)->first();
         if(is_null($store)) {
             $this->error("no have");

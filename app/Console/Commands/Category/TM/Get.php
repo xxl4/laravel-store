@@ -70,13 +70,13 @@ class Get extends Command
                 //todo 
                 return false;
             }
-            $items = $resp->item_cats->item_cat;
+            $items = $resp->item_cats;
             
             Cache::put($cacheKey, json_encode($items), 3600);
         }
         
         //var_dump($items);exit;
-        foreach($items as $key=>$item) {
+        foreach($items->item_cat as $key=>$item) {
             $category = \App\Models\Category::where("category_id", $item->cid)->where("shop_id", $store->id)->first();
             $status = 1;
             if(is_null($category)) $category = new \App\Models\Category();
@@ -90,9 +90,9 @@ class Get extends Command
             $category->grade = $grade;
             $category->save();
 
-            var_dump($item->is_parent);
+            //var_dump($item->is_parent);exit;
 
-            if($item->is_parent==true) {
+            if($item->is_parent===true) {
                 $grade++;
                 $this->getCategory($item->cid, $store, $grade);
             }else{
@@ -103,7 +103,7 @@ class Get extends Command
 
     public function getCategoryProp($cid, $store) {
         $cacheKey = \App\Enums\CachePrefixEnum::RUNING_CATEGORY_PROP_ALL_PAGE.$cid;
-        echo $cid." start \r\n";
+        echo $cid." prop start \r\n";
         if(Cache::has($cacheKey)) {
             $items = json_decode(Cache::get($cacheKey));
         }else{
@@ -120,21 +120,23 @@ class Get extends Command
                 //todo 
                 return false;
             }
-            $items = $resp->item_props->item_prop;
-            var_dump($items);
+            $items = $resp->item_props;
+            //var_dump($items);
             Cache::put($cacheKey, json_encode($items), 3600);
         }
 
-        foreach($items as $key=>$item) {
+        foreach($items->item_prop as $key=>$item) {
             $prop = \App\Models\ProdProp::where("prop_id",$item->pid)->where("shop_id",$store->id)->first();
             if(is_null($prop)) $prop = new \App\Models\ProdProp();
             $prop->shop_id = $store->id;
             $prop->prop_name = $item->name;
-            $rule = $item->toArray();
+            //var_dump($item);
+            $rule = (array)$item;
+            unset($rule['prop_values']);
             $required = 1;
             $type = "text";
             if($item->is_key_prop==false) $required = 0;
-            if($item->is_enum_prop==false) $type = "select";
+            if($item->is_input_prop==false) $type = "select";
             $rule['required'] = $required;
             $rule['type'] = $type;
             $prop->rule = json_encode($rule);
@@ -142,13 +144,17 @@ class Get extends Command
             $prop->save();
 
             // 保存到prop_value
-            foreach($item->prop_values as $kk=>$opt) {
-                $propval = \App\Models\ProdPropValue::where("prop_id", $item->pid)->where("value_id",$opt->vid)->first();
-                if(is_null($propval)) $propval = new \App\Models\ProdPropValue();
-                $propval->value_id = $opt->value_id;
-                $propval->prop_value = $opt->name;
-                $propval->prop_id = $item->pid;
-                $propval->save();
+            if(isset($item->prop_values)) {
+                var_dump($item->prop_values);
+                foreach($item->prop_values->prop_value as $kk=>$opt) {
+                    if(!isset($opt->vid)) continue;
+                    $propval = \App\Models\ProdPropValue::where("prop_id", $item->pid)->where("value_id",$opt->vid)->first();
+                    if(is_null($propval)) $propval = new \App\Models\ProdPropValue();
+                    $propval->value_id = $opt->vid;
+                    $propval->prop_value = $opt->name;
+                    $propval->prop_id = $item->pid;
+                    $propval->save();
+                }
             }
 
             // 保存到category prop
