@@ -236,23 +236,23 @@ class ProductsController extends AdminController
         })->tab('商品图片', function($form){
 
             $form->image('pic', __('Pic'))->uniqueName();
-            $form->image('imgs', __('Imgs'))->uniqueName();
+            //$form->image('imgs', __('Imgs'))->uniqueName();
+            $form->multipleFile('imgs_attach', '图片')->pathColumn('file_path')->sortable()->uniqueName()->removable();
 
         })->tab('商品详情', function($form) {
             $form->editor('content', __('Content'));
-        })->tab('Sku', function ($form) {
+        })->tab(__('Sku'), function ($form) {
 
-            
             $form->hasMany('sku', function ($form) {
-                if($form->isEditing()) {
-                    $form->keyValue('properties');
-                }
-                $form->hidden('org_id', __('Prod id'))->default(Admin::user()->org_id);
-                $form->currency('price')->symbol('￥');
-                $form->text('stocks');
-                $form->text('party_code');
-                $form->text('weight');
-                $form->text('volumen');
+                //if($form->isEditing()) {
+                $form->keyValue('properties',__('Properties'));
+                //}
+                $form->hidden('org_id', __('Org id'))->default(Admin::user()->org_id);
+                $form->currency('price',__('Price'))->symbol('￥');
+                $form->text('stocks',__('Stocks'));
+                $form->text('party_code',__('Party code'));
+                $form->text('weight',__('Weight'));
+                $form->text('volume',__('Volume'));
             });
         });
 

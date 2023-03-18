@@ -20,6 +20,7 @@ class Product extends Model
 
     }
 
+    /*
     public function setImagsAttribute($imgs) {
         if(is_array($imgs)) {
             $this->attributes['imgs'] = json_encode($imgs);
@@ -28,6 +29,14 @@ class Product extends Model
 
     public function getImgsAttribute($imgs) {
         return json_decode($imgs, true);
+    }
+    */
+    public function imgs_attach() {
+        return $this->hasMany(AttachFile::class, "file_join_id", "prod_id")->whereFileJoinType(\App\Enums\FileTypeEnum::PROD_IMGS_LIST);
+    }
+
+    public function pic_attach() {
+        return $this->hasOne(AttachFile::class, "file_join_id", "prod_id")->whereFileJoinType(\App\Enums\FileTypeEnum::PROD_MAIN_PIC);
     }
 
 

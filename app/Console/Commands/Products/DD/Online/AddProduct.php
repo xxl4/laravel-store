@@ -65,7 +65,7 @@ class AddProduct extends Command
         //获取到店铺上新的配置数据内容
         $storeConfig = Utils::GetShopConfig($store->id);
 
-        var_dump($storeConfig);
+        //var_dump($storeConfig);
 
         $req = new \ProductListV2Request();
         $p = new \ProductListV2Param();
@@ -76,11 +76,9 @@ class AddProduct extends Command
         
         $p->outer_product_id = $this->prod_id;
         $p->product_type = 0;
-        $p->category_leaf_id = 23430;
+        $p->category_leaf_id = $prod->category_id;
         $p->name = $prod->prod_name;
         $p->recommend_remark = $prod->brief;
-
-
 
         $p->pay_type = $storeConfig['pay_type']; // 从配置中心获取
         $p->reduce_type = $storeConfig['reduce_type']; 
@@ -96,10 +94,63 @@ class AddProduct extends Command
         $p->maximum_per_order = $storeConfig['maximum_per_order'];
         $p->limit_per_buyer = $storeConfig['limit_per_buyer'];
         $p->minimum_per_order = $storeConfig['minimum_per_order'];
+        $p->commit = true;
+
+        //get sku
+        $skus = \App\Models\Sku::where("prod_id", $prod->prod_id)->get();
+        if(is_null($skus)) return false;
+        //var_dump($skus);
+        $specs = "";
+        $pic = "";
+        $spec_prices = [];
+        $i = 1;
+        var_dump(count($skus));
+        foreach($skus as $key=>$sku) {
+            $atts = $sku->properties;
+            $specs.=key($atts);
+            $pic.= $sku->pic;
+            if($i < count($skus)) {
+                $specs.="|";
+                $pic.="|";
+            } 
+            $spec_prices[$key]['spec_detail_name1'] = key($atts);
+            $spec_prices[$key]['stock_num'] = (int)$sku->stocks;
+            $spec_prices[$key]['price'] = (int)$sku->price*100;
+            $spec_prices[$key]['out_sku_id'] = $sku->sku_id;
+            $spec_prices[$key]['code'] = $sku->party_code;
+            $spec_prices[$key]['step_stock_num'] = 0;
+            $spec_prices[$key]['supplier_id'] = "";
+            $i++;
+        }
+        var_dump($specs);
+        $p->specs =$specs;
+        $p->spec_prices = json_encode($spec_prices);
+        $p->pic = $pic;
+        //check attr info
+        
+        $prodAttr = \App\Models\ProdProperty::where("prod_id", $this->prod_id)->pluck("value","name");
+        if(is_null($prodAttr)) return false;
+
+        $prodAttr = $prodAttr->toArray();
+
+        $quality_list = [];
+        $quality_list['quality_key'] = $storeConfig['quality_key'];
+        $quality_list['quality_name'] = $storeConfig['quality_name'];
+        $quality_list['quality_attachments']['media_type'] = $storeConfig['quality_attachments_media_type'];
+        $quality_list['quality_attachments']['url'] = $storeConfig['quality_attachments_url'];
+
+        $p->quality_list = json_encode($quality_list);
+
+        $product_format_new = [];
+        foreach($prodAttr as $kk => $attr) {
+            $product_format_new[$kk][] = array("value"=>0,'name'=>$attr,"diy_type"=>1);
+        }
+
+        $p->product_format_new = json_encode($product_format_new);
 
         $req->setParam($p);
-
-        
+        var_dump($req);
+        exit;
 
         //$resp = $req->execute($access_token);
         

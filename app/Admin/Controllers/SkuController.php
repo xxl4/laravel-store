@@ -119,7 +119,7 @@ class SkuController extends AdminController
     {
         $form = new Form(new Sku());
 
-        $form->number('prod_id', __('Prod id'));
+        $form->text('prod_id', __('Prod id'));
         $form->keyValue('properties', __('Properties'));
         $form->decimal('ori_price', __('Ori price'));
         $form->decimal('price', __('Price'));
@@ -142,7 +142,7 @@ class SkuController extends AdminController
             $form->org_id = Admin::user()->org_id;
             $prod = \App\Models\Product::where("prod_id", $form->prod_id)->select(['category_id'])->first();
             // 返回一个简单response
-            if(is_null($prod)) return response('商品不存在');
+            //if(is_null($prod)) return response('商品不存在');
             
             $sysCate = \App\Libs\Utils::GetCateProp($prod->category_id);
             $props = $form->properties;
@@ -151,7 +151,7 @@ class SkuController extends AdminController
             //var_dump($sysCate);
             foreach($props as $key=>$prop) {
                 if(!isset($sysCate[$key][$prop])) {
-                    return response('属性内容错误');
+                    //return response('属性内容错误');
                 }
             }
 

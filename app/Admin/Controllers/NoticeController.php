@@ -71,7 +71,7 @@ class NoticeController extends AdminController
 
         $form->number('shop_id', __('Shop id'));
         $form->text('title', __('Title'));
-        $form->textarea('content', __('Content'));
+        $form->editor('content', __('Content'));
         $form->switch('status', __('Status'));
         $form->switch('is_top', __('Is top'));
 

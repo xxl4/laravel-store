@@ -66,4 +66,7 @@ Route::group([
     $router->resource('deliveries', DeliveryController::class);
     $router->resource('notices', NoticeController::class);
 
+    //文档内容
+    $router->resource('attach-files', AttachFileController::class);
+
 });
