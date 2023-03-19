@@ -32,7 +32,7 @@ class ProdOuterController extends AdminController
     {
         $grid = new Grid(new ProdOuter());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->column('prod_id', __('Prod id'))->filter();
         $grid->column('outer_id', __('Outer id'))->filter();
         $grid->column('content', __('Content'))->display(function($t){
@@ -40,8 +40,8 @@ class ProdOuterController extends AdminController
         })->width(500);
         $grid->column('shop_type', __('Shop type'))->filter();
         //$grid->column('shop_id', __('Shop id'))->filter();
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('created_at', __('Created at'))->sortable();
+        $grid->column('updated_at', __('Updated at'))->sortable();
 
         $grid->model()->orderBy("id","desc");
 

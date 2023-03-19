@@ -67,8 +67,8 @@ class AddProduct extends Command
 
         //var_dump($storeConfig);
 
-        $req = new \ProductListV2Request();
-        $p = new \ProductListV2Param();
+        $req = new \ProductAddV2Request();
+        $p = new \ProductAddV2Param();
         $config = new \DoudianOpConfig();
         $config->appKey = $store->key;
         $config->appSecret = $store->secret;
@@ -79,6 +79,8 @@ class AddProduct extends Command
         $p->category_leaf_id = $prod->category_id;
         $p->name = $prod->prod_name;
         $p->recommend_remark = $prod->brief;
+
+        
 
         $p->pay_type = $storeConfig['pay_type']; // 从配置中心获取
         $p->reduce_type = $storeConfig['reduce_type']; 
@@ -126,6 +128,7 @@ class AddProduct extends Command
         $p->specs =$specs;
         $p->spec_prices = json_encode($spec_prices);
         $p->pic = $pic;
+        $p->description = $description;
         //check attr info
         
         $prodAttr = \App\Models\ProdProperty::where("prod_id", $this->prod_id)->pluck("value","name");
@@ -149,11 +152,16 @@ class AddProduct extends Command
         $p->product_format_new = json_encode($product_format_new);
 
         $req->setParam($p);
-        var_dump($req);
-        exit;
+        //var_dump($req);
+        //exit;
 
-        //$resp = $req->execute($access_token);
+        $resp = $req->execute($access_token);
+        var_dump($req,$resp);
+        //exit;
         
-        
+    }
+
+    public function imglist($prod_id) {
+         
     }
 }

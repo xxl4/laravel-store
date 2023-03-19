@@ -68,8 +68,8 @@ class ProductsController extends AdminController
         $grid->column('imgs', __('Imgs'))->hide();
         $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();
         $grid->column('category_id', __('Category id'))->filter();
-        $grid->column('sold_num', __('Sold num'))->filter();
-        $grid->column('total_stocks', __('Total stocks'))->filter();
+        //$grid->column('sold_num', __('Sold num'))->filter();
+        //$grid->column('total_stocks', __('Total stocks'))->filter();
         //$grid->column('delivery_mode', __('Delivery mode'));
         //$grid->column('delivery_template_id', __('Delivery template id'));
         $grid->column('create_time', __('Create time'));
@@ -140,10 +140,10 @@ class ProductsController extends AdminController
         $show->field('imgs', __('Imgs'));
         $show->field('status', __('Status'));
         $show->field('category_id', __('Category id'));
-        $show->field('sold_num', __('Sold num'));
-        $show->field('total_stocks', __('Total stocks'));
-        $show->field('delivery_mode', __('Delivery mode'));
-        $show->field('delivery_template_id', __('Delivery template id'));
+        //$show->field('sold_num', __('Sold num'));
+        //$show->field('total_stocks', __('Total stocks'));
+        //$show->field('delivery_mode', __('Delivery mode'));
+        //$show->field('delivery_template_id', __('Delivery template id'));
         $show->field('create_time', __('Create time'));
         $show->field('update_time', __('Update time'));
         $show->field('putaway_time', __('Putaway time'));
