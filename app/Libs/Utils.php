@@ -244,4 +244,50 @@ final class Utils
         }
         return false;
     }
+    /**
+     * 
+     * 获取店铺类型
+     * @param int org_id
+     * @return array|boolean
+     */
+    static function ShopType($shop_id) {
+        $key = \App\Enums\CachePrefixEnum::ORG_STORE_TYPE.$shop_id;
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        }else{
+            $shopType = \App\Models\OrganizationStore::where("shop_id", $shop_id)->value("shop_type");
+            Cache::put($key, $shopType);
+            return $shopType;
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * 获取订单状态
+     * @param int org_id
+     * @return array|boolean
+     */
+    static function ShopOrderStatus($shop_id, $status) {
+        $shopType = self::ShopType($shop_id);
+        switch($shopType) {
+            case "TM":
+                //todo
+            break;
+            case "TB":
+                //todo
+            break;
+            case "DD":
+                
+            break;
+            case "JD":
+                //todo
+            break;
+            case "WD":
+                //todo
+            break;
+            default:
+            //todo
+        }
+    }
 }

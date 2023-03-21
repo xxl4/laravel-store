@@ -102,7 +102,7 @@ class GetRefund extends Command
 
                 $refund->order_amount = $localOrder->actual_total;
                 $refund->user_id = $localOrder->user_id;
-                $refund->flow_trade_no = $localOrderSettlement->pay_no;
+                $refund->flow_trade_no = "";
 
 
 

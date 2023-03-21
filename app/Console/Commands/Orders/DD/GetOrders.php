@@ -113,9 +113,10 @@ class GetOrders extends Command
         $p->shop_order_id = $shop_order_id;
         $req->setParam($p);
         $resp = $req->execute($access_token);
-        var_dump($resp);
+        //var_dump($resp);
         if($resp->code==10000) {
             $order_detail = $resp->data->shop_order_detail;
+            var_dump($order_detail);
             $this->saveToDB($order_detail, $store, $access_token);
         }
     }
@@ -132,6 +133,9 @@ class GetOrders extends Command
         $order->pay_type = $order_detail->pay_type;
         $order->remarks = $order_detail->buyer_words;
         $order->order_number = $order_detail->order_id;
+        $order->status = $order_detail->order_status;
+        //var_dump($order_detail);exit;
+        $order->product_nums = 1;
         
         //加密内容处理
         $items = [];
@@ -149,7 +153,7 @@ class GetOrders extends Command
         $items[] = $list;
 
         $decrypt = $this->batchDecrypt($order_detail->order_id, $access_token, $store, $items);
-        var_dump($decrypt);
+        //var_dump($decrypt);
         $user = \App\Models\User::where("user_mobile",$decrypt['encrypt_post_tel'])->first();
         if(is_null($user)) $user = new \App\Models\User();
         //$user->shop_id = $store->id;
@@ -159,13 +163,58 @@ class GetOrders extends Command
         $user->save();
         $order->user_id = $user->user_id;
         $order->pay_time = date("Y-m-d H:i:s", $order_detail->pay_time);
+        if(!empty($order_detail->pay_time)) $order->is_payed = 1;
+
+        $order->save();
 
         //$order->reduce_amount = $item->discount_fee;
         // 订单的商品内容
+        $sku_order_list = $order_detail->sku_order_list;
+        foreach ($sku_order_list as $k => $sku_order) {
+            if($sku_order->order_status !=2) {
+                continue;
+            }
+            $order_item = \App\Models\OrderItem::where("shop_id", $store->id)->where("order_number",$sku_order->order_id)->where("prod_id", $sku_order->out_product_id)->where("sku_id", $sku_order->out_sku_id)->first();
+            if(is_null($order_item)) $order_item = new \App\Models\OrderItem();
+            $order_item->shop_id = $store->id;
+            $order_item->order_number = $sku_order->order_id;
+            $order_item->prod_id = $sku_order->out_product_id;
+            $order_item->sku_id = $sku_order->out_sku_id;
+            $order_item->prod_count = $sku_order->item_num;
+            $order_item->prod_name = $sku_order->product_name;
+            $order_item->sku_name = $sku_order->product_name;
+            $order_item->pic = $sku_order->product_pic;
+            $order_item->user_id = $user->user_id;
+            $order_item->price = $sku_order->pay_amount / 100;
+            $order_item->product_total_amount = $sku_order->pay_amount / 100;
+            //var_dump($sku_order);
+            $order_item->rec_time = date("Y-m-d H:i:s", $sku_order->create_time);
 
-        
-        
-        $order->save();
+            $order_item->save();
+            /*
+            $ginfo = [];
+            $goods_id = $sku_order->out_sku_id;
+            
+            $ginfo['goods_id'] = $real_goods_id; //修改out sku id data
+            $ginfo['seat'] = $seat; //修改out sku id data
+            $ginfo['goods_price'] = $sku_order->origin_amount;
+            $ginfo['goods_number'] = $sku_order->item_num;
+            $ginfo['goods_name'] = $sku_order->product_name;
+
+            // 用户保存对应的订单的商品情况，方便发货处理
+            $doudian_redis_order_goods = [];
+            $doudian_redis_order_goods['goods_id'] = $ginfo['goods_id'];
+            $doudian_redis_order_goods['product_id'] = $sku_order->product_id;
+            Redis::set("doudian_sync_".$order_sn,json_encode($doudian_redis_order_goods));
+            Redis::expire("doudian_sync_".$order_sn, 180000); // 配置过期时间
+            */
+            //var_dump($sku_order);exit;
+
+
+            //$goods[] = $ginfo;
+        }
+
+        //exit;
     }
     // 批量解密操作
     private function batchDecrypt($order_sn,$access_token, $store, $list = array()) {

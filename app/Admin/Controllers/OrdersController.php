@@ -34,16 +34,18 @@ class OrdersController extends AdminController
         $grid->column('order_number', __('Order number'))->expand(function ($model) {
 
             $outers = $model->item()->take(10)->orderBy("order_item_id","desc")->get()->map(function ($outer) {
-                return $outer->only(['prod_name','sku_name', 'prod_count','price','product_total_amount','rec_time']);
+                return $outer->only(['prod_name','sku_name','prod_id','sku_id', 'prod_count','price','product_total_amount','rec_time']);
             });
-            return new Table(['商品名称','SKU名称','数量','价格','总价', '添加时间'], $outers->toArray());
+            return new Table(['商品名称','SKU名称',"Prod ID","SKU ID",'数量','价格','总价', '添加时间'], $outers->toArray());
 
         })->sortable()->filter();
         $grid->column('total', __('Total'));
         $grid->column('actual_total', __('Actual total'));
         $grid->column('pay_type', __('Pay type'));
         $grid->column('remarks', __('Remarks'));
-        $grid->column('status', __('Status'));
+        $grid->column('status', __('Status'))->display(function($t) {
+            return \App\Libs\Utils::ShopOrderStatus($this->shop_id, $t);
+        });
         $grid->column('dvy_type', __('Dvy type'));
         $grid->column('dvy_id', __('Dvy id'));
         $grid->column('dvy_flow_id', __('Dvy flow id'));
