@@ -79,18 +79,18 @@ class GetOrders extends Command
         //$req->setStatus('WAIT_SELLER_SEND_GOODS'); //获取订单状态
         $req->setFields($this->fields);
         $req->setPageSize($this->size);
-        $req->setStartCreated(date("Y-m-d H:i:s", strtotime("-1 month")));// 最近一个月的数据
+        $req->setStartCreated(date("Y-m-d H:i:s", strtotime("-1 week")));// 最近一个月的数据
         $req->setPageNo($page);
         $resp = $c->execute($req, $store->token);
 
         if (!property_exists($resp, 'trades')) {
             //todo 
-            var_dump($resp);
             Log::error(json_encode($resp));
             $this->error("数据好像给出差了哦");
             return false;
         }
         $this->total = $resp->total_results;
+        echo $this->total."\r\n";
         foreach($resp->trades->trade as $key=>$item) {
             $this->saveToDB($item, $store); //优化代码逻辑
         }
