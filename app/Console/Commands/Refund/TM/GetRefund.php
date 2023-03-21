@@ -81,6 +81,7 @@ class GetRefund extends Command
         //$req->setStatus('WAIT_SELLER_SEND_GOODS'); //获取订单状态
         $req->setFields($this->fields);
         $req->setPageSize($this->size);
+        $req->setStartModified(date("Y-m-d H:i:s", strtotime("-1 month")));// 最近一个月的数据
         $req->setPageNo($page);
         $resp = $c->execute($req, $store->token);
         //var_dump($resp);
@@ -162,6 +163,7 @@ class GetRefund extends Command
         $refund->order_id = $localOrder->order_id;
 
         $refund->flow_trade_no = $item->refund_id;
+        $refund->order_item_id = intval($item->outer_id);
 
         $refund->outer_refund = json_encode($item);
 

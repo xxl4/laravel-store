@@ -79,6 +79,7 @@ class GetOrders extends Command
         //$req->setStatus('WAIT_SELLER_SEND_GOODS'); //获取订单状态
         $req->setFields($this->fields);
         $req->setPageSize($this->size);
+        $req->setStartCreated(date("Y-m-d H:i:s", strtotime("-1 month")));// 最近一个月的数据
         $req->setPageNo($page);
         $resp = $c->execute($req, $store->token);
 
