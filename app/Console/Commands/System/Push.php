@@ -38,9 +38,9 @@ class Push extends Command
     public function handle()
     {
         $this->push("DD", 3);
-        $this->push("JD", 4);
-        $this->push("TM", 1);
-        $this->push("TB", 2);
+        //$this->push("JD", 4);
+        //$this->push("TM", 1);
+        //$this->push("TB", 2);
         
     }
 
@@ -61,8 +61,21 @@ class Push extends Command
         $data['prod_id'] = 0;
         \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
         //上新
+        $data['act_type'] = "upload";
+        $data['prod_id'] = 719678;
+        \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
         //同步库存
+        $data['act_type'] = "sync_good";
+        $data['prod_id'] = 3554815857253334579;
+        \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
+        //上架
+        $data['act_type'] = "putaway";
+        $data['prod_id'] = 3554815857253334579;
+        \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
         //下架
+        $data['act_type'] = "down";
+        $data['prod_id'] = 0;
+        \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
         //添加sku
         //删除SKU
         //修改价格

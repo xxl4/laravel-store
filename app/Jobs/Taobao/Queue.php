@@ -98,15 +98,26 @@ class Queue implements ShouldQueue
                 Artisan::call("orders:online", $data);
                 break;
             case 'add_sku': // 添加SKU
-                $data = ['data'=> $this->item->data];
-                Artisan::call("products:".$this->item->shop_type.":".$$this->item->type.":online", $data);
+                $data['type'] = "add_sku";
+                $data['prod_id'] = $this->item->prod_id;
+                $data['sku_id'] = $this->item->sku_id;
+                Artisan::call("products:online", $data);
                 break;
             case 'edit_sku': //编辑SKU
-                $data = ['data'=> $this->item->data];
-                Artisan::call("products:".$this->item->shop_type.":".$$this->item->type.":online", $data);
+                $data['type'] = "edit_sku";
+                $data['prod_id'] = $this->item->prod_id;
+                $data['sku_id'] = $this->item->sku_id;
+                Artisan::call("products:online", $data);
                 break;
             case 'delete_sku': //删除SKU
-                $data = ['data'=> $this->item->data];
+                $data['type'] = "delete_sku";
+                $data['prod_id'] = $this->item->prod_id;
+                $data['sku_id'] = $this->item->sku_id;
+                Artisan::call("products:online", $data);
+                break;
+            case 'skulist':
+                $data['type'] = "skulist";
+                $data['prod_id'] = $this->item->prod_id;
                 Artisan::call("products:online", $data);
                 break;
             case 'get_logistics': //获取快递支持与运费情况
@@ -124,9 +135,13 @@ class Queue implements ShouldQueue
                 Artisan::call("orders:online", $data);
                 break;
             case 'send-logistics': // 发货
+                $data['type'] = "send-logistics";
+                $data['order_id'] = $this->item->order_id;
                 Artisan::call("orders:online", $data);
                 break;
             case 'resend-logistics': // 重新发货
+                $data['type'] = "resend-logistics";
+                $data['order_id'] = $this->item->order_id;
                 Artisan::call("orders:online", $data);
                 break;
             case 'test_config': // 验证接口是否正常
