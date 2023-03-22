@@ -38,6 +38,9 @@ class Push extends Command
     public function handle()
     {
         $this->push("DD", 3);
+        $this->push("JD", 4);
+        $this->push("TM", 1);
+        $this->push("TB", 2);
         
     }
 
