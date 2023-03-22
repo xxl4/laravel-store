@@ -65,5 +65,8 @@ class Push extends Command
         //下架
         //添加sku
         //删除SKU
+        //修改价格
+        //发货
+        
     }
 }

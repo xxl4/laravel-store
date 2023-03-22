@@ -34,20 +34,20 @@ class SkuController extends AdminController
         $grid->column('properties', __('Properties'))->display(function ($v){
             return $v;
         });
-        $grid->column('ori_price', __('Ori price'))->sortable()->filter();
-        $grid->column('price', __('Price'))->sortable()->filter();
-        $grid->column('stocks', __('Stocks'))->sortable()->filter();
-        $grid->column('actual_stocks', __('Actual stocks'))->sortable()->filter();
+        $grid->column('ori_price', __('Ori price'))->editable()->sortable()->filter();
+        $grid->column('price', __('Price'))->editable()->sortable()->filter();
+        $grid->column('stocks', __('Stocks'))->editable()->sortable()->filter();
+        $grid->column('actual_stocks', __('Actual stocks'))->editable()->sortable()->filter();
         $grid->column('update_time', __('Update time'));
         $grid->column('rec_time', __('Rec time'));
         $grid->column('party_code', __('Party code'))->sortable()->filter();
         //$grid->column('model_id', __('Model id'));
         //$grid->column('pic', __('Pic'));
-        $grid->column('sku_name', __('Sku name'))->sortable()->filter();
-        $grid->column('prod_name', __('Prod name'))->sortable()->filter();
+        $grid->column('sku_name', __('Sku name'))->editable()->filter();
+        $grid->column('prod_name', __('Prod name'))->editable()->filter();
         //$grid->column('version', __('Version'))->sortable()->filter();
-        $grid->column('weight', __('Weight'))->sortable()->filter();
-        $grid->column('volume', __('Volume'))->sortable()->filter();
+        $grid->column('weight', __('Weight'))->editable()->filter();
+        $grid->column('volume', __('Volume'))->editable()->filter();
         $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();
         $grid->column('is_delete')->bool(['1' => true, '0' => false])->sortable()->filter();
 
