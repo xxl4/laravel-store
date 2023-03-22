@@ -80,7 +80,7 @@ class GetOrder extends Command
         $req->setPage($page);
         $req->setPageSize($this->size);
         $resp = $c->execute($req, $c->accessToken);
-        //var_dump($resp);
+        var_dump($resp);
         if($resp->jingdong_pop_order_search_responce->code==0) {
             $this->total = $resp->jingdong_pop_order_search_responce->searchorderinfo_result->orderTotal;
             foreach ($resp->jingdong_pop_order_search_responce->searchorderinfo_result->orderInfoList as $key=> $item) {
@@ -92,7 +92,7 @@ class GetOrder extends Command
                 $order->actual_total = $item->orderPayment;
                 $order->freight_amount = $item->freightPrice;
                 $order->create_time = $item->orderStartTime;
-                $order->remarks = $item->orderRemark;
+                $order->remarks = $item->orderRemark." 开票内容：".$item->invoiceInfo;
                 //$order->orderPayment = $item->orderRemark;
                 $order->product_nums = count($item->itemInfoList);
                 //$order->orderState = count($item->itemInfoList);
@@ -158,7 +158,7 @@ class GetOrder extends Command
                 $order->actual_total = $item->orderPayment;
                 $order->freight_amount = $item->freightPrice;
                 $order->create_time = $item->orderStartTime;
-                $order->remarks = $item->orderRemark;
+                $order->remarks = $item->orderRemark." 开票内容：".$item->invoiceInfo;
                 //$order->orderPayment = $item->orderRemark;
                 $order->product_nums = count($item->itemInfoList);
                 //$order->orderState = count($item->itemInfoList);
