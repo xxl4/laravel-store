@@ -113,7 +113,14 @@ class Queue implements ShouldQueue
                 $data = ['data'=> $this->item->data];
                 Artisan::call("logistics:online", $data);
                 break;
+            case 'sync_refund_order': // 订单售后同步
+                $data['type'] = "get";
+                $data['refund_id'] = $this->item->refund_id;
+                Artisan::call("refund:online", $data);
+                break;
             case 'sync_orders': // 订单同步
+                $data['type'] = "get";
+                $data['order_id'] = $this->item->order_id;
                 Artisan::call("orders:online", $data);
                 break;
             case 'send-logistics': // 发货
