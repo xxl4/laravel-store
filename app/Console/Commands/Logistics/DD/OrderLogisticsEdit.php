@@ -11,7 +11,7 @@ class OrderLogisticsEdit extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'logistics:DD:edit:online {store} {order_id} {data?}';
 
     /**
      * The console command description.
@@ -37,6 +37,36 @@ class OrderLogisticsEdit extends Command
      */
     public function handle()
     {
-        //
+        //OrderLogisticsEditRequest
+        $store = $this->argument('store');
+        $order_id = $this->argument('order_id'); // 用于发货
+
+        //检查对应的OrderID 是否有内容
+        $order = \App\Models\Order::where("order_id", $order_id)->where("shop_id", $store->id)->first();
+        if(is_null($order)) {
+            //todo
+            return false;
+        }
+
+        $access_token = Utils::GetDoudianStoreToken($store->id);
+        $access_token = unserialize($access_token);
+
+        $req = new \OrderLogisticsEditRequest();
+        $p = new \OrderLogisticsEditParam();
+        $config = new \DoudianOpConfig();
+        $config->appKey = $store->key;
+        $config->appSecret = $store->secret;
+        $req->setConfig($config);
+
+        $p->order_id = $order_id;
+        $p->company_code = $order_id;
+        $p->logistics_code = $order_id;
+
+        $req->setParam($p);
+        $resp = $req->execute($access_token);
+        if($resp->code!=10000) {
+            //todo
+        }
+
     }
 }
