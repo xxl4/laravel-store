@@ -57,7 +57,8 @@ class GetProduct extends Command
         $req->setField($this->_field);
         $req->setOrderField("wareId");
         $req->setOrderType("desc");
-        $resp = $c->execute($req, $c->accessToken);
+        //$resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
 
         $total = $resp->jingdong_ware_read_searchWare4Valid_responce->page->totalItem;
 
@@ -94,7 +95,7 @@ class GetProduct extends Command
             $req->setField($this->_field);
             $req->setOrderField("wareId");
             $req->setOrderType("desc");
-            $resp = $c->execute($req, $c->accessToken);
+            $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
 
             $items = (array)$resp->jingdong_ware_read_searchWare4Valid_responce->page->data;
             $goods = [];

@@ -310,10 +310,16 @@ final class Utils
                 $resp = $client->execute($token);
                 if($resp->code!=10000) { 
                     //todo 
+                    var_dump($resp);
                 }
             break;
             case "JD":
-                //todo
+                $resp = $client->execute($req, $token);
+                if (property_exists($resp, 'errorMessage')) {
+                    //todo
+                    var_dump($resp);
+                    //return false;
+                }
             break;
             case "TM":
                 $resp = $client->execute($req, $token);

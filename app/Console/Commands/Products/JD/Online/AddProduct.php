@@ -283,7 +283,7 @@ class AddProduct extends Command
  
          $req->setSkus($skus);
          Log::info($this->goods_id." Upload Start  ".json_encode($req));
-         $resp = $c->execute($req, $c->accessToken);
+         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
          Log::info($this->goods_id." Upload Result  ".json_encode($resp));
  
          if(isset($resp->jingdong_ware_write_add_responce->ware->wareId)){

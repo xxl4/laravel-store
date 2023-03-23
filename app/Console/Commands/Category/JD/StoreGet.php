@@ -53,7 +53,7 @@ class StoreGet extends Command
         $req = new \CategoryReadFindByPIdRequest();
         $req->setParentCid($cid);
         //$req->setField($this->_fields);
-        $resp = $c->execute($req, $c->accessToken);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
         var_dump($resp);
     
     }

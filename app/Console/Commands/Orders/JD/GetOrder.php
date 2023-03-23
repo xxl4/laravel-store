@@ -79,7 +79,7 @@ class GetOrder extends Command
         $req->setOptionalFields($this->fields);
         $req->setPage($page);
         $req->setPageSize($this->size);
-        $resp = $c->execute($req, $c->accessToken);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
         var_dump($resp);
         if($resp->jingdong_pop_order_search_responce->code==0) {
             $this->total = $resp->jingdong_pop_order_search_responce->searchorderinfo_result->orderTotal;
@@ -147,7 +147,7 @@ class GetOrder extends Command
         $req = new \PopOrderGetRequest();
         $req->setOptionalFields($this->fields);
         $req->setOrderId($order_id);
-        $resp = $c->execute($req, $c->accessToken);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
         if($resp->jingdong_pop_order_get_responce->code==0) {
             $item = $resp->jingdong_pop_order_get_responce->orderDetailInfo->orderInfo;
             $order = \App\Models\Order::where("order_number", $item->orderId)->first();
