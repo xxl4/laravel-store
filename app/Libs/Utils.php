@@ -311,6 +311,7 @@ final class Utils
                 if($resp->code!=10000) { 
                     //todo 
                     var_dump($resp);
+                    return false;
                 }
             break;
             case "JD":
@@ -318,14 +319,24 @@ final class Utils
                 if (property_exists($resp, 'errorMessage')) {
                     //todo
                     var_dump($resp);
-                    //return false;
+                    return false;
                 }
             break;
             case "TM":
                 $resp = $client->execute($req, $token);
+                if (property_exists($resp, 'error_response')) {
+                    //todo
+                    var_dump($resp);
+                    return false;
+                }
             break;
             case "TB":
                 $resp = $client->execute($req, $token);
+                if (property_exists($resp, 'error_response')) {
+                    //todo
+                    var_dump($resp);
+                    return false;
+                }
                 //todo
             break;
         }
