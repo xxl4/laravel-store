@@ -295,6 +295,10 @@ final class Utils
     /**
      * 
      * 统一的处理第三方API接口请求处理
+     * @param shop_id 店铺的ID
+     * @param client 第三方API的 client object
+     * @param token 第三方API 需要的token 内容
+     * @return boolean|object
      * 
      */
     static function execThirdStoreApi($shop_id, $client, $token) {
