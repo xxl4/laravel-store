@@ -57,7 +57,7 @@ class DouDianImportData extends Command
         $req->setConfig($config);
         $p->cid = $cid;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp, $req);
         if($resp->code=='10000') {
             $cache_key = "shop_category_".$p->cid;

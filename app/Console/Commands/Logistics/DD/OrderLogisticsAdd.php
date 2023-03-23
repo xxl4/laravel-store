@@ -65,7 +65,7 @@ class OrderLogisticsAdd extends Command
         $p->serial_number_list = $order_id;
 
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code!=10000) {
             //todo
         }

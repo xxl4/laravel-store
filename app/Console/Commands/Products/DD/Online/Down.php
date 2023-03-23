@@ -64,7 +64,7 @@ class Down extends Command
         $req->setConfig($config);
         $p->product_id = $prodouter->outer_id;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp,$req);
         if($resp->code=='10000') {
             //var_dump($resp);

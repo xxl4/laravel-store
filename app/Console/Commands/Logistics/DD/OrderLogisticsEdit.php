@@ -63,7 +63,7 @@ class OrderLogisticsEdit extends Command
         $p->logistics_code = $order_id;
 
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code!=10000) {
             //todo
         }

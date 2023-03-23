@@ -53,7 +53,7 @@ class Get extends Command
         $req->setConfig($config);
         $p->cid = $cid;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp);
         if($resp->code=='10000') {
             $items = $resp->data;
@@ -84,7 +84,7 @@ class Get extends Command
         $req->setConfig($config);
         $p->category_leaf_id = $cid;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp);
         if($resp->code=='10000') {
             foreach($resp->data->data as $key=>$item) {

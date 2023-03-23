@@ -58,7 +58,7 @@ class GetLogistics extends Command
         $config->appKey = $store->key;
         $config->appSecret = $store->secret;
         $req->setConfig($config);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code==10000) {
             foreach($resp->data as $key=>$item) {
                 $logistics = \App\Models\Delivery::where("shop_type", $store->shop_type)->where("code", $item->code)->where("outer_id", $item->id)->first();
@@ -83,7 +83,7 @@ class GetLogistics extends Command
         $p->page = 0;
         $p->size = 10;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         //var_dump($resp);
         if($resp->code==10000) {
             foreach($resp->data->List as $key=>$item) {

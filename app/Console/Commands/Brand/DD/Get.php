@@ -54,7 +54,7 @@ class Get extends Command
         $p->category_id = $cid;
         $req->setParam($p);
         $req->setConfig($config);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         //var_dump($resp);
         if($resp->code=='10000') {
             if (!property_exists($resp, 'brand_list')) {

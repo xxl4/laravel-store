@@ -155,7 +155,7 @@ class AddProduct extends Command
         //var_dump($req);
         //exit;
 
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($req,$resp);
         //exit;
         

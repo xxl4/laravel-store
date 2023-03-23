@@ -92,7 +92,7 @@ class GetProduct extends Command
         $p->page = $page;
         if($outer_prod_id  > 0) $p->product_id = $outer_prod_id;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code==10000) {
             $this->total = $resp->data->total;
             foreach ($resp->data->data as $key=>$item) {
@@ -121,7 +121,7 @@ class GetProduct extends Command
         $req->setConfig($config);
         $p->product_id = $outer_id;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp);
         if($resp->code==10000) {
             $prod = \App\Models\ProdOuter::where("outer_id", $outer_id)->first();

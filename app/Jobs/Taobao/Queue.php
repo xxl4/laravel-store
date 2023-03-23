@@ -40,7 +40,6 @@ class Queue implements ShouldQueue
     {
         //
         $this->item = json_decode($this->item);
-        var_dump($this->item);
         $data = [];
         $data['store_id'] = $this->item->shop_id;
         //$data['data'] = $this->item->data;

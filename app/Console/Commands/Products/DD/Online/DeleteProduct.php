@@ -71,7 +71,7 @@ class DeleteProduct extends Command
         $p->product_id = $outer_id;
         $p->delete_forever = true;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp, $outer_id);
         if($resp->code==10000) {
             echo $outer_id."已成功被删除";

@@ -86,7 +86,10 @@ class GetOrders extends Command
         //$p->create_time_end = strtotime("-4 months", time());
         //if($outer_order_id  > 0) $p->product_id = $outer_order_id;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        //$resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+
         //var_dump($resp);
         if($resp->code==10000) {
             $this->total = $resp->data->total;
@@ -112,7 +115,8 @@ class GetOrders extends Command
         $req->setConfig($config);
         $p->shop_order_id = $shop_order_id;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        //$resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         //var_dump($resp);
         if($resp->code==10000) {
             $order_detail = $resp->data->shop_order_detail;
@@ -230,7 +234,8 @@ class GetOrders extends Command
         $req->setConfig($config);
         $q->cipher_infos = $list;
         $req->setParam($q);
-        $resp = $req->execute($access_token);
+        //$resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         //var_dump($resp);
         if($resp->code==10000) {
             $data = $resp->data;

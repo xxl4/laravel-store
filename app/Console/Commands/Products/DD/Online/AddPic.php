@@ -67,7 +67,7 @@ class AddPic extends Command
         $p->material_name = $material_name;
         $req->setParam($p);
 
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp);
     }
 }

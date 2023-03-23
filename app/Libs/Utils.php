@@ -255,7 +255,8 @@ final class Utils
         if(Cache::has($key)) {
             return Cache::get($key);
         }else{
-            $shopType = \App\Models\OrganizationStore::where("shop_id", $shop_id)->value("shop_type");
+            $shopType = \App\Models\OrganizationStore::where("id", $shop_id)->value("shop_type");
+            if(is_null($shopType)) return false;
             Cache::put($key, $shopType);
             return $shopType;
         }
@@ -289,5 +290,24 @@ final class Utils
             default:
             //todo
         }
+    }
+
+    /**
+     * 
+     * 统一的处理第三方API接口请求处理
+     * 
+     */
+    static function execThirdStoreApi($shop_id, $client, $token) {
+        $shopType = self::ShopType($shop_id);
+        $resp = false;
+        switch($shopType) {
+            case "DD":
+                $resp = $client->execute($token);
+                if($resp->code!=10000) { 
+                    //todo 
+                }
+            break;
+        }
+        return $resp;
     }
 }

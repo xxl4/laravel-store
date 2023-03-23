@@ -78,7 +78,7 @@ class GetRefund extends Command
         $p->page = $page;
         $p->order_by = "apply_time asc";
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code==10000) {
             $this->total = $resp->data->total;
             foreach($resp->data->items as $key=>$item) {

@@ -53,7 +53,7 @@ class StoreGet extends Command
         $req->setConfig($config);
         $p->cid = $cid;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code=='10000') {
             $items = $resp->data;
             foreach($items as $key=>$item) {
@@ -81,7 +81,7 @@ class StoreGet extends Command
         $req->setConfig($config);
         $p->category_leaf_id = $cid;
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code=='10000') {
             foreach($resp->data->data as $key=>$item) {
                 $prop = \App\Models\ProdProp::where("prop_id",$item->property_id)->where("shop_id", $store->id)->first();

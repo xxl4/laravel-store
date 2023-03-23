@@ -103,7 +103,7 @@ class UpdateProduct extends Command
         $p->commit = true;
 
         $req->setParam($p);
-        $resp = $req->execute($access_token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp);
     }
 }
