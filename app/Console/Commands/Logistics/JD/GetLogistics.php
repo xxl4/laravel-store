@@ -13,9 +13,6 @@ class GetLogistics extends Command
      */
     protected $signature = 'logistics:JD:get:online {store} {order_id} {data?}';
 
-    private $_field = "id,code,name,reg_mail_no";
-    private $_field2 = "template_id,template_name,created,modified,supports,assumer,valuation,query_express,query_ems,query_cod,query_post";
-
     /**
      * The console command description.
      *
@@ -45,17 +42,19 @@ class GetLogistics extends Command
         $order_id = $this->argument('order_id'); // 用于发货
 
         $this->logisticsCompanyList($store);
-        $this->freightTemplateList($store);
+        //$this->freightTemplateList($store);
     }
 
     private function logisticsCompanyList($store) {
         $c = new \TopClient();
         $c->appkey = $store->key;
         $c->secretKey = $store->secret;
+        $c->accessToken = $store->token;
 
-        $req = new \LogisticsCompaniesGetRequest();
-        $req->setFields($this->_field);
-        $resp = $c->execute($req, $store->token);
+        $req = new \OrderLogisticsCompanyListRequest();
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $c->accessToken, $req);
+        var_dump($resp);exit;
+        //$resp = $c->execute($req, $store->token);
         foreach($resp->logistics_companies->logistics_company as $key=>$item) {
             $logistics = \App\Models\Delivery::where("shop_type", $store->shop_type)->where("code", $item->code)->where("outer_id", $item->id)->first();
             if(is_null($logistics)) $logistics = new \App\Models\Delivery();
