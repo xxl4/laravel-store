@@ -298,10 +298,11 @@ final class Utils
      * @param shop_id 店铺的ID
      * @param client 第三方API的 client object
      * @param token 第三方API 需要的token 内容
+     * @param req 基于需要构建 request 内容的接口使用
      * @return boolean|object
      * 
      */
-    static function execThirdStoreApi($shop_id, $client, $token) {
+    static function execThirdStoreApi($shop_id, $client, $token, $req="") {
         $shopType = self::ShopType($shop_id);
         $resp = false;
         switch($shopType) {
@@ -310,6 +311,16 @@ final class Utils
                 if($resp->code!=10000) { 
                     //todo 
                 }
+            break;
+            case "JD":
+                //todo
+            break;
+            case "TM":
+                $resp = $client->execute($req, $token);
+            break;
+            case "TB":
+                $resp = $client->execute($req, $token);
+                //todo
             break;
         }
         return $resp;
