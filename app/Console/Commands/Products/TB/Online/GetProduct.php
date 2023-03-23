@@ -76,8 +76,10 @@ class GetProduct extends Command
         $req = new \ItemsOnsaleGetRequest();
         $req->setFields($this->_field);
         $req->setPageNo($page);
+        $req->setOrderBy("num:desc");
         $req->setPageSize($this->size);
-        $resp = $c->execute($req, $store->token);
+        
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         //var_dump($resp,$req, $store,$c);exit;
         $this->total = (int)$resp->total_results;
         //var_dump($total,$resp);

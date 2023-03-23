@@ -55,7 +55,7 @@ class GetLogistics extends Command
 
         $req = new \LogisticsCompaniesGetRequest();
         $req->setFields($this->_field);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         if (!property_exists($resp, 'logistics_companies')) {
             //todo 
         }
@@ -77,7 +77,7 @@ class GetLogistics extends Command
         $c->secretKey = $store->secret;
         $req = new \DeliveryTemplatesGetRequest();
         $req->setFields($this->_field2);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         if (!property_exists($resp, 'delivery_templates')) {
             //todo 
         }

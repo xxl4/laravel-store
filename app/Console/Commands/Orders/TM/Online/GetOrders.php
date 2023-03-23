@@ -81,7 +81,7 @@ class GetOrders extends Command
         $req->setPageSize($this->size);
         $req->setStartCreated(date("Y-m-d H:i:s", strtotime("-1 week")));// 最近一个月的数据
         $req->setPageNo($page);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
 
         if (!property_exists($resp, 'trades')) {
             //todo 
@@ -105,7 +105,7 @@ class GetOrders extends Command
         //$req->setStatus('WAIT_SELLER_SEND_GOODS'); //获取订单状态
         $req->setFields($this->fields);
         $req->setTid($outer_id);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         //var_dump($resp);
         if (!property_exists($resp, 'trade')) {
             //todo 

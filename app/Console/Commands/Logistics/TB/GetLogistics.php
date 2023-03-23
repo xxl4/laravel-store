@@ -55,7 +55,7 @@ class GetLogistics extends Command
 
         $req = new \LogisticsCompaniesGetRequest();
         $req->setFields($this->_field);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         foreach($resp->logistics_companies->logistics_company as $key=>$item) {
             $logistics = \App\Models\Delivery::where("shop_type", $store->shop_type)->where("code", $item->code)->where("outer_id", $item->id)->first();
             if(is_null($logistics)) $logistics = new \App\Models\Delivery();
@@ -74,7 +74,7 @@ class GetLogistics extends Command
         $c->secretKey = $store->secret;
         $req = new \DeliveryTemplatesGetRequest();
         $req->setFields($this->_field2);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         foreach($resp->delivery_templates->delivery_template as $key=>$item) {
             $transport = \App\Models\Transport::where("outer_id",$item->template_id)->where("shop_id", $store->id)->first();
             if(is_null($transport)) $transport = new \App\Models\Transport();

@@ -54,7 +54,7 @@ class Get implements ShouldQueue
         $c->secretKey = $store->scret;
         $req = new \ShopSellerGetRequest();
         $req->setFields('sid,title,pic_path');
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         if (!property_exists($resp, 'shop_seller_get_response')) {
             $subject = "店铺".$this->shop_id."验证失败，请确认好内容继续重试";
             $message = "请检查您店铺信息是否完整";

@@ -64,7 +64,7 @@ class Get extends Command
             $req = new \ItemcatsGetRequest();
             $req->setFields($this->_field2);
             $req->setParentCid($cid);
-            $resp = $c->execute($req, $store->token);
+            $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
             //var_dump($resp);
             if (!property_exists($resp, 'item_cats')) {
                 //todo 
@@ -114,7 +114,7 @@ class Get extends Command
             $req = new \ItempropsGetRequest();
             $req->setFields($this->_field);
             $req->setCid($cid);
-            $resp = $c->execute($req, $store->token);
+            $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
             //var_dump($resp);
             if (!property_exists($resp, 'item_props')) {
                 //todo 

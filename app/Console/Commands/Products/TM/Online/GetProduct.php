@@ -46,8 +46,6 @@ class GetProduct extends Command
         $store = $this->argument('store');
         $prod_id = $this->argument('prod_id'); // 但prod_id 为 0 的时候获取全部的商品数据
         //
-        $this->info("get from online info start".$store);
-        //
         $this->getOnline(1, $store);
         $this->info("get from online info Total ".$this->total);
         echo $this->total."\r\n";
@@ -75,8 +73,10 @@ class GetProduct extends Command
         $req = new \ItemsOnsaleGetRequest();
         $req->setFields($this->_field);
         $req->setPageNo($page);
+        $req->setOrderBy("num:desc");
         $req->setPageSize($this->size);
-        $resp = $c->execute($req, $store->token);
+       // $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         if (!property_exists($resp, 'items')) {
             var_dump($resp);
             return false;

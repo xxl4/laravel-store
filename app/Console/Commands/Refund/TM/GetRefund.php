@@ -83,7 +83,7 @@ class GetRefund extends Command
         $req->setPageSize($this->size);
         $req->setStartModified(date("Y-m-d H:i:s", strtotime("-1 month")));// 最近一个月的数据
         $req->setPageNo($page);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         //var_dump($resp);
         if (!property_exists($resp, 'refunds')) {
             //todo 
@@ -114,7 +114,7 @@ class GetRefund extends Command
         $req = new \RefundGetRequest();
         $req->setRefundId($refund_id);
         $req->setFields($this->fields);
-        $resp = $c->execute($req, $store->token);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         //var_dump($resp);
         if (!property_exists($resp, 'refund')) {
             //todo 
