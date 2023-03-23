@@ -77,10 +77,7 @@ class GetProduct extends Command
         $req->setPageSize($this->size);
        // $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
-        if (!property_exists($resp, 'items')) {
-            var_dump($resp);
-            return false;
-        }
+        
         $this->total = (int)$resp->total_results;
         foreach ($resp->items->item as $key=> $item) {
             
