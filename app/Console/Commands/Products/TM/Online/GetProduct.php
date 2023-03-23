@@ -12,7 +12,7 @@ class GetProduct extends Command
      *
      * @var string
      */
-    protected $signature = 'products:TM:get:online {store} {prod_id} {data?}';
+    protected $signature = 'products:TM:get:online {store} {prod_id} {data?} {is_sure?}';
 
     private $_field = "approve_status,iid,num_iid,title,nick,type,cid,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity";
 
@@ -45,6 +45,9 @@ class GetProduct extends Command
     {
         $store = $this->argument('store');
         $prod_id = $this->argument('prod_id'); // 但prod_id 为 0 的时候获取全部的商品数据
+        $is_sure = $this->argument("is_sure");
+        if($prod_id ==0 && $is_sure!=1) return false;
+
         //
         $this->getOnline(1, $store);
         $this->info("get from online info Total ".$this->total);
