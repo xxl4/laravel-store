@@ -88,7 +88,7 @@ class Push extends Command
         $shop_type = "TM";
         $shop_id = 1;
         // 同步商品
-        $items = \App\Models\ProdOuter::where("shop_id", $shop_id)->select("prod_id")->limit(10000)->get();
+        $items = \App\Models\ProdOuter::where("shop_id", $shop_id)->select("prod_id")->limit(1)->get();
         foreach($items as $key=>$item) {
             $data = [];
             $data['act_type'] = "skulist";
@@ -97,11 +97,11 @@ class Push extends Command
             \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
         }
         //同步订单状态
-        $items = \App\Models\Order::where("shop_id", $shop_id)->select("prod_id")->limit(10000)->get();
+        $items = \App\Models\Order::where("shop_id", $shop_id)->select("order_id")->limit(10)->get();
         foreach($items as $key=>$item) {
             $data = [];
             $data['act_type'] = "skulist";
-            $data['prod_id'] = $item->prod_id;
+            $data['order_id'] = $item->order_id;
             $data['shop_id'] = $shop_id;
             \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
         }

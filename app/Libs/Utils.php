@@ -106,7 +106,7 @@ final class Utils
         }else{
             $data = \App\Models\Config::where("org_id", $org_id)->where("shop_id", $shop_id)->where("code", $code)->select(['value'])->first();
             if(is_null($data)) return false;
-            Cache::put($key, $data);
+            Cache::put($key, $data->value);
             return $data;
         }
         return false;

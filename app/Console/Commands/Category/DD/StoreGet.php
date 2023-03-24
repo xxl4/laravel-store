@@ -56,19 +56,24 @@ class StoreGet extends Command
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code=='10000') {
             $items = $resp->data;
-            foreach($items as $key=>$item) {
-                $this->saveToDB($item, $store);
-                if($item->enable==true && $item->is_leaf==false) {
-                    Artisan::call("category:online",['cid'=>$item->id, 'type'=>'storeget', 'store_id'=>$store->id]);
-                    sleep(2);
-
+            if(!empty($items)) {
+                foreach($items as $key=>$item) {
+                    $this->saveToDB($item, $store);
+                    if($item->enable==true && $item->is_leaf==false) {
+                        Artisan::call("category:online",['cid'=>$item->id, 'type'=>'storeget', 'store_id'=>$store->id]);
+                        sleep(2);
+    
+                    }
+                    //
+                    if($item->is_leaf==true && $item->enable==true) {
+                        //ProductGetCatePropertyV2Request
+                       $this->categoryProperty($item->id, $store, $access_token);
+                    }
                 }
-                //
-                if($item->is_leaf==true && $item->enable==true) {
-                    //ProductGetCatePropertyV2Request
-                   $this->categoryProperty($item->id, $store, $access_token);
-                }
+            }else{
+                $this->categoryProperty($cid, $store, $access_token);
             }
+
         }
     }
 
@@ -82,6 +87,7 @@ class StoreGet extends Command
         $p->category_leaf_id = $cid;
         $req->setParam($p);
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+        var_dump($resp);
         if($resp->code=='10000') {
             foreach($resp->data->data as $key=>$item) {
                 $prop = \App\Models\ProdProp::where("prop_id",$item->property_id)->where("shop_id", $store->id)->first();

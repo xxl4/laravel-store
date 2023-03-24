@@ -54,23 +54,28 @@ class Get extends Command
         $p->cid = $cid;
         $req->setParam($p);
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
-        var_dump($resp);
+        var_dump($resp,$req);
         if($resp->code=='10000') {
             $items = $resp->data;
-            foreach($items as $key=>$item) {
-                $this->saveToDB($item, $store);
-                if($item->enable==true && $item->is_leaf==false) {
-                    echo $item->id." parent id \r\n";
-                    Artisan::call("category:online",['cid'=>$item->id, 'type'=>'get', 'store_id'=>$store->id]);
-                    sleep(2);
+            if(!empty($items)) {
+                foreach($items as $key=>$item) {
+                    $this->saveToDB($item, $store);
+                    if($item->enable==true && $item->is_leaf==false) {
+                        echo $item->id." parent id \r\n";
+                        Artisan::call("category:online",['cid'=>$item->id, 'type'=>'get', 'store_id'=>$store->id]);
+                        sleep(2);
+                    }
+                    //
+                    if($item->is_leaf==true && $item->enable==true) {
+                        //ProductGetCatePropertyV2Request
+                        echo $item->id." property get \r\n";
+                       $this->categoryProperty($item->id, $store, $access_token);
+                    }
                 }
-                //
-                if($item->is_leaf==true && $item->enable==true) {
-                    //ProductGetCatePropertyV2Request
-                    echo $item->id." property get \r\n";
-                   $this->categoryProperty($item->id, $store, $access_token);
-                }
+            }else{
+                $this->categoryProperty($cid, $store, $access_token);
             }
+
         }
     }
 

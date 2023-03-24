@@ -66,7 +66,7 @@ class AddProduct extends Command
         $storeConfig = Utils::GetShopConfig($store->id);
 
         //var_dump($storeConfig);
-
+        //@link https://op.jinritemai.com/docs/api-docs/14/249
         $req = new \ProductAddV2Request();
         $p = new \ProductAddV2Param();
         $config = new \DoudianOpConfig();
@@ -77,8 +77,11 @@ class AddProduct extends Command
         $p->outer_product_id = $this->prod_id;
         $p->product_type = 0;
         $p->category_leaf_id = $prod->category_id;
+        //$p->category_leaf_id = 23430;
         $p->name = $prod->prod_name;
         $p->recommend_remark = $prod->brief;
+
+        //$p->standard_brand_id = 596120136;
 
         
 
@@ -103,19 +106,30 @@ class AddProduct extends Command
         if(is_null($skus)) return false;
         //var_dump($skus);
         $specs = "";
-        $pic = "";
+        //$pic = "https://p3-aio.ecombdimg.com/obj/ecom-shop-material/wnOrEgF_m_54e2e208b7fadc0e84c632f9d8473253_sx_83716_www600-600|https://p3-aio.ecombdimg.com/obj/ecom-shop-material/wnOrEgF_m_54e2e208b7fadc0e84c632f9d8473253_sx_83716_www600-600";
+        $pic="";
+        $description = "https://p3-aio.ecombdimg.com/obj/ecom-shop-material/wnOrEgF_m_54e2e208b7fadc0e84c632f9d8473253_sx_83716_www600-600";
         $spec_prices = [];
         $i = 1;
         var_dump(count($skus));
+        $spec_arr = []; //针对系统的数据需要做下特殊处理
         foreach($skus as $key=>$sku) {
             $atts = $sku->properties;
-            $specs.=key($atts);
+            $speck_arr_key = key($atts);
+            //var_dump($atts);
+            //$specs.=key($atts)."|";
+            //$spec_arr[$speck_arr_key] = array();
+            //var_dump($spec_arr);
             $pic.= $sku->pic;
             if($i < count($skus)) {
                 $specs.="|";
                 $pic.="|";
             } 
-            $spec_prices[$key]['spec_detail_name1'] = key($atts);
+            //$specs.=$atts[key($atts)];
+            //var_dump($spec_arr);
+            $spec_arr[$speck_arr_key][] = $atts[$speck_arr_key];
+            //var_dump($spec_arr);
+            $spec_prices[$key]['spec_detail_name1'] = $atts[$speck_arr_key];
             $spec_prices[$key]['stock_num'] = (int)$sku->stocks;
             $spec_prices[$key]['price'] = (int)$sku->price*100;
             $spec_prices[$key]['out_sku_id'] = $sku->sku_id;
@@ -124,11 +138,14 @@ class AddProduct extends Command
             $spec_prices[$key]['supplier_id'] = "";
             $i++;
         }
-        var_dump($specs);
-        $p->specs =$specs;
+        //var_dump($spec_prices);exit;
+        $specs_info = $this->spec($spec_arr);
+        $p->specs =$specs_info['specs'];
+        //var_dump($spec_arr);exit;
         $p->spec_prices = json_encode($spec_prices);
         $p->pic = $pic;
-        $p->description = $description;
+        $p->description = $pic;
+        $p->spec_name = $specs_info['specs_name'];;
         //check attr info
         
         $prodAttr = \App\Models\ProdProperty::where("prod_id", $this->prod_id)->pluck("value","name");
@@ -146,9 +163,30 @@ class AddProduct extends Command
 
         $product_format_new = [];
         foreach($prodAttr as $kk => $attr) {
-            $product_format_new[$kk][] = array("value"=>0,'name'=>$attr,"diy_type"=>1);
+            //if($kk==3296) continue;
+            //if($kk==326) continue;
+            //if($kk==2000) continue;
+            //if($kk==855) continue;
+            $rules = $this->PropRule($kk);
+            //var_dump($rules);
+            if($rules->diy_type==0) {
+                if(empty($attr)) continue;
+                $value = 0;
+                if($rules->type=="select") {
+                    $attr = \App\Models\ProdPropValue::where("prop_id", $kk)->where("value_id", $attr)->value("prop_value");
+                    $value = (int) $kk;
+                } 
+                $product_format_new[$kk][] = array("value"=>$value,'name'=>$attr,"diy_type"=>$rules->diy_type);
+            }else{
+                //continue;
+                $prop_value = \App\Models\ProdPropValue::where("prop_id", $kk)->where("value_id", $attr)->value("prop_value");
+                //if(empty($prop_value)) continue;
+                //var_dump($prop_value);
+                $product_format_new[$kk][] = array("value"=>(int)$attr,'name'=>$prop_value,"diy_type"=>$rules->diy_type);
+            }
         }
-
+        $product_format_new['1687'][] = array("value"=>603534321,'name'=>"时间岛","diy_type"=>0);
+        var_dump($product_format_new);
         $p->product_format_new = json_encode($product_format_new);
 
         $req->setParam($p);
@@ -156,9 +194,44 @@ class AddProduct extends Command
         //exit;
 
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
-        var_dump($req,$resp);
+        var_dump($resp, $req);
         //exit;
         
+    }
+
+    // 获取分类的规则
+    private function PropRule($prop_id) {
+        $rules = \App\Models\ProdProp::where("prop_id", $prop_id)->select(["rule"])->first();
+        if(is_null($rules)) return false;
+        //var_dump($rules);
+        return json_decode($rules->rule);
+    }
+
+    private function spec($specs) {
+        $specs_str = "";
+        $specs_name_str = "";
+        $j = 1;
+        foreach($specs as $key=>$spec) {
+            $specs_str.=$key."|";
+            $specs_name_str.=$key;
+            $i = 1;
+            foreach($spec as $kk=>$val){
+                $specs_str.=$val;
+                if($i<count($spec)) {
+                    $specs_str.=",";
+                }
+                $i++;
+            }
+            if($j<count($specs)) {
+                $specs_name_str.="-";
+            }
+        }
+        $ret = [];
+        $ret['specs'] = $specs_str;
+        $ret['specs_name'] = $specs_name_str;
+
+        //var_dump($ret);
+        return $ret;
     }
 
     public function imglist($prod_id) {
