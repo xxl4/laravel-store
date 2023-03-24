@@ -309,8 +309,8 @@ final class Utils
             case "DD":
                 $resp = $client->execute($token);
                 if($resp->code!=10000) { 
-                    //todo 
-                    var_dump($resp);
+                    var_dump($resp,$client);
+                    self::sendMessage(1, 1, $resp->msg, $resp->sub_msg."--".$resp->log_id."--".$resp->sub_code);
                     return false;
                 }
             break;
