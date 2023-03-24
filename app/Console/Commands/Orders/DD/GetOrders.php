@@ -140,6 +140,8 @@ class GetOrders extends Command
         $order->status = $order_detail->order_status;
         //var_dump($order_detail);exit;
         $order->product_nums = 1;
+
+        
         
         //加密内容处理
         $items = [];
@@ -157,7 +159,7 @@ class GetOrders extends Command
         $items[] = $list;
 
         $decrypt = $this->batchDecrypt($order_detail->order_id, $access_token, $store, $items);
-        //var_dump($decrypt);
+        var_dump($decrypt);
         $user = \App\Models\User::where("user_mobile",$decrypt['encrypt_post_tel'])->first();
         if(is_null($user)) $user = new \App\Models\User();
         //$user->shop_id = $store->id;
@@ -178,6 +180,9 @@ class GetOrders extends Command
             if($sku_order->order_status !=2) {
                 continue;
             }
+
+            //var_dump($sku_order->code);exit;
+
             $order_item = \App\Models\OrderItem::where("shop_id", $store->id)->where("order_number",$sku_order->order_id)->where("prod_id", $sku_order->out_product_id)->where("sku_id", $sku_order->out_sku_id)->first();
             if(is_null($order_item)) $order_item = new \App\Models\OrderItem();
             $order_item->shop_id = $store->id;
@@ -235,15 +240,19 @@ class GetOrders extends Command
         $q->cipher_infos = $list;
         $req->setParam($q);
         //$resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+        //@link https://op.jinritemai.com/docs/api-docs/15/982
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         //var_dump($resp);
         if($resp->code==10000) {
             $data = $resp->data;
             $out = [];
-            $out['encrypt_post_tel'] = $data->decrypt_infos[1]->decrypt_text;
-            $out['encrypt_post_receiver'] = $data->decrypt_infos[2]->decrypt_text;
-            $out['encrypt_detail'] = $data->decrypt_infos[0]->decrypt_text;
-            Cache::put($redis_key, $out, 3600);
+            $out = [];
+            foreach($data->decrypt_infos as $key=>$item) {
+                if($item->data_type==3) $out['encrypt_post_tel'] = $item->decrypt_text;
+                if($item->data_type==2) $out['encrypt_post_receiver'] = $item->decrypt_text;
+                if($item->data_type==1) $out['encrypt_detail'] = $item->decrypt_text;
+            }
+            Cache::put($redis_key, $out, 36000);
             return $out;
         }
 
