@@ -22,4 +22,8 @@ class OrderLogisticsAddParam
 
 	public $address_id;
 
+	public $store_id;
+
+	public $after_sale_address_id;
+
 }

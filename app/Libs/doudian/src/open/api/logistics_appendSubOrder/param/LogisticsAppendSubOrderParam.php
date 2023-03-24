@@ -10,4 +10,6 @@ class LogisticsAppendSubOrderParam
 
 	public $pack_add_quantity;
 
+	public $is_return_full_sub_codes;
+
 }

@@ -6,4 +6,6 @@ class AddressCreateParam
 
 	public $address;
 
+	public $store_id;
+
 }

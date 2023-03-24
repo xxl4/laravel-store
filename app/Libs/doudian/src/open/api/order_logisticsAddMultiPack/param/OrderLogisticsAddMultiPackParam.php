@@ -18,4 +18,8 @@ class OrderLogisticsAddMultiPackParam
 
 	public $is_refund_reject;
 
+	public $store_id;
+
+	public $after_sale_address_id;
+
 }

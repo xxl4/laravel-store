@@ -24,4 +24,6 @@ class Address
 
 	public $fixed_phone;
 
+	public $remark;
+
 }

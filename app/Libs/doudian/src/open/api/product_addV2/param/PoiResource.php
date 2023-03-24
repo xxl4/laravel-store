@@ -26,4 +26,6 @@ class PoiResource
 
 	public $condition;
 
+	public $coupon_return_methods;
+
 }

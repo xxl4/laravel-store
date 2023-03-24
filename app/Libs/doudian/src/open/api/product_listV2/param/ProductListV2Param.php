@@ -14,12 +14,18 @@ class ProductListV2Param
 
 	public $end_time;
 
+	public $update_start_time;
+
+	public $update_end_time;
+
 	public $page;
 
 	public $size;
 
-	public $update_start_time;
+	public $store_id;
 
-	public $update_end_time;
+	public $name;
+
+	public $product_id;
 
 }

@@ -26,4 +26,8 @@ class OrderLogisticsAddSinglePackParam
 
 	public $order_serial_number;
 
+	public $store_id;
+
+	public $after_sale_address_id;
+
 }

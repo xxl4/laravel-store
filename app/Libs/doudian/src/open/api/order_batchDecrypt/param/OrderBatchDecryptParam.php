@@ -6,4 +6,8 @@ class OrderBatchDecryptParam
 
 	public $cipher_infos;
 
+	public $account_id;
+
+	public $account_type;
+
 }

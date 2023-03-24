@@ -16,6 +16,7 @@ class DoudianOpClient
         $appSecret = $config->appSecret;
         $timestamp = time();
         $sign = SignUtil::sign($appKey, $appSecret, $method, $timestamp, $paramJson);
+//        print $sign . "\n";
         $openHost = $config->openRequestUrl;
         $accessTokenStr = "";
         if($accessToken != null) {

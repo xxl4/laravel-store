@@ -24,4 +24,6 @@ class LogisticsUpdateOrderParam
 
 	public $weight;
 
+	public $warehouse;
+
 }

@@ -10,4 +10,8 @@ class OutWarehouseList
 
 	public $intro;
 
+	public $address_detail;
+
+	public $warehouse_location;
+
 }

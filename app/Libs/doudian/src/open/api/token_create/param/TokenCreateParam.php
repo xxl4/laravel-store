@@ -12,4 +12,8 @@ class TokenCreateParam
 
 	public $shop_id;
 
+	public $auth_id;
+
+	public $auth_subject_type;
+
 }

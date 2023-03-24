@@ -10,6 +10,8 @@ class MaterialSearchMaterialParam
 
 	public $material_type;
 
+	public $operate_status;
+
 	public $audit_status;
 
 	public $create_time_start;
@@ -18,12 +20,12 @@ class MaterialSearchMaterialParam
 
 	public $folder_id;
 
+	public $material_id_list;
+
 	public $page_num;
 
 	public $page_size;
 
 	public $order_type;
-
-	public $operate_status;
 
 }

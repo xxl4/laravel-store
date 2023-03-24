@@ -6,7 +6,7 @@ class SignUtil
     {
         $paramPattern = 'app_key' . $appKey . 'method' . $method . 'param_json' . $paramJson . 'timestamp' . $timestamp . 'v2';
         $signPattern = $appSecret . $paramPattern . $appSecret;
-        //print('sign_pattern:' . $signPattern . "\n");
+//        print('sign_pattern:' . $signPattern . "\n");
         return hash_hmac("sha256", $signPattern, $appSecret);
     }
 

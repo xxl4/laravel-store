@@ -8,10 +8,14 @@ class OrderLogisticsEditParam
 
 	public $logistics_id;
 
-	public $company;
-
 	public $company_code;
 
 	public $logistics_code;
+
+	public $company;
+
+	public $store_id;
+
+	public $after_sale_address_id;
 
 }

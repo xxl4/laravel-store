@@ -2,9 +2,13 @@
 
 class AccessToken
 {
-    private $errNo;
+    private $code;
 
-    private $message;
+    private $msg;
+
+    private $sub_code;
+
+    private $sub_msg;
 
     private $logId;
 
@@ -12,11 +16,17 @@ class AccessToken
 
     public static function wrap($resp) {
         $accessToken = new AccessToken();
-        if(property_exists($resp, "err_no")) {
-            $accessToken->setErrNo($resp->err_no);
+        if(property_exists($resp, "code")) {
+            $accessToken->setCode($resp->code);
         }
-        if(property_exists($resp, "message")){
-            $accessToken->setMessage($resp->message);
+        if(property_exists($resp, "msg")){
+            $accessToken->setMsg($resp->msg);
+        }
+        if(property_exists($resp, "sub_code")){
+            $accessToken->setSubCode($resp->sub_code);
+        }
+        if(property_exists($resp, "sub_msg")){
+            $accessToken->setSubMsg($resp->sub_msg);
         }
         if(property_exists($resp, "log_id")) {
             $accessToken->setLogId($resp->log_id);
@@ -29,7 +39,7 @@ class AccessToken
 
     public function isSuccess()
     {
-        return $this->errNo == 0;
+        return $this->code == 10000;
     }
 
     public function getAccessToken()
@@ -76,24 +86,44 @@ class AccessToken
     }
 
 
-    public function getErrNo()
+    public function getCode()
     {
-        return $this->errNo;
+        return $this->code;
     }
 
-    public function setErrNo($errNo)
+    public function setCode($errNo)
     {
-        $this->errNo = $errNo;
+        $this->code = $errNo;
     }
 
-    public function getMessage()
+    public function getMsg()
     {
-        return $this->message;
+        return $this->msg;
     }
 
-    public function setMessage($message)
+    public function setMsg($message)
     {
-        $this->message = $message;
+        $this->msg = $message;
+    }
+
+    public function setSubCode($sub_code)
+    {
+        $this->sub_code = $sub_code;
+    }
+
+    public function getSubCode()
+    {
+        return $this->sub_code;
+    }
+
+    public function setSubMsg($sub_msg)
+    {
+        $this->sub_msg = $sub_msg;
+    }
+
+    public function getSubMsg()
+    {
+        return $this->sub_msg;
     }
 
     public function getLogId()

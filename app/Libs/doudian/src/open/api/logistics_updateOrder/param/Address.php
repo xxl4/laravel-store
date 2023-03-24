@@ -16,4 +16,12 @@ class Address
 
 	public $detail_address;
 
+	public $province_code;
+
+	public $city_code;
+
+	public $district_code;
+
+	public $street_code;
+
 }

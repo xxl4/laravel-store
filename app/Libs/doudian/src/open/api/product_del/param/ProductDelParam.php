@@ -8,4 +8,6 @@ class ProductDelParam
 
 	public $out_product_id;
 
+	public $delete_forever;
+
 }

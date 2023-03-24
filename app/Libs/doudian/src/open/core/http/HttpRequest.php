@@ -7,4 +7,6 @@ class HttpRequest
 
     public $connectTimeout;
     public $readTimeout;
+
+    public $header;
 }

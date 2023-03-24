@@ -10,4 +10,8 @@ class MaterialUploadImageSyncParam
 
 	public $material_name;
 
+	public $file_uri;
+
+	public $need_distinct;
+
 }

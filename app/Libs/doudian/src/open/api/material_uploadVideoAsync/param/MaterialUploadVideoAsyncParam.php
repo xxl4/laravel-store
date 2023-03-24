@@ -10,4 +10,6 @@ class MaterialUploadVideoAsyncParam
 
 	public $name;
 
+	public $file_uri;
+
 }

@@ -52,4 +52,8 @@ class OrderInfos
 
 	public $special_delivery_type_value;
 
+	public $package_weight;
+
+	public $combine_orders;
+
 }

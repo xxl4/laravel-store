@@ -6,4 +6,6 @@ class AddressUpdateParam
 
 	public $address;
 
+	public $store_id;
+
 }

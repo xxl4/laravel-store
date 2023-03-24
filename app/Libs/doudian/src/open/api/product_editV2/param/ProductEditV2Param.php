@@ -96,4 +96,58 @@ class ProductEditV2Param
 
 	public $car_vin_code;
 
+	public $presell_config_level;
+
+	public $need_recharge_mode;
+
+	public $account_template_id;
+
+	public $presell_delivery_type;
+
+	public $white_back_ground_pic_url;
+
+	public $long_pic_url;
+
+	public $after_sale_service;
+
+	public $sell_channel;
+
+	public $start_sale_type;
+
+	public $delay_rule;
+
+	public $material_video_id;
+
+	public $pickup_method;
+
+	public $size_info_template_id;
+
+	public $substitute_goods_url;
+
+	public $sale_channel_type;
+
+	public $name_prefix;
+
+	public $store_id;
+
+	public $main_product_id;
+
+	public $sale_limit_id;
+
+	public $reference_price;
+
+	public $reference_price_certificate;
+
+	public $main_image_three_to_four;
+
+	public $unit_price_info;
+
+	public $quality_inspection_info;
+
+	public $is_c2b_switch_on;
+
+	public $micro_app_id;
+
+	public $is_auto_charge;
+
 }

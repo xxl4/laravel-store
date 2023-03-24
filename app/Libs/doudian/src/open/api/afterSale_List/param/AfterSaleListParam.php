@@ -54,4 +54,6 @@ class AfterSaleListParam
 
 	public $agree_refuse_sign;
 
+	public $aftersale_sub_type;
+
 }

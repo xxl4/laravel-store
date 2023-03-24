@@ -10,4 +10,6 @@ class ShippedOrderInfo
 
 	public $shipped_item_ids;
 
+	public $bundle_list;
+
 }

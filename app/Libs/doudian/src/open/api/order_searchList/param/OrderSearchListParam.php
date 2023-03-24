@@ -38,6 +38,8 @@ class OrderSearchListParam
 
 	public $order_asc;
 
+	public $fulfil_status;
+
 	public $is_searchable;
 
 }

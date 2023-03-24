@@ -14,4 +14,8 @@ class OrderLogisticsEditByPackParam
 
 	public $logistics_id;
 
+	public $store_id;
+
+	public $after_sale_address_id;
+
 }
