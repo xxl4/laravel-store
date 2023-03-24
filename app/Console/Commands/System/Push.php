@@ -38,6 +38,7 @@ class Push extends Command
     public function handle()
     {
         $this->push("DD", 3);
+        $this->skuslist();
         //$this->push("JD", 4);
         //$this->push("TM", 1);
         //$this->push("TB", 2);
@@ -81,5 +82,30 @@ class Push extends Command
         //修改价格
         //发货
         
+    }
+
+    public function skuslist() {
+        $shop_type = "TM";
+        $shop_id = 1;
+        // 同步商品
+        $items = \App\Models\ProdOuter::where("shop_id", $shop_id)->select("prod_id")->limit(10000)->get();
+        foreach($items as $key=>$item) {
+            $data = [];
+            $data['act_type'] = "skulist";
+            $data['prod_id'] = $item->prod_id;
+            $data['shop_id'] = $shop_id;
+            \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
+        }
+        //同步订单状态
+        $items = \App\Models\Order::where("shop_id", $shop_id)->select("prod_id")->limit(10000)->get();
+        foreach($items as $key=>$item) {
+            $data = [];
+            $data['act_type'] = "skulist";
+            $data['prod_id'] = $item->prod_id;
+            $data['shop_id'] = $shop_id;
+            \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
+        }
+
+
     }
 }

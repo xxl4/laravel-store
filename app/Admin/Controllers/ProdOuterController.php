@@ -7,6 +7,7 @@ use Nicelizhi\Admin\Controllers\AdminController;
 use Nicelizhi\Admin\Form;
 use Nicelizhi\Admin\Grid;
 use Nicelizhi\Admin\Show;
+use Nicelizhi\Admin\Widgets\Table;
 use App\Admin\Actions\ProdOuter\BatchDown;
 use App\Admin\Actions\ProdOuter\BatchOnline;
 use App\Admin\Actions\ProdOuter\BatchDownAndDelete;
@@ -34,10 +35,17 @@ class ProdOuterController extends AdminController
 
         $grid->column('id', __('Id'))->sortable();
         $grid->column('prod_id', __('Prod id'))->filter();
-        $grid->column('outer_id', __('Outer id'))->filter();
-        $grid->column('content', __('Content'))->display(function($t){
-            return json_decode($t);
-        })->width(500);
+        $grid->column('outer_id', __('Outer id'))->filter()->expand(function ($model) {
+
+            $outers = $model->skus()->take(10)->orderBy("id","desc")->get()->map(function ($outer) {
+                return $outer->only(['outer_prod_id','sku_id','outer_sku_id','status','quantity','created_at','updated_at']);
+            });
+            return new Table(['外部ID',"SKUID","外部SKUID","状态","库存",'添加时间','更新时间'], $outers->toArray());
+
+        })->sortable()->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id));
+        // $grid->column('content', __('Content'))->display(function($t){
+        //     return json_decode($t);
+        // })->width(500);
         $grid->column('shop_type', __('Shop type'))->filter();
         //$grid->column('shop_id', __('Shop id'))->filter();
         $grid->column('created_at', __('Created at'))->sortable();

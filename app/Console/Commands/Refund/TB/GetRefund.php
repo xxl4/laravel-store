@@ -150,6 +150,7 @@ class GetRefund extends Command
             $localOrder = new \App\Models\Order();
             $localOrder->order_number = $item->tid;
             $localOrder->user_id = $user->user_id;
+            $localOrder->shop_id = $store->id;
             $localOrder->save();
         }
 

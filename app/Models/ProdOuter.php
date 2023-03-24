@@ -12,4 +12,8 @@ class ProdOuter extends Model
     protected $casts = [
         'content' => 'json',
     ];
+
+    public function skus() {
+        return $this->hasMany(ProdSkuOuter::class, "outer_prod_id", "outer_id");
+    }
 }
