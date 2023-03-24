@@ -100,6 +100,7 @@ class AddProduct extends Command
         $p->limit_per_buyer = $storeConfig['limit_per_buyer'];
         $p->minimum_per_order = $storeConfig['minimum_per_order'];
         $p->commit = true;
+        $p->standard_brand_id = 596120136;
 
         //get sku
         $skus = \App\Models\Sku::where("prod_id", $prod->prod_id)->get();
@@ -186,7 +187,7 @@ class AddProduct extends Command
             }
         }
         $product_format_new['1687'][] = array("value"=>603534321,'name'=>"时间岛","diy_type"=>0);
-        //var_dump($product_format_new);
+        var_dump($product_format_new);
         $p->product_format_new = json_encode($product_format_new);
 
         $req->setParam($p);

@@ -310,13 +310,16 @@ class ProductsController extends AdminController
             if($rule->type=="select") {
                 $categoryMoreProp[$key]['prop_value'] = \App\Models\ProdPropValue::where("prop_id",$key)->pluck("prop_value","value_id");
             }
+            if($rule->type=="multi_select") {
+                $categoryMoreProp[$key]['prop_value'] = \App\Models\ProdPropValue::where("prop_id",$key)->pluck("prop_value","value_id");
+            }
             
 
         }
 
         $ProdProperty = \App\Models\ProdProperty::where("prod_id", $id)->pluck("value","name")->toArray();
 
-        //var_dump($ProdProperty);
+        //var_dump($categoryMoreProp,$ProdProperty);exit;
 
         return $content->title("商品编辑".$prod->prod_name)->view('admin.products.prop', compact('categoryMoreProp',"id","ProdProperty"));
 
