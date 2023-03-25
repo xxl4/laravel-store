@@ -10,6 +10,9 @@ use Nicelizhi\Admin\Show;
 use App\Enums\OrganizationEnableEnum;
 use App\Admin\Forms\OrganizationSecret;
 use Nicelizhi\Admin\Layout\Content;
+use Nicelizhi\Admin\Facades\Admin;
+use Nicelizhi\Admin\Auth\Database\Administrator;
+use App\Admin\Actions\Org\OrgMaster;
 
 class OrganizationController extends AdminController
 {
@@ -36,6 +39,10 @@ class OrganizationController extends AdminController
         $grid->column('code', __('Code'))->filter();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+
+        $grid->actions(function ($actions) {
+            $actions->add(new OrgMaster());
+        });
 
         return $grid;
     }
@@ -70,7 +77,11 @@ class OrganizationController extends AdminController
     {
         $form = new Form(new Organization());
 
-        $form->number('user_id', __('User id'));
+        //$form->number('user_id', __('User id'));
+        $form->select('user_id', __('UserName'))->options(function($id) {
+            $user = Administrator::find($id);
+            if($user) return [$user->id => $user->username];
+        })->ajax('/admin/organization-users/users');
         $form->switch('enable', __('Enable'));
         $form->text('name', __('Name'));
         $form->text('code', __('Code'));
