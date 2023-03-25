@@ -38,7 +38,9 @@ class ProdPropController extends AdminController
             return new Table(['ID','属性'], $skus->toArray());
 
         });
-        $grid->column('rule', __('Rule'));
+        $grid->column('rule', __('Rule'))->display(function($t){
+            return json_decode($t);
+        });
         //$grid->column('shop_id', __('Shop id'))->hide();
 
         $grid->filter(function($filter){
