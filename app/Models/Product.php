@@ -32,11 +32,15 @@ class Product extends Model
     }
     */
     public function imgs_attach() {
-        return $this->hasMany(AttachFile::class, "file_join_id", "prod_id")->whereFileJoinType(\App\Enums\FileTypeEnum::PROD_IMGS_LIST);
+        return $this->hasMany(AttachFile::class, "file_join_id", "prod_id");
     }
 
     public function pic_attach() {
-        return $this->hasOne(AttachFile::class, "file_join_id", "prod_id")->whereFileJoinType(\App\Enums\FileTypeEnum::PROD_MAIN_PIC);
+        return $this->hasOne(ProdAttachFile::class, "file_join_id", "prod_id");
+    }
+
+    public function video_attach() {
+        return $this->hasMany(ProdVideoAttachFile::class, "file_join_id", "prod_id");
     }
 
 

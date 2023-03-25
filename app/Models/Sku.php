@@ -23,4 +23,8 @@ class Sku extends Model
     public function prod() {
         return $this->hasOne(Product::class, "prod_id", "prod_id");
     }
+
+    public function pic_attach() {
+        return $this->hasOne(ProdSkuAttachFile::class, "file_join_id", "sku_id");
+    }
 }
