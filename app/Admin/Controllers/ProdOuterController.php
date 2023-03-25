@@ -42,10 +42,10 @@ class ProdOuterController extends AdminController
             });
             return new Table(['外部ID',"SKUID","外部SKUID","状态","库存",'添加时间','更新时间'], $outers->toArray());
 
-        })->sortable()->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id));
-        // $grid->column('content', __('Content'))->display(function($t){
-        //     return json_decode($t);
-        // })->width(500);
+        })->sortable();
+         $grid->column('content', __('Content'))->display(function($t){
+             return json_decode($t);
+         })->width(500);
         $grid->column('shop_type', __('Shop type'))->filter();
         //$grid->column('shop_id', __('Shop id'))->filter();
         $grid->column('created_at', __('Created at'))->sortable();

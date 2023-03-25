@@ -71,13 +71,22 @@ class SkuList extends Command
         $req->setParam($p);
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp);
-        if($resp->code==10000) {
-            //$product->outer_id = $item->product_id;
-            //$product->prod_id = $item->out_product_id;
-            //$product->shop_id = $store->id;
-            //$product->shop_type = $store->shop_type;
-            //$product->content = json_encode($item);
-            //$product->save();
+        foreach($resp->data as $key=>$sku) {
+            //var_dump($sku);exit;
+            $sku_mapping = \App\Models\ProdSkuOuter::where("outer_prod_id", $sku->product_id)->where("outer_sku_id", $sku->id)->first();
+            if(is_null($sku_mapping)) $sku_mapping = new \App\Models\ProdSkuOuter();
+
+            $status = 1;
+
+            $sku_mapping->outer_prod_id = $sku->product_id;
+            $sku_mapping->outer_sku_id = $sku->id;
+            $sku_mapping->sku_id = $sku->out_sku_id;
+            $sku_mapping->quantity = $sku->stock_num;
+            $sku_mapping->properties_name = json_encode($sku->sell_properties);
+            //if($sku->status=='delete') $status = 0;
+            $sku_mapping->status = $status;
+
+            $sku_mapping->save();
         }
     }
 }

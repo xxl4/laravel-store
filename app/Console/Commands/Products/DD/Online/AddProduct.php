@@ -198,7 +198,7 @@ class AddProduct extends Command
             }
         }
         $product_format_new['1687'][] = array("value"=>603534321,'name'=>"时间岛","diy_type"=>0);
-        var_dump($product_format_new);
+        //var_dump($product_format_new);
         $p->product_format_new = json_encode($product_format_new);
 
         $req->setParam($p);
@@ -206,6 +206,9 @@ class AddProduct extends Command
         //exit;
 
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+        if($resp->code=='10000') {
+
+        }
         //var_dump($resp, $req);
         //exit;
         
