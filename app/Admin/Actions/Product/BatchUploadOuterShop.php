@@ -49,7 +49,7 @@ class BatchUploadOuterShop extends BatchAction
 
     public function form()
     {
-        $stores = \App\Models\OrganizationStore::where("organization_id", Admin::user()->org_id)->pluck("name","id");
+        $stores = \App\Libs\Utils::getOrgStores(Admin::user()->org_id);
 
         $this->select('store', '店铺')->options($stores)->rules("required");
     }
