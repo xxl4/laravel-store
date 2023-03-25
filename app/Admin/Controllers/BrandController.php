@@ -50,6 +50,8 @@ class BrandController extends AdminController
         $grid->column('updated_at', __('Updated at'));
         //$grid->column('first_char', __('First char'));
 
+        $grid->model()->where("org_id", Admin::user()->org_id);
+
         $grid->model()->orderBy("brand_id", "desc");
 
         $grid->filter(function($filter){
