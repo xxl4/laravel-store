@@ -100,7 +100,7 @@ final class Utils
      */
     static function GetStoreConfig($org_id, $shop_id, $code, $is_update=false) {
         $key = \App\Enums\CachePrefixEnum::CONFIG_SHOP_CODE.$org_id."_".$shop_id."_".$code;
-        if($is_update) Cache::delete($key);
+        if($is_update) return Cache::delete($key);
         if(Cache::has($key)) {
             return Cache::get($key);
         }else{

@@ -50,8 +50,11 @@ class AddPic extends Command
 
         //$this->folder_id = "70522347406649264791409";
 
-        $picurl = "
-        https://sdimage.oss-cn-shanghai.aliyuncs.com/20230309140817.png";
+        //获取到店铺上新的配置数据内容
+        $storeConfig = \App\Libs\Utils::GetShopConfig($store->id);
+
+        //$picurl = "https://sdimage.oss-cn-shanghai.aliyuncs.com/20230309140817.png";
+        $photo_max_height = $storeConfig['photo_max_height'];
         //
         //获取对应商品的内容，完成商品的数据更新
         $access_token = \App\Libs\Utils::GetDoudianStoreToken($store->id);
@@ -70,7 +73,7 @@ class AddPic extends Command
         if(!empty($prod->pic)) {
             //判断是否有http开头的加对于的地址内容
             $url = $prod->pic;
-            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$prod->pic;
+            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$prod->pic."?x-oss-process=image/resize,m_pad,h_".$photo_max_height.",w_".$photo_max_height.",color_FFffff";
             $items[] = [
                 'url' => $url,
                 'request_id'=> $this->prod_id,
@@ -82,8 +85,9 @@ class AddPic extends Command
         //上传SKU图片
         $skus = \App\Models\Sku::where("prod_id",$this->prod_id)->select(["pic","sku_id"])->get();
         foreach($skus as $key=>$sku) {
+            if(empty($sku->pic)) continue;
             $url = $sku->pic;
-            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$sku->pic;
+            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$sku->pic."?x-oss-process=image/resize,m_pad,h_".$photo_max_height.",w_".$photo_max_height.",color_FFffff";
             $items[] = [
                 'url' => $url,
                 'request_id'=> $this->prod_id."_".$sku->sku_id,
@@ -96,8 +100,9 @@ class AddPic extends Command
         //上传相册图片
         $imgs = \App\Models\AttachFile::where("file_join_id", $this->prod_id)->select(["file_id","file_path"])->get();
         foreach($imgs as $kk => $img) {
+            if(empty($img->file_path)) continue;
             $url = $img->file_path;
-            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$img->file_path;
+            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$img->file_path."?x-oss-process=image/resize,m_pad,h_".$photo_max_height.",w_".$photo_max_height.",color_FFffff";
             $items[] = [
                 'url' => $url,
                 'request_id'=> $this->prod_id."_".$img->file_id,
@@ -106,7 +111,7 @@ class AddPic extends Command
                 'name'  => $this->prod_id.'_'.$img->file_id."_gallery"
             ];
         }
-        var_dump($items);
+        //var_dump($items);
         $this->batchUploadImageSync($items, $access_token, $store);
 
         
@@ -127,6 +132,21 @@ class AddPic extends Command
         $p->need_distinct = true; // 唯一
         $req->setParam($p);
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
-        var_dump($resp);
+        foreach($resp->data->success_map as $key=>$item) {
+            $pic = \App\Models\AttachFileMapping::where("file_id", $item->Name)->first();
+            if(is_null($pic)) $pic = new \App\Models\AttachFileMapping();
+            $pic->status = $item->AuditStatus;
+            $pic->file_id = $item->Name;
+            if(empty($item->ByteUrl)) {
+                $pic->url = $item->MaterialId;
+            }else{
+                $pic->url = $item->ByteUrl;
+            }
+
+            $pic->file_type = 1;
+            
+            $pic->shop_id = $store->id;
+            $pic->save();
+        }
     }
 }
