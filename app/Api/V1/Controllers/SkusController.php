@@ -51,7 +51,7 @@ class SkusController extends Controller {
         //var_dump($sysCate);
         foreach($props as $key=>$prop) {
             if(!isset($sysCate[$key][$prop])) {
-                return $this->response->error("属性错误，请调整".$key, 500);
+                return $this->response->error("属性错误，请调整".$key, 500); 
             }
         }
 
