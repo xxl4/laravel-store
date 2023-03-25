@@ -100,7 +100,8 @@ class AddProduct extends Command
         $p->limit_per_buyer = $storeConfig['limit_per_buyer'];
         $p->minimum_per_order = $storeConfig['minimum_per_order'];
         $p->commit = true;
-        $p->standard_brand_id = 596120136;
+        //@link https://op.jinritemai.com/docs/question-docs/92/2459
+        $p->standard_brand_id = $storeConfig['brand_default_id'];
 
         //get sku
         $skus = \App\Models\Sku::where("prod_id", $prod->prod_id)->get();

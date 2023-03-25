@@ -32,7 +32,7 @@ class ConfigController extends AdminController
         //$grid->column('shop_id', __('Shop id'))->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id));
         //$grid->column('user_id', __('User id'))->filter();
         $grid->column('type', __('Type'))->filter(\App\Enums\ShopConfigTypeEnum::getInstances());
-        $grid->column('code', __('Code'))->filter();
+        $grid->column('code', __('Code'))->copyable()->filter();
         $grid->column('value', __('Value'))->limit(100);
         $grid->column('desc', __('Desc'))->display(function($t){
             return __("config_desc_".$this->code);
