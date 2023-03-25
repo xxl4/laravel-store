@@ -57,11 +57,7 @@ class Get extends Command
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp, $req);
         if($resp->code=='10000') {
-            if (!property_exists($resp, 'brand_list')) {
-                //todo 
-                var_dump($resp);
-                return false;
-            }
+            
             foreach($resp->data->brand_list as $key=>$item) {
                 $brand = \App\Models\Brand::where("shop_id", $store->id)->where("outer_id", $item->brand_id)->first();
                 if(is_null($brand)) $brand = new \App\Models\Brand();
