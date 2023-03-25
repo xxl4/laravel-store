@@ -83,12 +83,10 @@ class AddProduct extends Command
 
         //$p->standard_brand_id = 596120136;
 
-        
-
         $p->pay_type = $storeConfig['pay_type']; // 从配置中心获取
         $p->reduce_type = $storeConfig['reduce_type']; 
         //$p->assoc_ids = ""; //todo
-        $p->freight_id = 13143768; // 调用默认的快递配送方式
+        $p->freight_id = $storeConfig['freight_id']; // 调用默认的快递配送方式
         $p->weight = $prod->weight;
         $p->weight_unit = $storeConfig['weight_unit'];
         $p->delivery_delay_day = $storeConfig['delivery_delay_day'];
@@ -128,19 +126,8 @@ class AddProduct extends Command
         foreach($skus as $key=>$sku) {
             $atts = $sku->properties;
             $speck_arr_key = key($atts);
-            //var_dump($atts);
-            //$specs.=key($atts)."|";
-            //$spec_arr[$speck_arr_key] = array();
-            //var_dump($spec_arr);
             $pic.= $sku->pic;
-            if($i < count($skus)) {
-                $specs.="|";
-                //$pic.="|";
-            } 
-            //$specs.=$atts[key($atts)];
-            //var_dump($spec_arr);
             $spec_arr[$speck_arr_key][] = $atts[$speck_arr_key];
-            //var_dump($spec_arr);
             $spec_prices[$key]['spec_detail_name1'] = $atts[$speck_arr_key];
             $spec_prices[$key]['stock_num'] = (int)$sku->stocks;
             $spec_prices[$key]['price'] = (int)$sku->price*100;
@@ -175,10 +162,6 @@ class AddProduct extends Command
 
         $product_format_new = [];
         foreach($prodAttr as $kk => $attr) {
-            //if($kk==3296) continue;
-            //if($kk==326) continue;
-            //if($kk==2000) continue;
-            //if($kk==855) continue;
             $rules = $this->PropRule($kk);
             //var_dump($rules);
             if($rules->diy_type==0) {
@@ -192,8 +175,6 @@ class AddProduct extends Command
             }else{
                 //continue;
                 $prop_value = \App\Models\ProdPropValue::where("prop_id", $kk)->where("value_id", $attr)->value("prop_value");
-                //if(empty($prop_value)) continue;
-                //var_dump($prop_value);
                 $product_format_new[$kk][] = array("value"=>(int)$attr,'name'=>$prop_value,"diy_type"=>$rules->diy_type);
             }
         }
