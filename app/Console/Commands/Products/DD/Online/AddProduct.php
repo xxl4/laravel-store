@@ -202,16 +202,16 @@ class AddProduct extends Command
         $p->product_format_new = json_encode($product_format_new);
 
         $req->setParam($p);
-        //var_dump($req);
-        //exit;
 
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         if($resp->code=='10000') {
-
-        }
-        //var_dump($resp, $req);
-        //exit;
-        
+            //todo
+            $prodouter = \App\Models\ProdOuter::where("prod_id",$this->prod_id)->first();
+            if(!is_null($prodouter)) return false;//todo
+            $prodouter->outer_id = $resp->data->product_id;
+            $prodouter->content = json_encode($resp->data);
+            $prodouter->save();
+        }        
     }
 
     // 获取分类的规则
