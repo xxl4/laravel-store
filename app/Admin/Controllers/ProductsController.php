@@ -236,7 +236,7 @@ class ProductsController extends AdminController
         })->tab('商品图片', function($form){
 
             $form->image('pic', __('Pic'))->uniqueName();
-            //$form->image('imgs', __('Imgs'))->uniqueName();
+            $form->multipleFile('video_attach',"视频")->pathColumn('file_path')->sortable()->uniqueName()->removable();
             $form->multipleFile('imgs_attach', '图片')->pathColumn('file_path')->sortable()->uniqueName()->removable();
 
         })->tab('商品详情', function($form) {

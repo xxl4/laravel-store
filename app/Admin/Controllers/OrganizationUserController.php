@@ -74,6 +74,9 @@ class OrganizationUserController extends AdminController
     {
         $form = new Form(new OrganizationUser());
 
+        //$form->text("username","姓名"); todo
+        //$form->text("mobile","联系电话");
+
         $form->select('user_id', __('UserName'))->options(function($id) {
             $user = Administrator::find($id);
             if($user) return [$user->id => $user->username];
@@ -88,13 +91,9 @@ class OrganizationUserController extends AdminController
             $org_id = $orgMember->organization_id;
         }
         
-        
         $form->hidden("organization_id")->default($org_id);
-
-
         // 数据保存后的权限调整
         $form->saved(function (Form $form) {
-
             // 清理前面的权限
             DB::table("admin_role_users")->where('user_id', $form->model()->user_id)->delete();
             $created_at = date("Y-m-d H:i:s");
@@ -102,11 +101,8 @@ class OrganizationUserController extends AdminController
                 "user_id" => $form->model()->user_id,
                 "role_id" => $form->model()->role_id
             ]);
-
             // 更新管理员表机构数据内容
             DB::table("admin_user")->where("id", $form->model()->user_id)->update(['org_id'=>$form->model()->organization_id]);
-  
-        
         });
 
         return $form;
