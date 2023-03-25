@@ -239,6 +239,11 @@
     "config_desc_notice_enable":"通知是否开启 1 开启 0 关闭",
     "config_desc_notice_type":"通知方式 dingding 钉钉 wecom 企业微信 feishu 飞书",
     "config_desc_notice_url":"通知Web URL",
+    "config_desc_quality_key":"资质key （资质，可通过/product/qualificationConfig获取）",
+    "config_desc_quality_name":"资质名称",
+    "config_desc_quality_attachments_media_type":"品牌内容类型 1-图片，2-pdf ",
+    "config_desc_quality_attachments_url":"商品上新过程中的商品授权内容，一般是图片地址",
+    "config_desc_brand_default_id":"抖店默认品牌数据，针对商品上传过程中对于未有强制品牌认证需要的场景使用",
 
 
     "Goods number": "商品数量",
