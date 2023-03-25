@@ -13,7 +13,11 @@ class AddPic extends Command
      */
     protected $signature = 'products:DD:addpic:online {store} {prod_id} {data?} {file?} {url?}';
 
-    private $folder_id = null;
+    private $folder_id = 0;
+
+    private $prod_id = 0;
+
+    private $imgUrl="https://sdimage.oss-cn-shanghai.aliyuncs.com/";
 
     /**
      * The console command description.
@@ -40,11 +44,11 @@ class AddPic extends Command
     public function handle()
     {
         $store = $this->argument('store');
-        $prod_id = $this->argument("prod_id");
+        $this->prod_id = $this->argument("prod_id");
         $file = $this->argument("file");
         $picurl = $this->argument("url");
 
-        $this->folder_id = "70522347406649264791409";
+        //$this->folder_id = "70522347406649264791409";
 
         $picurl = "
         https://sdimage.oss-cn-shanghai.aliyuncs.com/20230309140817.png";
@@ -53,20 +57,75 @@ class AddPic extends Command
         $access_token = \App\Libs\Utils::GetDoudianStoreToken($store->id);
         $access_token = unserialize($access_token);
 
-        $req = new \MaterialUploadImageSyncRequest();
+        //检查对应的商品是否在线和存在
+        $prod = \App\Models\Product::where("prod_id", $this->prod_id)->first();
+        if(is_null($prod)) {
+            $this->info("对应的的prod id 不存在");
+            echo "对应的的prod id ".$this->prod_id." 不存在\r\n";
+            return false;
+        }
+
+
+        //上传主图
+        if(!empty($prod->pic)) {
+            //判断是否有http开头的加对于的地址内容
+            $url = $prod->pic;
+            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$prod->pic;
+            $items[] = [
+                'url' => $url,
+                'request_id'=> $this->prod_id,
+                'folder_id' => $this->folder_id,
+                'material_type' => 'photo',
+                'name'  => $this->prod_id."_main"
+            ];
+        }
+        //上传SKU图片
+        $skus = \App\Models\Sku::where("prod_id",$this->prod_id)->select(["pic","sku_id"])->get();
+        foreach($skus as $key=>$sku) {
+            $url = $sku->pic;
+            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$sku->pic;
+            $items[] = [
+                'url' => $url,
+                'request_id'=> $this->prod_id."_".$sku->sku_id,
+                'folder_id' => $this->folder_id,
+                'material_type' => 'photo',
+                'name'  => $this->prod_id.'_'.$sku->sku_id."_main"
+            ];
+        }
+        
+        //上传相册图片
+        $imgs = \App\Models\AttachFile::where("file_join_id", $this->prod_id)->select(["file_id","file_path"])->get();
+        foreach($imgs as $kk => $img) {
+            $url = $img->file_path;
+            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$img->file_path;
+            $items[] = [
+                'url' => $url,
+                'request_id'=> $this->prod_id."_".$img->file_id,
+                'folder_id' => $this->folder_id,
+                'material_type' => 'photo',
+                'name'  => $this->prod_id.'_'.$img->file_id."_gallery"
+            ];
+        }
+        var_dump($items);
+        $this->batchUploadImageSync($items, $access_token, $store);
+
+        
+    }
+
+    //@link https://op.jinritemai.com/docs/api-docs/69/1616
+    public function batchUploadImageSync($materials, $access_token, $store) {
+        //MaterialBatchUploadImageSyncRequest
+        $req = new \MaterialBatchUploadImageSyncRequest();
         $config = new \DoudianOpConfig();
         $config->appKey = $store->key;
         $config->appSecret = $store->secret;
         $req->setConfig($config);
-        $p = new \MaterialUploadImageSyncParam();
-        $p->folder_id = $this->folder_id;
+        $p = new \MaterialBatchUploadImageSyncParam();
+        //$p->folder_id = $this->folder_id;
+        //$materials = [];
+        $p->materials = $materials;
         $p->need_distinct = true; // 唯一
-
-        $p->url = $picurl."?x-oss-process=image/crop,x_10,y_10,w_600,h_600,g_se";
-        $material_name = basename($picurl);
-        $p->material_name = $material_name;
         $req->setParam($p);
-
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
         var_dump($resp);
     }

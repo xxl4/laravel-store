@@ -247,12 +247,13 @@ class ProductsController extends AdminController
                 //if($form->isEditing()) {
                 $form->keyValue('properties',__('Properties'));
                 //}
-                $form->hidden('org_id', __('Org id'))->default(Admin::user()->org_id);
+                
                 $form->currency('price',__('Price'))->symbol('￥');
                 $form->text('stocks',__('Stocks'));
                 $form->text('party_code',__('Party code'));
                 $form->text('weight',__('Weight'));
                 $form->text('volume',__('Volume'));
+                $form->hidden('sku_org_id', __('Org id'))->default(Admin::user()->org_id);
             });
         });
 
@@ -265,8 +266,8 @@ class ProductsController extends AdminController
         $form->saving(function (Form $form) {
             $form->category_id = $form->third_cat;
             if(empty($form->category_id)) $form->category_id = $form->second_cat;
-            Log::info(json_encode($form));
-            Log::info($form->category_id);
+            //Log::info(json_encode($form));
+            //Log::info($form->category_id);
         });
         
 

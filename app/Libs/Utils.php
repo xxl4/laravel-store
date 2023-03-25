@@ -344,4 +344,13 @@ final class Utils
         }
         return $resp;
     }
+
+    static function checkUrl($url) {
+        $preg = "/^http(s)?:\\/\\/.+/";
+        if(preg_match($preg,$url)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

@@ -12,9 +12,9 @@ class Sku extends Model
     const UPDATED_AT = "update_time";
     const CREATED_AT = "rec_time";
 
-    protected $fillable = ["prod_id","ori_price","pic","price","properties","actual_stocks","stocks","party_code","sku_name","prod_name","weight","volume","status"];
+    protected $fillable = ["prod_id","ori_price","sku_org_id","pic","price","properties","actual_stocks","stocks","party_code","sku_name","prod_name","weight","volume","status"];
 
-    protected $guarded = ["user_id","org_id"];
+    protected $guarded = ["user_id"];
 
     protected $casts = [
         'properties' => 'json',
