@@ -46,10 +46,10 @@ class ProductsController extends AdminController
         $grid->column('prod_name', __('Prod name'))->expand(function ($model) {
 
             $skus = $model->sku()->take(10)->orderBy("sku_id","desc")->get()->map(function ($sku) {
-                return $sku->only(['sku_id', 'sku_name', 'price','actual_stocks']);
+                return $sku->only(['sku_id', 'price','party_code','stocks']);
             });
 
-            return new Table(['SKU ID', 'SKU名称','属性', '实际库存'], $skus->toArray());
+            return new Table(['SKU ID','价格','编码', '实际库存'], $skus->toArray());
 
         })->filter();
         $grid->column('shop_id', __('Shop id'))->expand(function ($model) {
