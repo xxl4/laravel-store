@@ -109,11 +109,21 @@ class AddProduct extends Command
         //var_dump($skus);
         $specs = "";
         //$pic = "https://p3-aio.ecombdimg.com/obj/ecom-shop-material/wnOrEgF_m_54e2e208b7fadc0e84c632f9d8473253_sx_83716_www600-600|https://p3-aio.ecombdimg.com/obj/ecom-shop-material/wnOrEgF_m_54e2e208b7fadc0e84c632f9d8473253_sx_83716_www600-600";
-        $pic="";
-        $description = "https://p3-aio.ecombdimg.com/obj/ecom-shop-material/wnOrEgF_m_54e2e208b7fadc0e84c632f9d8473253_sx_83716_www600-600";
+        $pic= \App\Models\AttachFileMapping::where("file_id", $prod->prod_id."_main")->value("url");
+        if(empty($pic)) {
+            echo "主图未上传\r\n";
+            return false;
+        }
+        $imgs = \App\Models\AttachFile::where("file_join_id", $this->prod_id)->select(["file_id","file_path"])->get();
+        foreach($imgs as $key=>$img) {
+            $img_url = \App\Models\AttachFileMapping::where("file_id", $prod->prod_id."_".$img->file_id."_gallery")->value("url");
+            if(empty($img_url)) continue;
+            $pic.="|".$img_url;
+        }
+        $description = $pic;
         $spec_prices = [];
         $i = 1;
-        var_dump(count($skus));
+        //var_dump(count($skus));
         $spec_arr = []; //针对系统的数据需要做下特殊处理
         foreach($skus as $key=>$sku) {
             $atts = $sku->properties;
@@ -125,7 +135,7 @@ class AddProduct extends Command
             $pic.= $sku->pic;
             if($i < count($skus)) {
                 $specs.="|";
-                $pic.="|";
+                //$pic.="|";
             } 
             //$specs.=$atts[key($atts)];
             //var_dump($spec_arr);
