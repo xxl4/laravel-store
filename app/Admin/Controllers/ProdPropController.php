@@ -28,7 +28,7 @@ class ProdPropController extends AdminController
     {
         $grid = new Grid(new ProdProp());
 
-        $grid->column('prop_id', __('Prop id'))->sortable()->filter();
+        $grid->column('prop_id', __('Prop id'))->copyable()->sortable()->filter();
         $grid->column('prop_name', __('Prop name'))->expand(function ($model) {
 
             $skus = $model->prop_value()->take(10)->get()->map(function ($sku) {

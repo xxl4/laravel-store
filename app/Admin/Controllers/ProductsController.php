@@ -42,7 +42,7 @@ class ProductsController extends AdminController
     {
         $grid = new Grid(new Product());
 
-        $grid->column('prod_id', __('Prod id'))->sortable()->filter();
+        $grid->column('prod_id', __('Prod id'))->copyable()->sortable()->filter();
         $grid->column('prod_name', __('Prod name'))->expand(function ($model) {
 
             $skus = $model->sku()->take(10)->orderBy("sku_id","desc")->get()->map(function ($sku) {
@@ -67,7 +67,7 @@ class ProductsController extends AdminController
         $grid->column('pic', __('Pic'))->hide();
         $grid->column('imgs', __('Imgs'))->hide();
         $grid->column('status')->bool(['1' => true, '0' => false])->sortable()->filter();
-        $grid->column('category_id', __('Category id'))->filter();
+        $grid->column('category_id', __('Category id'))->copyable()->filter();
         //$grid->column('sold_num', __('Sold num'))->filter();
         //$grid->column('total_stocks', __('Total stocks'))->filter();
         //$grid->column('delivery_mode', __('Delivery mode'));

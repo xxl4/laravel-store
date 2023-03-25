@@ -34,7 +34,7 @@ class CategoryController extends AdminController
             return "<a href='/admin/categories?parent_id=".$this->category_id."'>".$id."</a>";
         });
         //$grid->column('shop_id', __('Shop id'))->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->sortable();
-        $grid->column('parent_id', __('Parent id'))->filter()->sortable();
+        $grid->column('parent_id', __('Parent id'))->filter()->sortable()->copyable();
         $grid->column('category_name', __('Category name'))->expand(function ($model) {
 
             $skus = $model->category_prop()->take(20)->get()->map(function ($sku) {
