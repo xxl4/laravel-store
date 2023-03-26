@@ -306,7 +306,7 @@ class ProductsController extends AdminController
             
             $categoryMoreProp[$key]['rule']['required'] = $rule->required;
             $categoryMoreProp[$key]['rule']['type'] = $rule->type;
-            $categoryMoreProp[$key]['rule']['property_type'] = $rule->property_type;
+            //$categoryMoreProp[$key]['rule']['property_type'] = $rule->property_type;
             $categoryMoreProp[$key]['prop_value'] = "";
             if($rule->type=="select") {
                 $categoryMoreProp[$key]['prop_value'] = \App\Models\ProdPropValue::where("prop_id",$key)->pluck("prop_value","value_id");
