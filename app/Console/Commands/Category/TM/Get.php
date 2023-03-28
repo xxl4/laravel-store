@@ -91,6 +91,7 @@ class Get extends Command
             $category->save();
 
             //var_dump($item->is_parent);exit;
+            sleep(1);
 
             if($item->is_parent===true) {
                 $grade++;
