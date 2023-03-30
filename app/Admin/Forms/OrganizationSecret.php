@@ -24,9 +24,9 @@ class OrganizationSecret extends Form
      */
     public function handle(Request $request)
     {
-        dump($request->secret);
+        //dump($request->secret);
 
-        admin_success('Processed successfully.');
+        admin_success('数据保存成功...');
 
         return back();
     }
@@ -49,7 +49,6 @@ class OrganizationSecret extends Form
     {
         $uid = Admin::user()->id;
         $secret = str_random(50);
-        //$org = \App\Models\Organization::where("user_id", $uid)->select(["secret","ips"])->first();
         \App\Models\Organization::where("user_id", $uid)->update(["secret"=>$secret]);
         return [
             "secret" => $secret,

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Admin\Controllers;
 
 use App\Models\Product;
@@ -49,17 +48,24 @@ class ProductsController extends AdminController
                 return $sku->only(['sku_id', 'price','party_code','stocks']);
             });
 
-            return new Table(['SKU ID','价格','编码', '实际库存'], $skus->toArray());
-
-        })->filter();
-        $grid->column('shop_id', __('Shop id'))->expand(function ($model) {
+            $table = new Table(['SKU ID','价格','编码', '实际库存'], $skus->toArray());
 
             $outers = $model->outer()->take(10)->orderBy("id","desc")->get()->map(function ($outer) {
                 return $outer->only(['shop_id', 'shop_type','outer_id', 'created_at','updated_at']);
             });
-            return new Table(['店铺ID','类型', '外部ID','添加时间','更新时间'], $outers->toArray());
+            $table1 = new Table(['店铺ID','类型', '外部ID','添加时间','更新时间'], $outers->toArray());
+
+            return $table.$table1;
+
+
+        })->filter();
+        /*
+        $grid->column('shop_id', __('Shop id'))->expand(function ($model) {
+
+            
 
         })->sortable()->filter(\App\Libs\Utils::getOrgStores(Admin::user()->org_id));
+        */
         $grid->column('ori_price', __('Ori price'))->sortable()->filter();
         $grid->column('price', __('Price'))->sortable()->filter();
         $grid->column('brief', __('Brief'))->limit(20);
@@ -189,7 +195,7 @@ class ProductsController extends AdminController
                     if($category) {
                         return [$category->category_id => $category->category_name];
                     }else{
-                        return \App\Models\Category::where("shop_id", $this->shop_id)->where("parent_id",0)->pluck("category_name","category_id");
+                        return \App\Models\Category::where("parent_id",0)->pluck("category_name","category_id");
                     } 
                 })->load('second_cat', '/admin/categories/category_api_data2');
                 $form->select("second_cat", __('Second cat'))->options(function($id){
@@ -203,15 +209,15 @@ class ProductsController extends AdminController
                 $form->select("category_id" , __('Category id'))->options(function($id){
                     $category = Category::where("category_id",$id)->select(["category_id","category_name"])->first();
                     if($category) return [$category->category_id => $category->category_name];
-                });
+                })->help("自动获取最后分类级别ID");
             }
 
             if($form->isCreating()) {
-                $form->select('shop_id', __('Shop id'))->options(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->load('first_cat', '/admin/categories/category_api_data');
-                $form->select('first_cat', __('Category id'))->load('second_cat', '/admin/categories/category_api_data2');
+                /*$form->select('shop_id', __('Shop id'))->options(\App\Libs\Utils::getOrgStores(Admin::user()->org_id))->load('first_cat', '/admin/categories/category_api_data');*/
+                $form->select('first_cat', __('Category id'))->options(\App\Models\Category::where("parent_id",0)->pluck("category_id", "category_name"))->load('second_cat', '/admin/categories/category_api_data2');
                 $form->select("second_cat")->load("third_cat", '/admin/categories/category_api_data2');
                 $form->select("third_cat")->load("category_id", '/admin/categories/category_api_data2');
-                $form->select("category_id");
+                $form->select("category_id")->help("自动获取最后分类级别ID");
             }
             
         
@@ -240,7 +246,7 @@ class ProductsController extends AdminController
             $form->multipleFile('imgs_attach', '图片')->pathColumn('file_path')->sortable()->uniqueName()->removable();
 
         })->tab('商品详情', function($form) {
-            $form->editor('content', __('Content'));
+            $form->textarea('content', __('Content'));
         })->tab(__('Sku'), function ($form) {
 
             $form->hasMany('sku', function ($form) {
