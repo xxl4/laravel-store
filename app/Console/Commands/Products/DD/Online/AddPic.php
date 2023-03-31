@@ -114,6 +114,21 @@ class AddPic extends Command
         //var_dump($items);
         $this->batchUploadImageSync($items, $access_token, $store);
 
+        //上传主视频内容
+        $items = [];
+        if(!empty($prod->video)) {
+            //判断是否有http开头的加对于的地址内容
+            $url = $prod->video;
+            if(!\App\Libs\Utils::checkUrl($url)) $url = $this->imgUrl.$prod->video;
+            $items[] = [
+                'url' => $url,
+                'request_id'=> $this->prod_id,
+                'folder_id' => $this->folder_id,
+                'material_type' => 'video',
+                'name'  => $this->prod_id."_main"
+            ];
+        }
+        $this->batchUploadVideoAsync($items, $access_token, $store);
         
     }
 
@@ -145,6 +160,33 @@ class AddPic extends Command
 
             $pic->file_type = 1;
             
+            $pic->shop_id = $store->id;
+            $pic->save();
+        }
+    }
+    //@link https://op.jinritemai.com/docs/api-docs/69/1617
+    public function batchUploadVideoAsync($materials, $access_token, $store) {
+        $req = new \MaterialBatchUploadVideoAsyncRequest();
+        $config = new \DoudianOpConfig();
+        $config->appKey = $store->key;
+        $config->appSecret = $store->secret;
+        $req->setConfig($config);
+        $p = new \MaterialBatchUploadVideoAsyncParam();
+        $p->materials = $materials;
+        $req->setParam($p);
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
+        foreach($resp->data->success_map as $key=>$item) {
+            $pic = \App\Models\AttachFileMapping::where("file_id", $item->Name)->first();
+            if(is_null($pic)) $pic = new \App\Models\AttachFileMapping();
+            $pic->status = $item->AuditStatus;
+            $pic->file_id = $item->Name;
+            if(empty($item->ByteUrl)) {
+                $pic->url = $item->MaterialId;
+            }else{
+                $pic->url = $item->ByteUrl;
+            }
+
+            $pic->file_type = \App\Enums\FileTypeEnum::PROD_MAIN_VIDEO;
             $pic->shop_id = $store->id;
             $pic->save();
         }
