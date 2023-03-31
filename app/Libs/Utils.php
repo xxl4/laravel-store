@@ -45,8 +45,15 @@ final class Utils
         ];
     }
 
+    /**
+     * 
+     * 获取分类的属性名称
+     * @param int cid
+     * @param int shop_id
+     * @return boolean|array
+     * 
+     */
     static function GetCateProp($cid, $shop_id=0) {
-        //$ret = Cache::get();
         $cacheKey = \App\Enums\CachePrefixEnum::CATEGORY_PROP_ID.$cid;
         if(Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
@@ -56,7 +63,33 @@ final class Utils
             foreach($items as $key=>$item) {
                 $ret[$item->prop_id] = \App\Models\ProdProp::where("prop_id", $item->prop_id)->value("prop_name");
             }
-            //var_dump($ret);
+            Cache::put($cacheKey, $ret);
+        }
+        return $ret;
+    }
+
+      /**
+     * 
+     * 获取分类的属性名称
+     * @param int cid
+     * @param int shop_id
+     * @return boolean|array
+     * 
+     */
+    static function GetCatePropValue($cid) {
+        $cacheKey = \App\Enums\CachePrefixEnum::CATEGORY_PROP_VALUE_ID.$cid;
+        if(Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }else{
+            $items = \App\Models\CategoryProp::where("category_id", $cid)->select(['prop_id'])->get();
+            $ret = [];
+            foreach($items as $key=>$item) {
+                $prop = \App\Models\ProdProp::where("prop_id", $item->prop_id)->first();
+                $ret[$item->prop_id]['name'] = $prop->prop_name;
+                $ret[$item->prop_id]['rule'] = json_decode($prop->rule);
+                $ret[$item->prop_id]['prop_id'] = $prop->prop_id;
+                $ret[$item->prop_id]['prop_value'] = \App\Models\ProdPropValue::where("prop_id",$prop->prop_id)->pluck("prop_value","value_id");
+            }
             Cache::put($cacheKey, $ret);
         }
         return $ret;

@@ -45,7 +45,13 @@ class ProductsController extends Controller {
 
         $data = $request->all();
 
-        /*
+        //检查category_id 是否存在
+        $category = \App\Models\Category::where("category_id", $data['category_id'])->first();
+        if(is_null($category)) {
+            return $this->response->error("分类ID错误，请调整".$data['category_id'], 500); 
+        }
+
+        
         $sysCate = $this->_getCateProp($data['category_id']);
         $props = $data['props'];
         $props_items = explode('|', $props);
@@ -57,7 +63,7 @@ class ProductsController extends Controller {
                 return $this->response->error("属性错误，请调整".$pi[1], 500);
             }
             
-        }*/
+        }
         //var_dump($sysCate);
         //exit;
         //$customer_props = $data['customer_props'];

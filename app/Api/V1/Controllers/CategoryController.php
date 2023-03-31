@@ -77,11 +77,19 @@ class CategoryController extends Controller {
         //$this->org = $user;
         // 验证
         $validated = $request->validate([
-            'cid'   => 'int|required',
+            'num'   => 'required|int|max:100',
+            'page'   => 'required|int',
+            'cid'   => 'int',
         ]);
+
+        $data = $request->all();
 
         // 接收数据
         $cid = $request->input("cid");
+        $page = $request->input("page");
+        $num = $request->input("num");
+
+        
 
         // 数据拼接
         $model = \App\Models\Category::select("*");
@@ -91,7 +99,7 @@ class CategoryController extends Controller {
         //$model->where("org_id", $this->org->id);
         //var_dump($model);
         $total = $model->count();
-        $items = $model->with("prop")->first();
+        $items = $model->with("category_prop")->offset($page * $num)->limit($num)->first();
 
         //数据返回
         $ret = [
@@ -113,6 +121,24 @@ class CategoryController extends Controller {
         $cid = $request->input("cid");
 
 
+    }
+
+    public function prop(Request $request) {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
+        $validated = $request->validate([
+            'cid'   => 'int|required',
+        ]);
+
+        $cid = $request->input('cid');
+
+        $category = \App\Models\Category::where("category_id", $cid)->first();
+        if(is_null($category)) {
+            return $this->response->error("分类ID错误，请调整".$cid, 500); 
+        }
+
+        $ret = \App\Libs\Utils::GetCatePropValue($cid);
+
+        return Utils::ApiResponse($ret);
     }
 
 }
