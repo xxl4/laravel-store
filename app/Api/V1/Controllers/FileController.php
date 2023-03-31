@@ -290,7 +290,23 @@ class FileController extends Controller {
             "total" => $total,
         ];
         return Utils::ApiResponse($ret);
+    }
 
+    public function delete(Request $request) {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
+        $validated = $request->validate([
+            'id'   => 'required|int',
+        ]);
+        $id = $request->input('id');
+        $model = \App\Models\ProdAttachFile::select("*");
+        $model->where("file_id", $id);
+        $model->where("org_id", $this->org->id);
+        $item = $model->first();
+        if(is_null($item)) {
+            return $this->response->error("您需要删除的资源不存在，或已被删除", 400);
+        }
+        $item->delete();
+        return Utils::ApiResponse([]);
     }
     
 }
