@@ -182,6 +182,9 @@ class AddProduct extends Command
         //var_dump($product_format_new);
         $p->product_format_new = json_encode($product_format_new);
 
+        //主图视频ID，可以先通过https://op.jinritemai.com/docs/api-docs/69/1617接口上传视频，获取审核通过的视频素材ID进行传入 任务需要验证
+        //$p->material_video_id = 0;
+
         $req->setParam($p);
 
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);

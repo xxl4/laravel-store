@@ -70,7 +70,7 @@ class SkuList extends Command
         $p->product_id = $outer_id;
         $req->setParam($p);
         $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $req, $access_token);
-        var_dump($resp);
+        //var_dump($resp);
         foreach($resp->data as $key=>$sku) {
             //var_dump($sku);exit;
             $sku_mapping = \App\Models\ProdSkuOuter::where("outer_prod_id", $sku->product_id)->where("outer_sku_id", $sku->id)->first();

@@ -37,8 +37,8 @@ class Push extends Command
      */
     public function handle()
     {
-        $this->push("DD", 3);
-        $this->skuslist();
+        //$this->push("DD", 3);
+        $this->skuslist("DD", 3);
         //$this->push("JD", 4);
         //$this->push("TM", 1);
         //$this->push("TB", 2);
@@ -84,9 +84,9 @@ class Push extends Command
         
     }
 
-    public function skuslist() {
-        $shop_type = "TM";
-        $shop_id = 1;
+    public function skuslist($shop_type, $shop_id) {
+        //$shop_type = "TM";
+        //$shop_id = 1;
         // 同步商品
         $items = \App\Models\ProdOuter::where("shop_id", $shop_id)->select("prod_id")->limit(1)->get();
         foreach($items as $key=>$item) {
@@ -99,11 +99,11 @@ class Push extends Command
         //同步订单状态
         $items = \App\Models\Order::where("shop_id", $shop_id)->select("order_id")->limit(10)->get();
         foreach($items as $key=>$item) {
-            $data = [];
-            $data['act_type'] = "skulist";
-            $data['order_id'] = $item->order_id;
-            $data['shop_id'] = $shop_id;
-            \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
+            // $data = [];
+            // $data['act_type'] = "skulist";
+            // $data['order_id'] = $item->order_id;
+            // $data['shop_id'] = $shop_id;
+            // \App\Libs\Utils::pushQueueByShopType($shop_type, $data);
         }
 
 

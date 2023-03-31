@@ -309,7 +309,6 @@ final class Utils
             case "DD":
                 $resp = $client->execute($token);
                 if($resp->code!=10000) { 
-                    var_dump($resp,$client);
                     self::sendMessage(1, 1, $resp->msg, $resp->sub_msg."--".$resp->log_id."--".$resp->sub_code);
                     return false;
                 }
@@ -318,7 +317,7 @@ final class Utils
                 $resp = $client->execute($req, $token);
                 if (property_exists($resp, 'errorMessage')) {
                     //todo
-                    var_dump($resp);
+                    self::sendMessage(1, 1, $resp->msg, $resp->sub_msg."--".$resp->log_id."--".$resp->sub_code);
                     return false;
                 }
             break;
@@ -326,9 +325,8 @@ final class Utils
                 $resp = $client->execute($req, $token);
                 //var_dump($resp);
                 if (property_exists($resp, 'error_response')) {
-                    //todo
-                    var_dump($resp);
-                    //return false;
+                    self::sendMessage(1, 1, $resp->msg, $resp->sub_msg."--".$resp->log_id."--".$resp->sub_code);
+                    return false;
                 }
                 return $resp;
             break;
@@ -336,7 +334,7 @@ final class Utils
                 $resp = $client->execute($req, $token);
                 if (property_exists($resp, 'error_response')) {
                     //todo
-                    var_dump($resp);
+                    self::sendMessage(1, 1, $resp->msg, $resp->sub_msg."--".$resp->log_id."--".$resp->sub_code);
                     return false;
                 }
                 //todo
