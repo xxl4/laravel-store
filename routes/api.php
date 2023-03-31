@@ -68,6 +68,8 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
     $api->get("store/area", 'App\Api\V1\Controllers\StoreController@area');
     $api->get("store/city", 'App\Api\V1\Controllers\StoreController@city');
     $api->get("file/signature", 'App\Api\V1\Controllers\FileController@signature');
+    $api->get("file/list", 'App\Api\V1\Controllers\FileController@list');
+    $api->get("file/detail", 'App\Api\V1\Controllers\FileController@detail');
 
 });
 

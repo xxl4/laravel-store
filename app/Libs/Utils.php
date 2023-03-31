@@ -37,6 +37,7 @@ final class Utils
      * 
      */
     static function ApiResponse($data, $message='Success', $code='200') {
+        if(is_null($data)) $data = (array) $data;
         return [
             'data' => $data,
             'code'  => $code,
@@ -341,6 +342,26 @@ final class Utils
             break;
         }
         return $resp;
+    }
+
+    /**
+     * 
+     * 基于机构的code 获取到对于的ID
+     * @param code 店铺的code
+     * @return boolean|object
+     * 
+     */
+    static function GetStoreByCode($code) {
+        $key = \App\Enums\CachePrefixEnum::ORG_CODE.$code;
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        }else{
+            $org_id = \App\Models\Organization::where("code", $code)->value("id");
+            if(is_null($org_id)) return false;
+            Cache::put($key, $org_id);
+            return $org_id;
+        }
+        return false;
     }
 
     static function checkUrl($url) {

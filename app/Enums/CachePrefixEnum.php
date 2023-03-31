@@ -30,6 +30,8 @@ final class CachePrefixEnum extends Enum
 
     const ORG_STORE_LIST = "org_store_list_";
     const ORG_STORE_TYPE = "org_store_type_";
+    const ORG_NAME = "org_name_";
+    const ORG_CODE = "org_code_";
 
     const RUNING_PRODUCT_ALL_PAGE = "runing_product_all_page_";
     const RUNING_ORDERS_ALL_PAGE = "runing_order_all_page_";

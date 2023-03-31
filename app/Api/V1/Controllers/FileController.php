@@ -8,9 +8,6 @@ use App\Libs\Utils;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use App\Http\Requests\ProductSkuAddRequest; 
-use App\Http\Requests\ProductSkuEditRequest; 
-use App\Http\Requests\ProductSkuDeleteRequest; 
 use Dingo\Api\Auth\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -57,24 +54,69 @@ class FileController extends Controller {
         $key = env('OSS_ACCESS_KEY');     // 请填写您的AccessKeySecret。
         $bucket = env('OSS_BUCKET');
         $endpoint = env('OSS_ENDPOINT');
-        $host = env('OSS_CDN_DOMAIN');
+        $host = env('OSS_CDN_DOMAIN')."?type=photo";;
         // $host = 'https://xxxx.oss-cn-hangzhou.aliyuncs.com'; // $host的格式为 bucketname.endpoint，
         
-        $dir = 'bz/'.$this->org->code; // 用户上传文件时指定的前缀。
-
-        // 若需要配置回调服务器URL 则此配置
-        // private $callbackUrl = 'http://你的域名/callback.php';//上传回调的地址 还记得上图中callback.php文件吗，把这文件放在你的项目中，配个路由保证能访问到这个文件就行，这个值就是访问callback.php此文件的URL 例如：我放在项目根目录 那值就为 http://liutong.pro/callback.php
-        // $callbackUrl = $this->callbackUrl;
-        // $callbackUrl为上传回调服务器的URL，请将下面的IP和Port配置为您自己的真实URL信息。
-        // $callback_param = array('callbackUrl' => $callbackUrl,
-        //     'callbackBody' => 'filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}',
-        //     'callbackBodyType' => "application/x-www-form-urlencoded");
-        // $callback_string = json_encode($callback_param);
-        // $base64_callback_body = base64_encode($callback_string);
+        $dir = '/bz/'.$this->org->code.'/images/'; // 用户上传文件时指定的前缀。
         $callbackUrl = env('OSS_UPLOAD_CALLBACK_URL');
         $callback_param = array(
             'callbackUrl' => $callbackUrl,
-            'callbackBody' => 'filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}&format=${imageInfo.format}',
+            'callbackBody' => 'filename=${object}&etag=${etag}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}&format=${imageInfo.format}',
+            'callbackBodyType' => "application/x-www-form-urlencoded"
+        );
+        $callback_string = json_encode($callback_param);
+        
+        $base64_callback_body = base64_encode($callback_string);
+
+        $now = time();
+        $expire = 30;  //设置该policy超时时间是10s. 即这个policy过了这个有效时间，将不能访问。
+        $end = $now + $expire;
+        $expiration = $this->gmt_iso8601($end);
+
+
+        //最大文件大小.用户可以自己设置
+        $condition = array(0 => 'content-length-range', 1 => 0, 2 => 2147483648);
+        $conditions[] = $condition;
+
+        // 表示用户上传的数据，必须是以$dir开始，不然上传会失败，这一步不是必须项，只是为了安全起见，防止用户通过policy上传到别人的目录。
+        $start = array(0 => 'starts-with', 1 => '$key', 2 => $dir);
+        $conditions[] = $start;
+
+
+        $arr = array('expiration' => $expiration, 'conditions' => $conditions);
+        $policy = json_encode($arr);
+        $base64_policy = base64_encode($policy);
+        $string_to_sign = $base64_policy;
+        $signature = base64_encode(hash_hmac('sha1', $string_to_sign, $key, true));
+
+        $response = array();
+        $response['accessid'] = $id;
+        $response['host'] = $host;
+        $response['policy'] = $base64_policy;
+        $response['signature'] = $signature;
+        $response['expire'] = $end;
+        $response['callback'] = $base64_callback_body;
+        $response['dir'] = $dir;  // 这个参数是设置用户上传文件时指定的前缀。
+        //echo json_encode($response);
+
+        return Utils::ApiResponse($response);
+    }
+
+    public function video_signature() {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
+        
+        $id = env("OSS_ACCESS_ID");         // 请填写您的AccessKeyId。
+        $key = env('OSS_ACCESS_KEY');     // 请填写您的AccessKeySecret。
+        $bucket = env('OSS_BUCKET');
+        $endpoint = env('OSS_ENDPOINT');
+        $host = env('OSS_CDN_DOMAIN')."?type=video";
+        // $host = 'https://xxxx.oss-cn-hangzhou.aliyuncs.com'; // $host的格式为 bucketname.endpoint，
+        
+        $dir = '/bz/'.$this->org->code.'/video/'; // 用户上传文件时指定的前缀。
+        $callbackUrl = env('OSS_UPLOAD_CALLBACK_URL');
+        $callback_param = array(
+            'callbackUrl' => $callbackUrl,
+            'callbackBody' => 'filename=${object}&etag=${etag}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}&format=${imageInfo.format}',
             'callbackBodyType' => "application/x-www-form-urlencoded"
         );
         $callback_string = json_encode($callback_param);
@@ -116,6 +158,11 @@ class FileController extends Controller {
     }
 
     public function oss_callback(Request $request) {
+        $type = $request->input('type');
+        if(!in_array($type, array('photo','video'))) {
+            header("http/1.1 403 Forbidden");
+            exit();
+        }
         $authorizationBase64 = $request->server('HTTP_AUTHORIZATION');
         $pubKeyUrlBase64 = $request->server('HTTP_X_OSS_PUB_KEY_URL');
         
@@ -164,9 +211,34 @@ class FileController extends Controller {
         if ($ok == 1)
         {
             $body = urldecode($body);
-            Log::info($body);
+            //Log::info($body);
             parse_str($body, $item);
-            Log::info("filename upload data".json_encode($item));
+            //Log::info("filename upload data".json_encode($item));
+            $file = \App\Models\ProdAttachFile::where("etag", $item['etag'])->first();
+            if(is_null($file)) $file = new \App\Models\ProdAttachFile();
+
+            $org_id = 0;
+
+            $filename_info = explode('/', $item['filename']);
+            $org_code = $filename_info[1];
+
+            $org_id = \App\Libs\Utils::GetStoreByCode($org_code);
+
+
+
+            Log::info(json_encode($filename_info));
+
+
+            $file->etag = $item['etag'];
+            $file->org_id = (int)$org_id;
+            $file->file_path = $item['filename'];
+            $file->file_type = $item['format'];
+            $file->file_size = $item['size'];
+            $file->height = $item['height'];
+            $file->width = $item['width'];
+            $file->save();
+
+
 
             //\App\Models\ProdAttachFile
             
@@ -180,6 +252,44 @@ class FileController extends Controller {
             exit();
         }
 
+
+    }
+
+    public function detail(Request $request) {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
+        $validated = $request->validate([
+            'id'   => 'required|int',
+        ]);
+        $id = $request->input('id');
+        $model = \App\Models\ProdAttachFile::select("*");
+        $model->where("file_id", $id);
+        $model->where("org_id", $this->org->id);
+
+        $item = $model->first();
+        
+        return Utils::ApiResponse($item);
+    }
+
+    public function list(Request $request) {
+        $this->org = app('Dingo\Api\Auth\Auth')->user();
+        $validated = $request->validate([
+            'num'   => 'required|int|max:100',
+            'page'   => 'required|int',
+        ]);
+        $num = $request->input('num');
+        $page = $request->input('page');
+        $model = \App\Models\ProdAttachFile::select("*");
+        $model->where("org_id", $this->org->id);
+        //var_dump($model);
+        $total = $model->count();
+        $items = $model->offset($page * $num)->limit($num)->get();
+
+        //数据返回
+        $ret = [
+            "items"=>$items,
+            "total" => $total,
+        ];
+        return Utils::ApiResponse($ret);
 
     }
     
