@@ -67,9 +67,12 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
     #系统
     $api->get("store/area", 'App\Api\V1\Controllers\StoreController@area');
     $api->get("store/city", 'App\Api\V1\Controllers\StoreController@city');
+    $api->get("file/signature", 'App\Api\V1\Controllers\FileController@signature');
 
+});
 
-
+$api->version('v1', ["prefix"=>"api/v1","middleware"=>'api'],function ($api) {
+    $api->get("file/oss_callback", 'App\Api\V1\Controllers\FileController@oss_callback');
 });
 
 $api->version('v2',["prefix"=>"api/v2","middleware"=>'api.auth'], function ($api) {
