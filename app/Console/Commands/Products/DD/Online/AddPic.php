@@ -180,7 +180,7 @@ class AddPic extends Command
             if(is_null($pic)) $pic = new \App\Models\AttachFileMapping();
             $pic->status = $item->AuditStatus;
             $pic->file_id = $item->Name;
-            if(empty($item->ByteUrl)) {
+            if(isset($item->ByteUrl)) {
                 $pic->url = $item->MaterialId;
             }else{
                 $pic->url = $item->ByteUrl;
