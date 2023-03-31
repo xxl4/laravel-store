@@ -72,7 +72,7 @@ $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api.auth'],function ($api
 });
 
 $api->version('v1', ["prefix"=>"api/v1","middleware"=>'api'],function ($api) {
-    $api->get("file/oss_callback", 'App\Api\V1\Controllers\FileController@oss_callback');
+    $api->post("file/oss_callback", 'App\Api\V1\Controllers\FileController@oss_callback');
 });
 
 $api->version('v2',["prefix"=>"api/v2","middleware"=>'api.auth'], function ($api) {

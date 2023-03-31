@@ -12,6 +12,7 @@ use App\Http\Requests\ProductSkuAddRequest;
 use App\Http\Requests\ProductSkuEditRequest; 
 use App\Http\Requests\ProductSkuDeleteRequest; 
 use Dingo\Api\Auth\Auth;
+use Illuminate\Support\Facades\Log;
 
 /**
  * category resource representation
@@ -73,7 +74,7 @@ class FileController extends Controller {
         $callbackUrl = env('OSS_UPLOAD_CALLBACK_URL');
         $callback_param = array(
             'callbackUrl' => $callbackUrl,
-            'callbackBody' => 'filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}',
+            'callbackBody' => 'filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}&format=${imageInfo.format}',
             'callbackBodyType' => "application/x-www-form-urlencoded"
         );
         $callback_string = json_encode($callback_param);
@@ -137,12 +138,13 @@ class FileController extends Controller {
         $pubKey = curl_exec($ch);
         if ($pubKey == "")
         {
-            //header("http/1.1 403 Forbidden");
+            header("http/1.1 403 Forbidden");
             exit();
         }
 
         // 4.获取回调body
         $body = file_get_contents('php://input');
+        Log::info($body);
 
         // 5.拼接待签名字符串
         $authStr = '';
@@ -161,13 +163,20 @@ class FileController extends Controller {
         $ok = openssl_verify($authStr, $authorization, $pubKey, OPENSSL_ALGO_MD5);
         if ($ok == 1)
         {
+            $body = urldecode($body);
+            Log::info($body);
+            parse_str($body, $item);
+            Log::info("filename upload data".json_encode($item));
+
+            //\App\Models\ProdAttachFile
+            
             header("Content-Type: application/json");
             $data = array("Status"=>"Ok");
             echo json_encode($data);
         }
         else
         {
-            //header("http/1.1 403 Forbidden");
+            header("http/1.1 403 Forbidden");
             exit();
         }
 
