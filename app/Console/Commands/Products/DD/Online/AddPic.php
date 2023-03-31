@@ -125,7 +125,7 @@ class AddPic extends Command
                 'request_id'=> $this->prod_id,
                 'folder_id' => $this->folder_id,
                 'material_type' => 'video',
-                'name'  => $this->prod_id."_main"
+                'name'  => $this->prod_id."_main_video"
             ];
         }
         $this->batchUploadVideoAsync($items, $access_token, $store);
