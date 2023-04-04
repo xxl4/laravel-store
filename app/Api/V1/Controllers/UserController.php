@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\UserGetRequest;
+use App\Http\Requests\UserAddRequest;
 
 /**
  * User resource representation
@@ -17,11 +18,14 @@ use App\Http\Requests\UserGetRequest;
 class UserController extends Controller {
 
     /**
-     * 用户获取
-     * 
+     * 客户获取
      */
     public function get(UserGetRequest $request) {
         $this->org = app('Dingo\Api\Auth\Auth')->user();
         $validated = $request->validated();
+    }
+
+    public function add(UserAddRequest $request) {
+
     }
 }

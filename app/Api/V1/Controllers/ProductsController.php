@@ -106,7 +106,7 @@ class ProductsController extends Controller {
         $data = $request->all();
         
         
-
+        $ret = [];
         return Utils::ApiResponse($ret);
     }
 
