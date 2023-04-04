@@ -32,7 +32,8 @@ class CategoryController extends Controller {
     */
     public function add(ProductSkuAddRequest $request) {
         $this->org = app('Dingo\Api\Auth\Auth')->user();
-        
+
+        $ret = [];
         return Utils::ApiResponse($ret);
     }
 
@@ -48,7 +49,7 @@ class CategoryController extends Controller {
         $data = $request->all();
         
         $ret = [
-            "product_id" => $product->id
+
         ];
 
         return Utils::ApiResponse($ret);

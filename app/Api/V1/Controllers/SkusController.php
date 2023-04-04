@@ -45,16 +45,6 @@ class SkusController extends Controller {
             return $this->response->error("商品内容不存在", 400);
         }
 
-        $sysCate = \App\Libs\Utils::GetCateProp($prod->category_id);
-        $props = $data['properties'];
-        $props = json_decode($props);
-        //var_dump($sysCate);
-        foreach($props as $key=>$prop) {
-            if(!isset($sysCate[$key][$prop])) {
-                return $this->response->error("属性错误，请调整".$key, 500); 
-            }
-        }
-
         //todo save data into db
 
         //todo check props 类型
@@ -88,15 +78,6 @@ class SkusController extends Controller {
             return $this->response->error("商品内容不存在", 400);
         }
 
-        $sysCate = \App\Libs\Utils::GetCateProp($prod->category_id);
-        $props = $data['properties'];
-        $props = json_decode($props);
-        //var_dump($sysCate);
-        foreach($props as $key=>$prop) {
-            if(!isset($sysCate[$key][$prop])) {
-                return $this->response->error("属性错误，请调整".$key, 500);
-            }
-        }
         \App\Models\Sku::where("sku_id",$data['sku_id'])->update($data);
         \App\Models\Sku::where("sku_id",$data['sku_id'])->increment('version');
         
