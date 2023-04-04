@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\UserGetRequest;
 use App\Http\Requests\UserAddRequest;
+use App\Http\Requests\UserEditRequest;
 
 /**
  * User resource representation
@@ -26,6 +27,10 @@ class UserController extends Controller {
     }
 
     public function add(UserAddRequest $request) {
+
+    }
+
+    public function edit(UserEditRequest $request) {
 
     }
 }
