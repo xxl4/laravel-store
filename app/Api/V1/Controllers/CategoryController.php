@@ -121,9 +121,15 @@ class CategoryController extends Controller {
         $product_id = $request->input("product_id");
         $cid = $request->input("cid");
 
+        return Utils::ApiResponse([]);
+
 
     }
 
+    /**
+     * 分类属性查找
+     * @Version({"v1"})
+     */
     public function prop(Request $request) {
         $this->org = app('Dingo\Api\Auth\Auth')->user();
         $validated = $request->validate([
