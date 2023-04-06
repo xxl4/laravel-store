@@ -94,10 +94,11 @@ class Get extends Command
             //var_dump($item->is_parent);exit;
             sleep(1);
 
-            if($item->is_parent===true) {
+            if($item->is_parent=="true") {
                 $grade++;
                 $this->getCategory($item->cid, $store, $grade);
             }else{
+                var_dump($item);
                 $this->getCategoryProp($item->cid, $store);
             }
         } 
@@ -115,11 +116,17 @@ class Get extends Command
 
             //@link https://open.taobao.com/api.htm?spm=a219a.7386797.0.0.553a669aqNnh3t&source=search&docId=53973&docType=2
             $req = new \AlibabaItemPublishPropsGetRequest();
-            $req->setFields($this->_field);
-            $req->setCid($cid);
+            //@link https://open.taobao.com/v2/doc?spm=a219a.15212433.0.0.2a24669aVuCvrz#/apiFile?docType=2&docId=53943
+            //$req = new \AlibabaItemPublishSchemaGetRequest();
+            //$req->setFields($this->_field);
+            $req->setCatId($cid);
             $req->setMarket("tmall");
+            //$req->setSpuId(0);
+            $spu_id = $this->TmallProductMatchSchemaGetRequest($cid, $store);
+            $req->setPropId('1636953');
+            $req->setSchema('<itemRule><field id="prop_1636953" name="ISBN编号" type="input"><rules><rule name="requiredRule" value="true"/></rules></field></itemRule>');
             $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
-            var_dump($resp);
+            var_dump($resp, $req);exit;
             if (!property_exists($resp, 'item_props')) {
                 //todo 
                 return false;
@@ -168,5 +175,23 @@ class Get extends Command
             $categoryProp->prop_id = $item->pid;
             $categoryProp->save();
         }
+    }
+
+    private function TmallProductMatchSchemaGetRequest($cid, $store) {
+
+        $c = new \TopClient();
+        $c->appkey = $store->key;
+        $c->secretKey = $store->secret;
+
+        //@link https://open.taobao.com/v2/doc?spm=a219a.15212433.0.0.2a24669aVuCvrz#/apiFile?docType=2&docId=23258
+        $req = new \TmallProductMatchSchemaGetRequest();
+        //$req->setFields($this->_field);
+        $req->setCategoryId($cid);
+        //$req->setMarket("tmall");
+        //$req->setSpuId(0);
+        //$req->setPropId('');
+        //$req->setSchema('<itemSchema> <field id="catProp" name="类目属性" type="complex"></field></itemSchema>');
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
+        var_dump($resp, $req);
     }
 }
