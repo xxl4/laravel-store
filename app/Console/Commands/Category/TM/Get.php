@@ -46,6 +46,7 @@ class Get extends Command
         $cid = $this->argument('cid'); // 用于发货
 
 
+        //@link https://open.taobao.com/anno?source=search&docId=25658&docType=12
         $this->getCategory($cid, $store, 0);
 
         
@@ -77,9 +78,9 @@ class Get extends Command
         
         //var_dump($items);exit;
         foreach($items->item_cat as $key=>$item) {
-            $category = \App\Models\Category::where("category_id", $item->cid)->where("shop_id", $store->id)->first();
+            $category = \App\Models\Tm\Category::where("category_id", $item->cid)->where("shop_id", $store->id)->first();
             $status = 1;
-            if(is_null($category)) $category = new \App\Models\Category();
+            if(is_null($category)) $category = new \App\Models\Tm\Category();
             $category->category_id = $item->cid;
             $category->shop_id = $store->id;
             $category->parent_id = $item->parent_cid;
@@ -93,10 +94,11 @@ class Get extends Command
             //var_dump($item->is_parent);exit;
             sleep(1);
 
-            if($item->is_parent===true) {
+            if($item->is_parent=="true") {
                 $grade++;
                 $this->getCategory($item->cid, $store, $grade);
             }else{
+                var_dump($item);
                 $this->getCategoryProp($item->cid, $store);
             }
         } 
@@ -112,11 +114,19 @@ class Get extends Command
             $c->appkey = $store->key;
             $c->secretKey = $store->secret;
 
-            $req = new \ItempropsGetRequest();
-            $req->setFields($this->_field);
-            $req->setCid($cid);
+            //@link https://open.taobao.com/api.htm?spm=a219a.7386797.0.0.553a669aqNnh3t&source=search&docId=53973&docType=2
+            $req = new \AlibabaItemPublishPropsGetRequest();
+            //@link https://open.taobao.com/v2/doc?spm=a219a.15212433.0.0.2a24669aVuCvrz#/apiFile?docType=2&docId=53943
+            //$req = new \AlibabaItemPublishSchemaGetRequest();
+            //$req->setFields($this->_field);
+            $req->setCatId($cid);
+            $req->setMarket("tmall");
+            //$req->setSpuId(0);
+            $spu_id = $this->TmallProductMatchSchemaGetRequest($cid, $store);
+            $req->setPropId('1636953');
+            $req->setSchema('<itemRule><field id="prop_1636953" name="ISBN编号" type="input"><rules><rule name="requiredRule" value="true"/></rules></field></itemRule>');
             $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
-            var_dump($resp);
+            var_dump($resp, $req);exit;
             if (!property_exists($resp, 'item_props')) {
                 //todo 
                 return false;
@@ -127,8 +137,8 @@ class Get extends Command
         }
 
         foreach($items->item_prop as $key=>$item) {
-            $prop = \App\Models\ProdProp::where("prop_id",$item->pid)->where("shop_id",$store->id)->first();
-            if(is_null($prop)) $prop = new \App\Models\ProdProp();
+            $prop = \App\Models\Tm\ProdProp::where("prop_id",$item->pid)->where("shop_id",$store->id)->first();
+            if(is_null($prop)) $prop = new \App\Models\Tm\ProdProp();
             $prop->shop_id = $store->id;
             $prop->prop_name = $item->name;
             //var_dump($item);
@@ -149,8 +159,8 @@ class Get extends Command
                 var_dump($item->prop_values);
                 foreach($item->prop_values->prop_value as $kk=>$opt) {
                     if(!isset($opt->vid)) continue;
-                    $propval = \App\Models\ProdPropValue::where("prop_id", $item->pid)->where("value_id",$opt->vid)->first();
-                    if(is_null($propval)) $propval = new \App\Models\ProdPropValue();
+                    $propval = \App\Models\Tm\ProdPropValue::where("prop_id", $item->pid)->where("value_id",$opt->vid)->first();
+                    if(is_null($propval)) $propval = new \App\Models\Tm\ProdPropValue();
                     $propval->value_id = $opt->vid;
                     $propval->prop_value = $opt->name;
                     $propval->prop_id = $item->pid;
@@ -159,11 +169,29 @@ class Get extends Command
             }
 
             // 保存到category prop
-            $categoryProp = \App\Models\CategoryProp::where("category_id", $cid)->where("prop_id", $item->pid)->first();
-            if(is_null($categoryProp)) $categoryProp = new \App\Models\CategoryProp();
+            $categoryProp = \App\Models\Tm\CategoryProp::where("category_id", $cid)->where("prop_id", $item->pid)->first();
+            if(is_null($categoryProp)) $categoryProp = new \App\Models\Tm\CategoryProp();
             $categoryProp->category_id = $cid;
             $categoryProp->prop_id = $item->pid;
             $categoryProp->save();
         }
+    }
+
+    private function TmallProductMatchSchemaGetRequest($cid, $store) {
+
+        $c = new \TopClient();
+        $c->appkey = $store->key;
+        $c->secretKey = $store->secret;
+
+        //@link https://open.taobao.com/v2/doc?spm=a219a.15212433.0.0.2a24669aVuCvrz#/apiFile?docType=2&docId=23258
+        $req = new \TmallProductMatchSchemaGetRequest();
+        //$req->setFields($this->_field);
+        $req->setCategoryId($cid);
+        //$req->setMarket("tmall");
+        //$req->setSpuId(0);
+        //$req->setPropId('');
+        //$req->setSchema('<itemSchema> <field id="catProp" name="类目属性" type="complex"></field></itemSchema>');
+        $resp = \App\Libs\Utils::execThirdStoreApi($store->id, $c, $store->token, $req);
+        var_dump($resp, $req);
     }
 }

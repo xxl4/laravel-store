@@ -30,7 +30,7 @@ class FileController extends Controller {
     */
     public function signature2(ProductSkuAddRequest $request) {
         $this->org = app('Dingo\Api\Auth\Auth')->user();
-        
+        $ret = [];
         return Utils::ApiResponse($ret);
     }
 
