@@ -38,3 +38,8 @@ Laravel admin Store 是一套基于基础商品，订单中心，基于基础订
 # BUG 提交
 
 https://github.com/nicelizhi/laravel-admin-store/issues
+
+
+# 体验
+
+需要体验的小伙伴可以发送邮件到 nice.lizhi#gmail.com 完成账号的体验申请
