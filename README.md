@@ -6,13 +6,13 @@ Laravel admin Store 是一套基于基础商品，订单中心，基于基础订
 ## 源码安装部署
 
 ```bash
-
+git clone https://github.com/nicelizhi/laravel-admin-store.git
 ```
 
 ## DOcker安装部署
 
 ```bash
-
+docker pull 
 ```
 
 ## 支持模块
