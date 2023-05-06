@@ -34,6 +34,8 @@ Laravel admin Store 是一套基于基础商品，订单中心，基于基础订
 开发平台： https://jos.jd.com/
 ## DouDian
 开发平台：https://op.jinritemai.com/home
+## 微店
+开发平台：https://www.weidian.com/
 
 # BUG 提交
 
