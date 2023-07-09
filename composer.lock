@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66a7b9e1df690230ecb65dc7254c88ed",
+    "content-hash": "02cb4d05a06a845c84b9fcc3701eca8f",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -3471,23 +3471,17 @@
         },
         {
             "name": "nicelizhi/laravel-admin",
-            "version": "1.0.0",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nicelizhi/laravel-admin.git",
-                "reference": "c3c9867c4d9a5d5e71e5fb7edfdf8b0728565a0d"
+                "reference": "9a93b23a7c00822ce872857ffce457a455e01301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nicelizhi/laravel-admin/zipball/c3c9867c4d9a5d5e71e5fb7edfdf8b0728565a0d",
-                "reference": "c3c9867c4d9a5d5e71e5fb7edfdf8b0728565a0d",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "url": "https://api.github.com/repos/nicelizhi/laravel-admin/zipball/9a93b23a7c00822ce872857ffce457a455e01301",
+                "reference": "9a93b23a7c00822ce872857ffce457a455e01301",
+                "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "2.*|3.*",
@@ -3545,9 +3539,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nicelizhi/laravel-admin/issues",
-                "source": "https://github.com/nicelizhi/laravel-admin/tree/1.0.0"
+                "source": "https://github.com/nicelizhi/laravel-admin/tree/1.0.3"
             },
-            "time": "2023-01-06T07:46:56+00:00"
+            "time": "2023-07-09T09:53:38+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -9500,5 +9494,5 @@
         "php": "^7.1.3"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

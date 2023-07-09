@@ -26,7 +26,7 @@
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
-        "nicelizhi/laravel-admin": "1.0.0",
+        "nicelizhi/laravel-admin": "1.0.3",
         "predis/predis": "~1.0"
     },
     "require-dev": {
