@@ -44,6 +44,14 @@ class OrganizationController extends AdminController
             $actions->add(new OrgMaster());
         });
 
+        $grid->actions(function ($actions) {
+
+            // 没有`delete-image`权限的角色不显示删除按钮
+            if (!Admin::user()->can('delete-image')) {
+                $actions->disableDelete();
+            }
+        });
+
         return $grid;
     }
 
