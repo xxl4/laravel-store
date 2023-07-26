@@ -25,6 +25,7 @@
         "laravel/framework": "^8.75",
         "maatwebsite/excel": "^3.1",
         "nicelizhi/laravel-admin": "1.0.4",
+        "elasticsearch/elasticsearch": "~7.0",
         "predis/predis": "~1.0"
     },
     "require-dev": {
