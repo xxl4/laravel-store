@@ -41,13 +41,13 @@ docker pull
 
 
 # 支持商店
-## Taobao
+## Taobao 淘宝
 开发平台：https://open.taobao.com/
-## Tmall
+## Tmall 天猫
 开发平台：https://open.taobao.com/
-## JD
+## JD 京东
 开发平台： https://jos.jd.com/
-## DouDian
+## DouDian 抖店
 开发平台：https://op.jinritemai.com/home
 ## 微店
 开发平台：https://www.weidian.com/
