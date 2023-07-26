@@ -177,6 +177,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Cmgmyr\Messenger\MessengerServiceProvider::class,
         Jacobcyl\AliOSS\AliOssServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
 
         //Maatwebsite\Excel\ExcelServiceProvider::class,
     ],

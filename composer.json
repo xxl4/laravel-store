@@ -15,6 +15,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "bensampo/laravel-enum": "^4.2",
+        "darkaonline/l5-swagger": "^8.5",
         "cmgmyr/messenger": "^2.28",
         "dingo/api": "^3.0.0",
         "doctrine/dbal": "^2.0",
