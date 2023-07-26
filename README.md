@@ -3,6 +3,14 @@ Laravel admin Store 是一套基于基础商品，订单中心，基于基础订
 
 针对于天猫，淘宝，JD，抖店都是需要有自己的服务器提供来运行，我们提供了队列机制，从而可以方便的管理各平台的数据内容。
 
+# 截图
+
+![image](https://github.com/nicelizhi/laravel-admin-store/assets/138437143/12247453-bcc5-46a7-b79b-54aeb54dda21)
+
+![image](https://github.com/nicelizhi/laravel-admin-store/assets/138437143/588c0bae-0ac4-4bb7-8755-1ef489f3365d)
+
+
+
 # 安装部署
 
 ## 源码安装部署
