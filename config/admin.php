@@ -194,6 +194,18 @@ return [
         'users_table' => 'admin_users',
         'users_model' => Nicelizhi\Admin\Auth\Database\Administrator::class,
 
+        //Emp tables and model
+        'emp_table' => 'admin_emp',
+        'emp_model' => Nicelizhi\Admin\Auth\Database\Emp::class,
+
+        //Emp user tables and model
+        'emp_users_table' => 'admin_emp_users',
+        'emp_users_model' => Nicelizhi\Admin\Auth\Database\EmpUsers::class,
+
+        // area tables and model
+        'area_table' => 'admin_area',
+        'area_model' => Nicelizhi\Admin\Auth\Database\Area::class,
+
         // Role table and model.
         'roles_table' => 'admin_roles',
         'roles_model' => Nicelizhi\Admin\Auth\Database\Role::class,
