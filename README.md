@@ -9,6 +9,9 @@ Laravel admin Store 是一套基于基础商品，订单中心，基于基础订
 
 ![image](https://github.com/nicelizhi/laravel-admin-store/assets/138437143/588c0bae-0ac4-4bb7-8755-1ef489f3365d)
 
+![image](https://github.com/nicelizhi/laravel-admin-store/assets/34465153/fd7e02ad-f007-4c05-b4e2-cd926108396c)
+
+
 
 # 安装部署
 
