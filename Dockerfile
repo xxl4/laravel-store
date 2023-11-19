@@ -48,7 +48,5 @@ RUN cd ${LARAVEL_PATH} \
       && chown www-data:www-data bootstrap/cache \
       && chown -R www-data:www-data storage/
 
-RUN rm /etc/apache2/sites-enabled/*
-COPY config/apache2 /etc/apache2/
 RUN a2enmod rewrite headers \
     && a2ensite laravel
