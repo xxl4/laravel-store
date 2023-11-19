@@ -27,7 +27,7 @@
         "laravel/framework": "^8.75",
         "maatwebsite/excel": "^3.1",
         "nicelizhi/laravel-admin": "1.0.4",
-        "predis/predis": "~1.0"
+        "predis/predis": "~2.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
