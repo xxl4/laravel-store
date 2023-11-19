@@ -1,7 +1,8 @@
-# laravel-admin-store
-Laravel admin Store 是一套基于基础商品，订单中心，基于基础订单，商品等模块，实现了商品的创建，商品的多平台的同步，更新等操作
+# laravel-store
 
-针对于天猫，淘宝，JD，抖店都是需要有自己的服务器提供来运行，我们提供了队列机制，从而可以方便的管理各平台的数据内容。
+Laravel Store 是一套基于基础商品，订单中心，基于基础订单，商品等模块，实现了商品的创建，商品的多平台的同步，更新等操作
+
+针对于天猫，淘宝，京东，抖店都是需要有自己的服务器提供来运行，提供了队列机制，从而可以方便的管理各平台的数据内容。
 
 # 截图
 
@@ -18,13 +19,13 @@ Laravel admin Store 是一套基于基础商品，订单中心，基于基础订
 ## 源码安装部署
 
 ```bash
-git clone https://github.com/nicelizhi/laravel-admin-store.git
+git clone https://github.com/nicelizhi/laravel-store.git
 ```
 
 ## DOcker安装部署
 
 ```bash
-docker pull 
+docker pull nicesteven/laravel-store
 ```
 
 ## 支持模块

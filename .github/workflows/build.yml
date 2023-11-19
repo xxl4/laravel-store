@@ -1,0 +1,67 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - .github/**
+      - docs/**
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  sync:
+    name: 'Submodules Sync'
+    runs-on: ubuntu-latest
+    steps:
+      - name: check submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      # Update references
+      - name: Git Sumbodule Update
+        run: |
+          git submodule update --remote --recursive
+      - name: ls dir
+        run: ls -la
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Git Sumbodule Update
+        run: |
+          git submodule update --remote --recursive
+          
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.HUB_DOCKER_USERNAME }}
+          password: ${{ secrets.HUB_DOCKER_PASSWORD }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: nicesteven/laravel-store
+
+      - name: Build and push Docker image version
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: nicesteven/laravel-store:1.0.0
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: nicesteven/laravel-store:latest
