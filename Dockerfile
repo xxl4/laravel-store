@@ -52,7 +52,3 @@ RUN rm /etc/apache2/sites-enabled/*
 COPY config/apache2 /etc/apache2/
 RUN a2enmod rewrite headers \
     && a2ensite laravel
-
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint
-RUN chmod +x /usr/local/bin/entrypoint
-ENTRYPOINT ["/usr/local/bin/entrypoint"]
