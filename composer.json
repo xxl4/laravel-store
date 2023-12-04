@@ -21,7 +21,7 @@
         "doctrine/dbal": "^2.0",
         "elasticsearch/elasticsearch": "~7.0",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "~6.0",
+        "guzzlehttp/guzzle": "~7.8",
         "intervention/image": "^2.5",
         "jacobcyl/ali-oss-storage": "^2.1",
         "laravel/framework": "^8.75",
